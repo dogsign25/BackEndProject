@@ -1,3 +1,8 @@
+# 이번주 해야 할 일!!!!
+- 회원가입, 로그인
+- 회원 마이페이지
+- 관리자 페이지-회원 관리
+
 # 1.음악 API
 
 https://developer.spotify.com/documentation/web-api
@@ -9,7 +14,3 @@ https://developer.spotify.com/documentation/web-api
 
 # 5.음악 커버곡 등록
 
-# 이번주 해야 할 일
-- 회원가입, 로그인
-- 회원 마이페이지
-- 관리자 페이지-회원 관리
