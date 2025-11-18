@@ -46,3 +46,4 @@ VALUES ('admin', '어드민', 'admin@gmail.com', '1234', '관리자', now());
 
 ```
 
+만약에 취향 같은거 넣을거면 users에 테이블 추가
