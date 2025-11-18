@@ -15,3 +15,7 @@ https://developer.spotify.com/documentation/web-api
 # 5.음악 커버곡 등록
 
 # 6.옷 스타일 별 곡 추천
+
+# 7.LP상품 구매 사이트
+
+# 8.청취기록 업다운 퀴즈(포인트)
