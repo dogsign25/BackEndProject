@@ -19,3 +19,21 @@ https://developer.spotify.com/documentation/web-api
 # 7.LP상품 구매 사이트
 
 # 8.청취기록 업다운 퀴즈(포인트)
+
+# 데이터베이스
+bash```
+// 테이블
+CREATE TABLE `users` (
+	`user_id`	VARCHAR(36)	NOT NULL primary key,
+	`username`	VARCHAR(30)	NOT NULL,
+	`email`	VARCHAR(100)	NOT NULL,
+	`password`	VARCHAR(255)	NOT NULL,
+	`nickname`	VARCHAR(30)	NULL,
+	`created_at`	DATETIME	NULL	DEFAULT CURRENT_TIMESTAMP,
+    `adminCheck` boolean default false 
+);
+
+//삽입
+INSERT INTO `MusicApp`.`users` (`user_id`, `username`, `email`, `password`, `nickname`, `created_at`, `adminCheck`)
+VALUES ('admin', '어드민', 'admin@gmail.com', '1234', '관리자', now(), true);
+```
