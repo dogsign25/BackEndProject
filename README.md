@@ -14,4 +14,4 @@ https://developer.spotify.com/documentation/web-api
 
 # 5.음악 커버곡 등록
 
-# 옷 스타일 별 곡 추천
+# 6.옷 스타일 별 곡 추천
