@@ -1,0 +1,1264 @@
+/* ================================== */
+/* 기본 설정 및 유틸리티 클래스 */
+/* ================================== */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: #181818;
+    color: white;
+    font-family: Vazirmatn, sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.highlight {
+    color: #34C759;
+}
+
+/* ================================== */
+/* 전체 레이아웃 (사이드바 + 메인 콘텐츠) */
+/* ================================== */
+.page-layout {
+    display: flex;
+    min-height: 100vh;
+    flex-wrap: wrap;
+}
+
+/* 왼쪽 사이드바 스타일 */
+.sidebar {
+    width: 250px;
+    background: #1E1E1E;
+    padding: 30px 15px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 10;
+    transition: width 0.3s ease;
+}
+
+.sidebar-logo {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.sidebar-nav-title {
+    opacity: 0.60;
+    color: rgba(52, 199, 89, 0.53);
+    font-size: 12px;
+    font-weight: 300;
+    padding: 0 10px;
+    margin-top: 15px;
+}
+
+.sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.sidebar-nav-item:hover {
+    background: #282828;
+    transform: translateX(5px);
+}
+
+.sidebar-nav-item.active {
+    background: #34C759;
+    color: #181818;
+    font-weight: 700;
+}
+
+.sidebar-nav-item.active .nav-icon {
+    background: #181818 !important;
+}
+
+.nav-icon {
+    width: 16px;
+    height: 16px;
+    position: relative;
+    overflow: hidden;
+    background: white;
+}
+
+.nav-text {
+    flex: 1;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* 메인 콘텐츠 영역 */
+.main-content-wrapper {
+    flex: 1;
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.content-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+    flex-grow: 1;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* ================================== */
+/* Hero 섹션 및 상단 메뉴 */
+/* ================================== */
+.hero-section {
+    padding-top: 30px;
+    margin-bottom: 50px;
+    position: relative;
+}
+
+.hero-image {
+    width: 100%;
+    max-height: 613px;
+    border-radius: 30px;
+    border: 1px black solid;
+    object-fit: cover;
+    display: block;
+}
+
+.header-overlay {
+    width: 95%;
+    max-width: 1062px;
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 30px;
+    display: block;
+}
+
+.nav-bar {
+    align-self: stretch;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    flex-wrap: wrap;
+}
+
+.search-container {
+    flex: 1 1 0;
+    height: 38px;
+    padding: 6px 8px;
+    background: #1F1F1F;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    min-width: 150px;
+    transition: all 0.3s ease;
+}
+
+.search-container:hover {
+    background: #282828;
+    box-shadow: 0 0 10px rgba(52, 199, 89, 0.2);
+}
+
+.search-container:focus-within {
+    background: #282828;
+    box-shadow: 0 0 15px rgba(52, 199, 89, 0.3);
+}
+
+.search-icon {
+    width: 25px;
+    height: 25px;
+    position: relative;
+    transform: rotate(180deg);
+    opacity: 0.60;
+    background: none;
+}
+
+.search-icon div {
+    width: 18.14px;
+    height: 18.14px;
+    left: 3.29px;
+    top: 3.57px;
+    position: absolute;
+    background: white;
+}
+
+.search-placeholder {
+    opacity: 0.60;
+    color: white;
+    font-size: 12px;
+    font-weight: 300;
+}
+
+.desktop-nav-links {
+    flex: 1 1 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-link {
+    text-align: center;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 8px 12px;
+    transition: all 0.3s ease;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.nav-link:hover {
+    color: #34C759;
+    background: rgba(52, 199, 89, 0.1);
+    transform: translateY(-2px);
+}
+
+.auth-buttons {
+    flex: 1 1 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn {
+    height: 36px;
+    padding: 6px 16px;
+    border-radius: 4px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex: 1 1 0;
+    font-size: 14px;
+    font-weight: 300;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20);
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-outline {
+    border: 1px #181818 solid;
+    background: white;
+    color: #181818;
+}
+
+.btn-outline:hover {
+    background: #34C759;
+    color: white;
+    border-color: #34C759;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 199, 89, 0.3);
+}
+
+.btn-fill {
+    background: #181818;
+    color: white;
+}
+
+.btn-fill:hover {
+    background: #34C759;
+    color: #181818;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 199, 89, 0.3);
+}
+
+/* ====== Hero Text Block ====== */
+.hero-text-block {
+    width: 352px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: absolute;
+    left: 50px;
+    bottom: 80px;
+    text-align: left;
+}
+
+.hero-title {
+    color: white;
+    font-size: 40px;
+    font-weight: 800;
+    line-height: 1.2;
+    text-align: left;
+}
+
+.hero-description {
+    color: white;
+    font-size: 12px;
+    font-weight: 300;
+    text-align: justify;
+}
+
+.hero-actions {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.action-btn-green {
+    height: 40px;
+    padding: 8px 24px;
+    background: #34C759;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.action-btn-green:hover {
+    background: #2ba84d;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(52, 199, 89, 0.4);
+}
+
+.action-btn-blue {
+    height: 40px;
+    padding: 8px 24px;
+    border-radius: 4px;
+    border: 1px #0E9EEF solid;
+    color: #0E9EEF;
+    font-size: 16px;
+    font-weight: 500;
+    background: transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.action-btn-blue:hover {
+    background: #0E9EEF;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(14, 158, 239, 0.4);
+}
+
+/* ================================== */
+/* Song Card Sections */
+/* ================================== */
+.song-section {
+    width: 100%;
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.section-title {
+    color: white;
+    font-size: 32px;
+    font-weight: 700;
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+
+.section-title:hover {
+    color: #34C759;
+}
+
+.song-card-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: 4px;
+    justify-content: flex-start;
+}
+
+.song-card-item {
+    flex: 1 1 180px;
+    min-width: 180px;
+    padding: 4px 15px;
+    background: #1F1F1F;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.song-card-item:hover {
+    background: #282828;
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(52, 199, 89, 0.2);
+}
+
+.song-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.song-card-image {
+    width: 100%;
+    height: auto;
+    max-height: 150px;
+    border-radius: 10px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.song-card-item:hover .song-card-image {
+    transform: scale(1.05);
+}
+
+.song-card-info {
+    height: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.song-title {
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color 0.3s ease;
+}
+
+.song-card-item:hover .song-title {
+    color: #34C759;
+}
+
+.song-artist {
+    opacity: 0.80;
+    color: white;
+    font-size: 12px;
+    font-weight: 300;
+}
+
+.view-all-card {
+    flex: 0 0 62px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+    align-self: flex-start;
+    margin-top: 10px;
+}
+
+.view-all-circle {
+    width: 62px;
+    height: 62px;
+    background: #1E1E1E;
+    border-radius: 31px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.view-all-circle:hover {
+    background: #34C759;
+    transform: scale(1.1);
+}
+
+.view-all-circle div {
+    width: 24px;
+    height: 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+.view-all-circle div div {
+    width: 14px;
+    height: 14px;
+    left: 5px;
+    top: 5px;
+    position: absolute;
+    background: white;
+}
+
+.view-all-circle:hover div div {
+    background: #181818;
+}
+
+/* ================================== */
+/* Trending Songs (Table) */
+/* ================================== */
+.trending-table-container {
+    width: 100%;
+    margin-bottom: 50px;
+    overflow-x: auto;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #333;
+    margin-bottom: 10px;
+}
+
+.table-header > div {
+    font-size: 20px;
+    font-weight: 400;
+    color: white;
+    white-space: nowrap;
+}
+
+.table-row {
+    display: flex;
+    align-items: center;
+    background: #1E1E1E;
+    border-radius: 5px;
+    height: 60px;
+    margin-bottom: 5px;
+    padding-right: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.table-row:hover {
+    background: #282828;
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(52, 199, 89, 0.2);
+}
+
+.row-col-hash {
+    flex: 0 0 50px;
+    color: white;
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+    transition: color 0.3s ease;
+}
+
+.table-row:hover .row-col-hash {
+    color: #34C759;
+}
+
+.row-col-track-artist {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+}
+
+.track-album-cover {
+    width: 58px;
+    height: 60px;
+    border-radius: 5px;
+    margin-right: 15px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.table-row:hover .track-album-cover {
+    transform: scale(1.05);
+}
+
+.track-info-text {
+    flex: 1;
+    min-width: 0;
+    margin-left: 0;
+}
+
+.track-info-text div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.track-title-text {
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+.table-row:hover .track-title-text {
+    color: #34C759;
+}
+
+.track-artist-text {
+    font-size: 12px;
+    font-weight: 300;
+    opacity: 0.8;
+    color: white;
+}
+
+.row-col-date {
+    flex: 0 0 100px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+    color: white;
+}
+
+.row-col-album {
+    flex: 0 0 300px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+    color: white;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.row-col-time {
+    flex: 0 0 80px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 14px;
+    color: white;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.play-icon-container {
+    width: 24px;
+    height: 25px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.play-icon-container:hover {
+    transform: scale(1.2);
+}
+
+.play-icon {
+    width: 20.83px;
+    height: 18.36px;
+    left: 1.70px;
+    top: 3.32px;
+    position: absolute;
+    background: rgba(52, 199, 89, 0.53);
+    transition: background 0.3s ease;
+}
+
+.table-row:hover .play-icon {
+    background: #34C759;
+}
+
+.view-all-table-btn {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.view-all-table-btn-wrapper {
+    width: 116px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.view-all-table-btn .inner-wrapper {
+    padding: 4px 16px;
+    background: #1E1E1E;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.view-all-table-btn .inner-wrapper:hover {
+    background: #34C759;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 199, 89, 0.3);
+}
+
+.view-all-table-btn .icon-text-group {
+    padding: 4px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+.view-all-table-btn .icon-text-group .view-all-text {
+    width: 58px;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.view-all-table-btn .inner-wrapper:hover .view-all-text {
+    color: #181818;
+}
+
+.view-all-icon-block {
+    width: 24px;
+    height: 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+.view-all-icon-block-inner {
+    width: 14px;
+    height: 14px;
+    left: 5px;
+    top: 5px;
+    position: absolute;
+    background: white;
+    transition: background 0.3s ease;
+}
+
+.view-all-table-btn .inner-wrapper:hover .view-all-icon-block-inner {
+    background: #181818;
+}
+
+/* ================================== */
+/* CTA Banner (Join Our Platform) */
+/* ================================== */
+.cta-banner {
+    width: 100%;
+    padding: 40px;
+    background: #34C759;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+    color: #181818;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.cta-banner:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(52, 199, 89, 0.3);
+}
+
+.cta-text-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.cta-title {
+    font-size: 32px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.cta-banner:hover .cta-title {
+    color: white;
+}
+
+.cta-subtitle {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.cta-button-wrapper {
+    flex-shrink: 0;
+}
+
+.cta-button {
+    padding: 12px 30px;
+    background: #181818;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.cta-button:hover {
+    background: white;
+    color: #34C759;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* ================================== */
+/* Footer 섹션 스타일 */
+/* ================================== */
+.footer {
+    width: 100%;
+    background: #1E1E1E;
+    padding: 40px 0;
+    box-sizing: border-box;
+    margin-top: 50px;
+}
+
+.footer-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.footer-col {
+    flex: 1 1 200px;
+    min-width: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.footer-logo-title {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.footer-description {
+    font-size: 12px;
+    font-weight: 300;
+    opacity: 0.8;
+}
+
+.footer-heading {
+    font-size: 18px;
+    font-weight: 600;
+    color: #34C759;
+    margin-bottom: 10px;
+}
+
+.footer-link {
+    font-size: 14px;
+    font-weight: 300;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.footer-link:hover {
+    opacity: 1;
+    color: #34C759;
+    transform: translateX(5px);
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.social-icon {
+    width: 24px;
+    height: 24px;
+    background: white;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.social-icon:hover {
+    background: #34C759;
+    transform: translateY(-3px);
+}
+
+.footer-copyright {
+    width: 100%;
+    padding: 20px 0;
+    text-align: center;
+    border-top: 1px solid #333;
+    margin-top: 30px;
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+/* ================================== */
+/* 반응형 디자인 (Responsive Design) */
+/* ================================== */
+
+/* 태블릿 및 작은 데스크탑 (max-width: 1200px) */
+@media screen and (max-width: 1200px) {
+    .sidebar {
+        width: 70px;
+        padding: 30px 5px;
+    }
+
+    .sidebar-logo,
+    .nav-text,
+    .sidebar-nav-title {
+        display: none;
+    }
+
+    .sidebar-nav-item {
+        justify-content: center;
+        padding: 10px 5px;
+    }
+
+    .hero-text-block {
+        width: calc(100% - 100px);
+        left: 30px;
+        bottom: 50px;
+    }
+
+    .hero-title {
+        font-size: 32px;
+    }
+
+    .row-col-album {
+        flex: 0 0 200px;
+    }
+}
+
+/* 태블릿 (max-width: 992px) */
+@media screen and (max-width: 992px) {
+    .sidebar {
+        display: none;
+    }
+
+    .page-layout {
+        flex-direction: column;
+    }
+
+    .main-content-wrapper {
+        width: 100%;
+    }
+
+    .desktop-nav-links {
+        display: none;
+    }
+
+    .search-container {
+        flex: 2 1 0;
+    }
+
+    .auth-buttons {
+        flex: 1 1 100px;
+    }
+
+    .row-col-album {
+        display: none;
+    }
+
+    .table-header .row-col-album-header {
+        display: none;
+    }
+
+    .song-card-item {
+        flex: 1 1 calc(33% - 16px);
+        min-width: 160px;
+    }
+
+    .footer-col {
+        flex: 1 1 calc(50% - 15px);
+    }
+
+    .cta-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 30px;
+        gap: 20px;
+    }
+
+    .cta-button-wrapper {
+        width: 100%;
+    }
+
+    .cta-button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav-bar {
+        gap: 8px;
+    }
+
+    .hero-text-block {
+        left: 20px;
+        bottom: 30px;
+        width: calc(100% - 40px);
+    }
+}
+
+/* 모바일 (max-width: 768px) */
+@media screen and (max-width: 768px) {
+    .content-container {
+        padding: 0 15px;
+    }
+
+    .hero-section {
+        padding-top: 15px;
+        margin-bottom: 30px;
+    }
+
+    .hero-image {
+        max-height: 400px;
+        border-radius: 20px;
+    }
+
+    .hero-text-block {
+        left: 15px;
+        bottom: 20px;
+        width: calc(100% - 30px);
+    }
+
+    .hero-title {
+        font-size: 28px;
+    }
+
+    .hero-actions {
+        gap: 12px;
+    }
+
+    .action-btn-green,
+    .action-btn-blue {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .song-card-item {
+        flex: 1 1 calc(50% - 12px);
+        min-width: 140px;
+    }
+
+    .section-title {
+        font-size: 24px;
+        padding: 8px;
+    }
+
+    .song-card-list {
+        gap: 12px;
+        padding: 0;
+    }
+
+    .table-row {
+        height: auto;
+        padding: 10px;
+    }
+
+    .row-col-date {
+        display: none;
+    }
+
+    .table-header .row-col-date-header {
+        display: none;
+    }
+
+    .track-album-cover {
+        width: 45px;
+        height: 45px;
+        margin-right: 10px;
+    }
+
+    .track-title-text {
+        font-size: 16px;
+    }
+
+    .track-artist-text {
+        font-size: 11px;
+    }
+
+    .row-col-time {
+        flex: 0 0 50px;
+        font-size: 12px;
+    }
+
+    .footer-col {
+        flex: 1 1 100%;
+    }
+
+    .cta-title {
+        font-size: 24px;
+    }
+
+    .cta-subtitle {
+        font-size: 14px;
+    }
+
+    .cta-button {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+}
+
+/* 소형 모바일 (max-width: 480px) */
+@media screen and (max-width: 480px) {
+    .nav-bar {
+        flex-direction: column;
+        gap: 8px;
+        padding: 5px;
+    }
+
+    .search-container {
+        flex: 1 1 100%;
+        order: 1;
+    }
+
+    .auth-buttons {
+        flex: 1 1 100%;
+        order: 2;
+    }
+
+    .btn {
+        flex: 1 1 0;
+        font-size: 12px;
+        padding: 5px 10px;
+        height: 32px;
+    }
+
+    .hero-text-block {
+        left: 12px;
+        bottom: 15px;
+        width: calc(100% - 24px);
+    }
+
+    .hero-title {
+        font-size: 24px;
+    }
+
+    .hero-description {
+        font-size: 11px;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .action-btn-green,
+    .action-btn-blue {
+        width: 100%;
+        padding: 10px 12px;
+    }
+
+    .song-card-item {
+        flex: 1 1 calc(50% - 6px);
+        min-width: 130px;
+    }
+
+    .view-all-card {
+        display: none;
+    }
+
+    .song-card-list {
+        gap: 12px;
+    }
+
+    .section-title {
+        font-size: 20px;
+    }
+
+    .table-row {
+        flex-wrap: wrap;
+    }
+
+    .row-col-hash {
+        flex: 0 0 40px;
+        font-size: 18px;
+    }
+
+    .row-col-track-artist {
+        flex: 1 1 100%;
+        order: 2;
+        margin-top: 8px;
+    }
+
+    .track-album-cover {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+
+    .track-title-text {
+        font-size: 14px;
+    }
+
+    .track-artist-text {
+        font-size: 10px;
+    }
+
+    .row-col-time {
+        flex: 0 0 100%;
+        order: 3;
+        margin-top: 8px;
+        justify-content: space-between;
+    }
+
+    .footer-container {
+        padding: 0 15px;
+        gap: 20px;
+    }
+
+    .cta-banner {
+        padding: 20px 15px;
+        border-radius: 8px;
+    }
+
+    .cta-title {
+        font-size: 20px;
+    }
+
+    .cta-subtitle {
+        font-size: 12px;
+    }
+
+    .cta-button {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+
+    .content-container {
+        padding: 0 12px;
+    }
+}
+
+/* 초소형 모바일 (max-width: 360px) */
+@media screen and (max-width: 360px) {
+    .hero-image {
+        max-height: 300px;
+        border-radius: 15px;
+    }
+
+    .hero-text-block {
+        left: 10px;
+        bottom: 10px;
+        width: calc(100% - 20px);
+    }
+
+    .hero-title {
+        font-size: 20px;
+    }
+
+    .song-card-item {
+        flex: 1 1 calc(100%);
+        min-width: 100%;
+    }
+
+    .btn {
+        font-size: 11px;
+    }
+}
