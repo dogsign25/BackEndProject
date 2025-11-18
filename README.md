@@ -22,6 +22,7 @@ https://developer.spotify.com/documentation/web-api
 
 # 데이터베이스
 회원 테이블
+
 bash```
 CREATE TABLE `users` (
 	`user_id`	VARCHAR(36)	NOT NULL primary key,
@@ -35,6 +36,7 @@ CREATE TABLE `users` (
 ```
 
 삽입
+
 bash```
 INSERT INTO `MusicApp`.`users` (`user_id`, `username`, `email`, `password`, `nickname`, `created_at`, `adminCheck`)
 VALUES ('admin', '어드민', 'admin@gmail.com', '1234', '관리자', now(), true);
