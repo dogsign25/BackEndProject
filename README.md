@@ -41,8 +41,8 @@ CREATE TABLE `users` (
 
 ```
 
-INSERT INTO `MusicApp`.`users` (`user_id`, `username`, `email`, `password`, `nickname`, `created_at`, `adminCheck`)
-VALUES ('admin', '어드민', 'admin@gmail.com', '1234', '관리자', now(), true);
+INSERT INTO `MusicApp`.`users` (`user_id`, `username`, `email`, `password`, `nickname`, `created_at`)
+VALUES ('admin', '어드민', 'admin@gmail.com', '1234', '관리자', now());
 
 ```
 
