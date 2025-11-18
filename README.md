@@ -4,8 +4,8 @@
 - 관리자 페이지-회원 관리
 
 # 1.음악 API
-
 https://developer.spotify.com/documentation/web-api
+
 # 2.음악 추천 알고리즘
 
 # 3.음악 숏폼화
@@ -23,7 +23,8 @@ https://developer.spotify.com/documentation/web-api
 # 데이터베이스
 회원 테이블
 
-bash```
+```
+
 CREATE TABLE `users` (
 	`user_id`	VARCHAR(36)	NOT NULL primary key,
 	`username`	VARCHAR(30)	NOT NULL,
@@ -33,12 +34,15 @@ CREATE TABLE `users` (
 	`created_at`	DATETIME	NULL	DEFAULT CURRENT_TIMESTAMP,
     `adminCheck` boolean default false 
 );
+
 ```
 
 삽입
 
-bash```
+```
+
 INSERT INTO `MusicApp`.`users` (`user_id`, `username`, `email`, `password`, `nickname`, `created_at`, `adminCheck`)
 VALUES ('admin', '어드민', 'admin@gmail.com', '1234', '관리자', now(), true);
+
 ```
 
