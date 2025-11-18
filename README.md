@@ -21,8 +21,8 @@ https://developer.spotify.com/documentation/web-api
 # 8.청취기록 업다운 퀴즈(포인트)
 
 # 데이터베이스
+회원 테이블
 bash```
-// 테이블
 CREATE TABLE `users` (
 	`user_id`	VARCHAR(36)	NOT NULL primary key,
 	`username`	VARCHAR(30)	NOT NULL,
@@ -32,8 +32,11 @@ CREATE TABLE `users` (
 	`created_at`	DATETIME	NULL	DEFAULT CURRENT_TIMESTAMP,
     `adminCheck` boolean default false 
 );
+```
 
-//삽입
+삽입
+bash```
 INSERT INTO `MusicApp`.`users` (`user_id`, `username`, `email`, `password`, `nickname`, `created_at`, `adminCheck`)
 VALUES ('admin', '어드민', 'admin@gmail.com', '1234', '관리자', now(), true);
 ```
+
