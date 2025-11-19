@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS members (
     INDEX idx_status (status),
     INDEX idx_type (type),
     INDEX idx_join_date (join_date)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb
+)
 
 
 ```
