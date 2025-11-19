@@ -51,6 +51,17 @@ CREATE TABLE IF NOT EXISTS members (
 삽입
 
 ```
+
+INSERT INTO members (name, email, password, phone, type, status, birthdate, join_date, last_login) VALUES
+('김철수', 'kim@example.com', '$2y$10$abcdefghijklmnopqrstuvwxyz', '010-1234-5678', 'premium', 'active', '1990-05-15', '2024-01-15', '2024-11-15'),
+('이영희', 'lee@example.com', '$2y$10$abcdefghijklmnopqrstuvwxyz', '010-2345-6789', 'free', 'active', '1992-08-20', '2024-02-20', '2024-11-14'),
+('박민수', 'park@example.com', '$2y$10$abcdefghijklmnopqrstuvwxyz', '010-3456-7890', 'premium', 'inactive', '1988-03-10', '2024-03-10', '2024-10-20'),
+('최지은', 'choi@example.com', '$2y$10$abcdefghijklmnopqrstuvwxyz', '010-4567-8901', 'free', 'suspended', '1995-12-05', '2024-04-05', '2024-09-15'),
+('정대호', 'jung@example.com', '$2y$10$abcdefghijklmnopqrstuvwxyz', '010-5678-9012', 'premium', 'active', '1993-07-22', '2024-05-12', '2024-11-16'),
+('강수진', 'kang@example.com', '$2y$10$abcdefghijklmnopqrstuvwxyz', '010-6789-0123', 'free', 'active', '1991-11-30', '2024-06-18', '2024-11-13'),
+('윤서연', 'yoon@example.com', '$2y$10$abcdefghijklmnopqrstuvwxyz', '010-7890-1234', 'premium', 'active', '1994-02-14', '2024-07-25', '2024-11-17'),
+('임재현', 'lim@example.com', '$2y$10$abcdefghijklmnopqrstuvwxyz', '010-8901-2345', 'free', 'active', '1989-09-08', '2024-08-30', '2024-11-12'),
+('한지민', 'han@example.com', '$2y$10$abcdefghijklmnopqrstuvwxyz', '010-9012-3456', 'premium', 'active', '1996-04-25', '2024-09-14', '2024-11-18'),
 ('송민호', 'song@example.com', '$2y$10$abcdefghijklmnopqrstuvwxyz', '010-0123-4567', 'free', 'inactive', '1987-06-17', '2024-10-22', '2024-10-25');
 
 ```
