@@ -25,24 +25,33 @@ https://developer.spotify.com/documentation/web-api
 
 ```
 
-CREATE TABLE `users` (
-	`user_id`	VARCHAR(36)	NOT NULL primary key,
-	`username`	VARCHAR(30)	NOT NULL,
-	`email`	VARCHAR(100)	NOT NULL,
-	`password`	VARCHAR(255)	NOT NULL,
-	`nickname`	VARCHAR(30)	NULL,
-	`created_at`	DATETIME	NULL	DEFAULT CURRENT_TIMESTAMP,
-    `adminCheck` boolean default false 
-);
+-- 회원 테이블
+CREATE TABLE IF NOT EXISTS members (
+    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '자동으로 증가하는 회원 코드 insert X',
+    name VARCHAR(100) NOT NULL COMMENT '회원 이름',
+    email VARCHAR(255) NOT NULL UNIQUE COMMENT '이메일 (로그인 ID)',
+    password VARCHAR(255) NOT NULL COMMENT '암호화된 비밀번호',
+    phone VARCHAR(20) COMMENT '전화번호',
+    birthdate DATE COMMENT '생년월일',
+    type ENUM('free', 'premium','admin') DEFAULT 'free' COMMENT '회원 유형',
+    status ENUM('active', 'inactive', 'suspended') DEFAULT 'active' COMMENT '회원 상태',
+    join_date DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '가입일',
+    last_login DATETIME COMMENT '최근 접속일',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일',
+    
+    INDEX idx_email (email),
+    INDEX idx_status (status),
+    INDEX idx_type (type),
+    INDEX idx_join_date (join_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb
+
 
 ```
 
 삽입
 
 ```
-
-INSERT INTO `MusicApp`.`users` (`user_id`, `username`, `email`, `password`, `nickname`, `created_at`)
-VALUES ('admin', '어드민', 'admin@gmail.com', '1234', '관리자', now());
+('송민호', 'song@example.com', '$2y$10$abcdefghijklmnopqrstuvwxyz', '010-0123-4567', 'free', 'inactive', '1987-06-17', '2024-10-22', '2024-10-25');
 
 ```
 
