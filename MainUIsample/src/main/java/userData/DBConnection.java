@@ -2,14 +2,14 @@ package userData;
 
 import java.sql.*;
 
-public class JdbcConnection {
+public class DBConnection {
 	public static Connection getConnection() {
 		Connection conn=null;
 		try {
 //			1단계 : 커넥터 로딩
 			Class.forName("com.mysql.cj.jdbc.Driver");
 //			2단계 : DB서버 커넥션
-			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/users", "root", "1234");
+			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/MusicApp", "root", "1234");
 			
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
