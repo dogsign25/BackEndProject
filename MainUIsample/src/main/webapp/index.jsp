@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -157,42 +158,24 @@
                         </div>
                     </div>
                     <div class="song-card-list">
-                        <div class="song-card-item">
-                            <div class="song-card-content">
-                                <img class="song-card-image" src="./src/Time.png" alt="Album Cover" />
-                                <div class="song-card-info">
-                                    <div class="song-title">Time</div>
-                                    <div class="song-artist">Luciano</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="song-card-item">
-                            <div class="song-card-content">
-                                <img class="song-card-image" src="./src/112.png" alt="Album Cover" />
-                                <div class="song-card-info">
-                                    <div class="song-title">112</div>
-                                    <div class="song-artist">jazz</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="song-card-item">
-                            <div class="song-card-content">
-                                <img class="song-card-image" src="./src/WeDontCare.png" alt="Album Cover" />
-                                <div class="song-card-info">
-                                    <div class="song-title">We Don't Care</div>
-                                    <div class="song-artist">Kyanu & Dj Gullum</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="song-card-item">
-                            <div class="song-card-content">
-                                <img class="song-card-image" src="./src/WhoIam.png" alt="Album Cover" />
-                                <div class="song-card-info">
-                                    <div class="song-title">Who I Am</div>
-                                    <div class="song-artist">Alan Walker & Elias</div>
-                                </div>
-                            </div>
-                        </div>
+  	<c:forEach var="album" items="${newReleases}">
+       	 			<div class="song-card-item">
+            			<div class="song-card-content">
+                			<img class="song-card-image" src="${album.imageUrl}" alt="${album.title} Album Cover" />
+                		<div class="song-card-info">
+                    	<div class="song-title">${album.title}</div>
+                    	<div class="song-artist">${album.artist}</div>
+                	</div>
+            	</div>
+        	</div>
+    </c:forEach>
+    <div class="view-all-card">
+         <div class="view-all-circle">
+             <div><div></div></div>
+         </div>
+         <div class="song-title">View All</div>
+    </div>
+</div>
                         
                         
                         <div class="view-all-card">
