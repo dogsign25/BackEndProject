@@ -222,7 +222,7 @@ public class MemberController extends HttpServlet {
         // JSP에서 ${member.name} 등으로 접근하여 폼에 표시
         request.setAttribute("member", member);
         
-        return "memberForm.jsp";
+        return "memberUpdateForm.jsp";
     }
     
     /**
@@ -351,5 +351,3 @@ public class MemberController extends HttpServlet {
         System.out.println("MemberController destroyed.");
     }
 }
-
-// ※ MemberStats 클래스는 별도 파일(MemberStats.java)로 분리했습니다!
