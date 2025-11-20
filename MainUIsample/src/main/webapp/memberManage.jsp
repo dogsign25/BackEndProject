@@ -373,28 +373,5 @@
             });
         });
     </script>
-
-    <style>
-        /* 알림 메시지 스타일 */
-        .alert {
-            padding: 15px 20px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            font-size: 14px;
-            transition: opacity 0.3s ease;
-        }
-        
-        .alert-success {
-            background: rgba(52, 199, 89, 0.2);
-            color: #34C759;
-            border-left: 4px solid #34C759;
-        }
-        
-        .alert-error {
-            background: rgba(255, 59, 48, 0.2);
-            color: #ff3b30;
-            border-left: 4px solid #ff3b30;
-        }
-    </style>
 </body>
 </html>
