@@ -3,6 +3,8 @@
 - 회원 마이페이지 - 민서
 - 관리자 페이지-회원 관리 -동진
 
+DAO, DTO, DBConnection, MemberController 다 짜놓았습니다. 이거 걍 AI한테 먹여서 만들어달라고 하면 됩니다. 그럼 이만기~
+
 # 1.음악 API
 https://developer.spotify.com/documentation/web-api
 
