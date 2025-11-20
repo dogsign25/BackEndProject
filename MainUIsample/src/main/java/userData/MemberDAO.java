@@ -84,8 +84,8 @@ public class MemberDAO {
                 member.setBirthdate(rs.getString("birthdate"));
                 member.setType(rs.getString("type"));
                 member.setStatus(rs.getString("status"));
-                member.setJoinDate(rs.getString("join_date"));
-                member.setLastLogin(rs.getString("last_login"));
+                member.setJoinDate(rs.getTimestamp("join_date"));
+                member.setLastLogin(rs.getTimestamp("last_login"));
                 member.setUpdatedAt(rs.getString("updated_at"));
                 members.add(member);
             }
@@ -114,8 +114,8 @@ public class MemberDAO {
                 member.setBirthdate(rs.getString("birthdate"));
                 member.setType(rs.getString("type"));
                 member.setStatus(rs.getString("status"));
-                member.setJoinDate(rs.getString("join_date"));
-                member.setLastLogin(rs.getString("last_login"));
+                member.setJoinDate(rs.getTimestamp("join_date"));
+                member.setLastLogin(rs.getTimestamp("last_login"));
                 member.setUpdatedAt(rs.getString("updated_at"));
                 return member;
             }
@@ -263,25 +263,3 @@ public class MemberDAO {
     }
 }
 
-
-
-//통계 정보를 담는 클래스
-class MemberStats {
- private int total;
- private int active;
- private int premium;
- private int newMembers;
- 
- // Getters and Setters
- public int getTotal() { return total; }
- public void setTotal(int total) { this.total = total; }
- 
- public int getActive() { return active; }
- public void setActive(int active) { this.active = active; }
- 
- public int getPremium() { return premium; }
- public void setPremium(int premium) { this.premium = premium; }
- 
- public int getNewMembers() { return newMembers; }
- public void setNewMembers(int newMembers) { this.newMembers = newMembers; }
-}

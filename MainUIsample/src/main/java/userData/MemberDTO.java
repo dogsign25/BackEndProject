@@ -1,5 +1,7 @@
 package userData;
 
+import java.util.Date;
+
 public class MemberDTO {
 	private int id;
     private String name;
@@ -8,8 +10,8 @@ public class MemberDTO {
     private String birthdate;
     private String type;        // free, premium, admin
     private String status;      // active, inactive, suspended
-    private String joinDate;
-    private String lastLogin;
+    private Date joinDate;
+    private Date lastLogin;
     private String updatedAt;
     
 	public int getId() {
@@ -54,16 +56,16 @@ public class MemberDTO {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public String getJoinDate() {
+	public Date getJoinDate() {
 		return joinDate;
 	}
-	public void setJoinDate(String joinDate) {
+	public void setJoinDate(Date joinDate) {
 		this.joinDate = joinDate;
 	}
-	public String getLastLogin() {
+	public Date getLastLogin() {
 		return lastLogin;
 	}
-	public void setLastLogin(String lastLogin) {
+	public void setLastLogin(Date lastLogin) {
 		this.lastLogin = lastLogin;
 	}
 	public String getUpdatedAt() {
