@@ -13,6 +13,7 @@ public class MemberDTO {
     private Date joinDate;
     private Date lastLogin;
     private String updatedAt;
+    private String password;
     
 	public int getId() {
 		return id;
@@ -73,6 +74,12 @@ public class MemberDTO {
 	}
 	public void setUpdatedAt(String updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 	
