@@ -80,6 +80,10 @@ public class MemberController extends HttpServlet {
                 // 회원 삭제 후 목록으로 리다이렉트
                 memberDelete(request, response);
                 response.sendRedirect("memberList.do");
+            } else if ("logout.do".equals(command)) {
+                // 로그아웃 처리
+                memberLogout(request, response);
+                response.sendRedirect("login.jsp");
             }
             
         } catch (Exception e) {
@@ -133,6 +137,14 @@ public class MemberController extends HttpServlet {
                 // 대량 작업 처리 후 목록으로 리다이렉트
                 memberBulkAction(request, response);
                 response.sendRedirect("memberList.do");
+            } else if ("login.do".equals(command)) {
+                // 로그인 처리
+                memberLogin(request, response);
+
+            } else if ("signup.do".equals(command)) {
+                // 회원가입 처리
+                memberSignup(request, response);
+                response.sendRedirect("login.jsp");
             }
             
         } catch (Exception e) {
@@ -145,6 +157,54 @@ public class MemberController extends HttpServlet {
     }
     
     // ==================== 각 기능별 메소드 ====================
+
+    /**
+     * 로그아웃 처리
+     */
+    private void memberLogout(HttpServletRequest request, HttpServletResponse response) {
+        request.getSession().invalidate();
+    }
+
+    /**
+     * 회원가입 처리
+     */
+    private void memberSignup(HttpServletRequest request, HttpServletResponse response) throws SQLException {
+        MemberDTO member = new MemberDTO();
+        member.setName(request.getParameter("name"));
+        member.setEmail(request.getParameter("email"));
+        member.setPassword(request.getParameter("password")); // 암호화 필요
+        member.setPhone(request.getParameter("phone"));
+        member.setBirthdate(request.getParameter("birthdate"));
+        member.setType("free");
+        member.setStatus("active");
+        
+        memberDAO.insertMember(member);
+    }
+    
+    /**
+     * 로그인 처리
+     */
+    private void memberLogin(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        
+        MemberDTO member = memberDAO.checkLogin(email, password);
+        
+        if (member != null) {
+            // 로그인 성공
+            request.getSession().setAttribute("userName", member.getName());
+            request.getSession().setAttribute("userEmail", member.getEmail());
+            
+            // last_login 업데이트 (추가 기능)
+            // memberDAO.updateLastLogin(member.getId()); 
+            
+            response.sendRedirect("index.jsp");
+        } else {
+            // 로그인 실패
+            request.setAttribute("errorMessage", "이메일 또는 비밀번호가 올바르지 않습니다.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
+    }
     
     /**
      * 회원 목록 조회

@@ -11,7 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class SpotifyService {
-    // 🚨 실제 발급받은 ID와 Secret을 입력하세요.
+    // 실제 발급받은 ID와 Secret을 입력하세요.
     private static final String CLIENT_ID = "55de3e8154e14951af8483654af23200";
     private static final String CLIENT_SECRET = "e1203c3b586342ebbfda21a5a6e6fc31";
     
@@ -38,7 +38,7 @@ public class SpotifyService {
             System.out.println("[Spotify API] Token Request Response Code: " + responseCode);
 
             if (responseCode != 200) {
-                System.err.println("[Spotify API] ⚠️ 토큰 요청 실패. 에러 메시지 확인:");
+                System.err.println("[Spotify API] 토큰 요청 실패. 에러 메시지 확인:");
                 BufferedReader errorBr = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
                 String errorLine;
                 StringBuilder errorResponse = new StringBuilder();
@@ -61,11 +61,11 @@ public class SpotifyService {
             JSONObject jsonResponse = new JSONObject(response.toString());
             String accessToken = jsonResponse.getString("access_token");
 
-            System.out.println("[Spotify API] ✅ Access Token 획득 성공.");
+            System.out.println("[Spotify API] Access Token 획득 성공.");
             return accessToken; 
 
         } catch (Exception e) {
-            System.err.println("[Spotify API] ❌ 토큰 획득 중 Exception 발생:");
+            System.err.println("[Spotify API] 토큰 획득 중 Exception 발생:");
             e.printStackTrace();
             return null;
         }
@@ -83,10 +83,10 @@ public class SpotifyService {
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Authorization", "Bearer " + accessToken);
             
-            // 🚨 응답 코드 확인
+            // 응답 코드 확인
             int responseCode = conn.getResponseCode();
             if (responseCode != 200) {
-                 System.err.println("[Spotify API] ⚠️ New Releases 요청 실패. 응답 코드: " + responseCode);
+                 System.err.println("[Spotify API] New Releases 요청 실패. 응답 코드: " + responseCode);
                  // 401 Unauthorized 에러일 경우 토큰 만료 등 확인 필요
                  return list;
             }
@@ -100,7 +100,7 @@ public class SpotifyService {
             }
             br.close();
 
-            // --- 🚨 JSON 파싱 및 디버깅 로직 (가장 중요한 부분) ---
+            // --- JSON 파싱 및 디버깅 로직 (가장 중요한 부분) ---
             String jsonString = response.toString();
             
             // 데이터가 있는지 확인 (500자까지만 출력)
@@ -132,7 +132,7 @@ public class SpotifyService {
 
         } catch (Exception e) {
             // 파싱 오류 발생 시 에러 메시지를 콘솔에 출력합니다.
-            System.err.println("[Spotify API] ❌ 데이터 파싱 중 Exception 발생! JSON 구조 문제 가능성 높음:");
+            System.err.println("[Spotify API] 데이터 파싱 중 Exception 발생! JSON 구조 문제 가능성 높음:");
             e.printStackTrace();
         }
         

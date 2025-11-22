@@ -48,7 +48,7 @@
                 <div class="nav-icon"></div>
                 <div class="nav-text">Setting</div>
             </a>
-            <a href="#" class="sidebar-nav-item">
+            <a href="logout.do" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
                 <div class="nav-text">Logout</div>
             </a>
@@ -79,8 +79,16 @@
                             </div>
                             
                             <div class="auth-buttons">
-                                <a href="#" class="btn btn-outline">Login</a>
-                                <a href="#" class="btn btn-fill">Sign Up</a>
+                                <c:choose>
+                                    <c:when test="${not empty sessionScope.userName}">
+                                        <span style="color:white; margin-right: 15px;">환영합니다, ${sessionScope.userName}님!</span>
+                                        <a href="logout.do" class="btn btn-outline">Logout</a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="login.jsp" class="btn btn-outline">Login</a>
+                                        <a href="signup.jsp" class="btn btn-fill">Sign Up</a>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
                     </div> 
@@ -507,10 +515,9 @@
                     </div>
                 </div>
                 
-                <div class="footer-copyright">
-                    Â© 2025 MusicSite. All rights reserved.
-                </div>
-            </footer>
+                                    <div class="footer-copyright">
+                                        © 2025 MusicSite. All rights reserved.
+                                    </div>            </footer>
             </div>
     </div>
 </body>
