@@ -23,7 +23,7 @@
                 <button type="submit">로그인</button>
             </div>
         </form>
-        <p>계정이 없으신가요? <a href="signup.jsp">회원가입</a></p>
+        <p>계정이 없으신가요? <a href="signupForm.do">회원가입</a></p>
         <%
             String errorMessage = (String) request.getAttribute("errorMessage");
             if (errorMessage != null) {

@@ -35,7 +35,7 @@
                 <button type="submit">가입하기</button>
             </div>
         </form>
-        <p>이미 계정이 있으신가요? <a href="login.jsp">로그인</a></p>
+        <p>이미 계정이 있으신가요? <a href="login.do">로그인</a></p>
         <%
             String errorMessage = (String) request.getAttribute("errorMessage");
             if (errorMessage != null) {

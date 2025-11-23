@@ -58,6 +58,9 @@
             <div class="content-container">
                 
                 <div class="hero-section">
+                    <c:if test="${not empty errorMessage}">
+                        <p style="color:red; text-align:center; margin-top: 10px;">${errorMessage}</p>
+                    </c:if>
                     
                     <img class="hero-image" src="./src/MainBackground.png" alt="Hero Background" />
 
@@ -85,8 +88,8 @@
                                         <a href="logout.do" class="btn btn-outline">Logout</a>
                                     </c:when>
                                     <c:otherwise>
-                                        <a href="login.jsp" class="btn btn-outline">Login</a>
-                                        <a href="signup.jsp" class="btn btn-fill">Sign Up</a>
+                                        <a href="login.do" class="btn btn-outline">Login</a>
+                                        <a href="signupForm.do" class="btn btn-fill">Sign Up</a>
                                     </c:otherwise>
                                 </c:choose>
                             </div>

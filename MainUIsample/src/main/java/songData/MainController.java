@@ -38,12 +38,12 @@ public class MainController extends HttpServlet {
                 System.err.println("[Controller] 액세스 토큰 획득에 실패하여 New Releases를 가져올 수 없습니다.");
             }
             
-        } catch (Exception e) {
-            System.err.println("[Controller] 데이터 처리 중 치명적인 오류 발생:");
-            e.printStackTrace();
-            // 오류가 발생해도 newReleases는 null 또는 빈 리스트로 유지되어 JSP 오류를 방지합니다.
-        }
-
+                    } catch (Exception e) {
+                        System.err.println("[Controller] 데이터 처리 중 치명적인 오류 발생:");
+                        e.printStackTrace();
+                        // 오류가 발생해도 newReleases는 null 또는 빈 리스트로 유지되어 JSP 오류를 방지합니다.
+                        request.setAttribute("errorMessage", "음악 데이터를 불러오는 데 실패했습니다. 잠시 후 다시 시도해 주세요.");
+                    }
         // 4. JSP에 데이터 전달
         // 'newReleases'라는 이름은 index.jsp의 c:forEach var="album" items="${newReleases}"와 일치해야 합니다.
         if (newReleases != null) {
@@ -59,10 +59,5 @@ public class MainController extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
         dispatcher.forward(request, response);
     }
-    
-    // doGet을 service로 호출하는 것이 일반적입니다.
-    protected void service(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-        doGet(request, response);
-    }
+
 }

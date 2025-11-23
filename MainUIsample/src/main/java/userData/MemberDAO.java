@@ -262,6 +262,35 @@ public class MemberDAO {
         return false;
     }
 
+    public MemberDTO getMemberByEmail(String email) throws SQLException {
+        String sql = "SELECT id, name, email, phone, birthdate, type, status, " +
+                    "join_date, last_login, updated_at FROM members WHERE email = ?";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, email);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                MemberDTO member = new MemberDTO();
+                member.setId(rs.getInt("id"));
+                member.setName(rs.getString("name"));
+                member.setEmail(rs.getString("email"));
+                member.setPhone(rs.getString("phone"));
+                member.setBirthdate(rs.getString("birthdate"));
+                member.setType(rs.getString("type"));
+                member.setStatus(rs.getString("status"));
+                member.setJoinDate(rs.getTimestamp("join_date"));
+                member.setLastLogin(rs.getTimestamp("last_login"));
+                member.setUpdatedAt(rs.getString("updated_at"));
+                return member;
+            }
+        }
+        
+        return null;
+    }
+
     // 로그인 체크
     public MemberDTO checkLogin(String email, String password) throws SQLException {
         String sql = "SELECT * FROM members WHERE email = ? AND password = ?";

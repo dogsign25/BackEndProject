@@ -5,8 +5,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -80,13 +83,19 @@ public class MemberController extends HttpServlet {
                 // 회원 삭제 후 목록으로 리다이렉트
                 memberDelete(request, response);
                 response.sendRedirect("memberList.do");
+            } else if ("login.do".equals(command)) {
+                viewPage = "login.jsp";
+                request.getRequestDispatcher(viewPage).forward(request, response);
+            } else if ("signupForm.do".equals(command)) {
+                viewPage = "signup.jsp";
+                request.getRequestDispatcher(viewPage).forward(request, response);
             } else if ("logout.do".equals(command)) {
                 // 로그아웃 처리
                 memberLogout(request, response);
-                response.sendRedirect("login.jsp");
+                response.sendRedirect("login.do");
             }
             else if ("myPage.do".equals(command)) {
-                // 로그아웃 처리
+                // 마이페이지 조회
             	viewPage = memberMyPage(request, response);
             	request.getRequestDispatcher(viewPage).forward(request, response);
             }
@@ -184,7 +193,7 @@ public class MemberController extends HttpServlet {
             } else if ("signup.do".equals(command)) {
                 // 회원가입 처리
                 memberSignup(request, response);
-                response.sendRedirect("login.jsp");
+                response.sendRedirect("login.do");
             }
             
         } catch (Exception e) {
