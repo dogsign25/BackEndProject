@@ -134,7 +134,7 @@ public class MemberDAO {
             
             pstmt.setString(1, member.getName());
             pstmt.setString(2, member.getEmail());
-            pstmt.setString(3, "temp_password"); // 실제로는 암호화된 비밀번호
+            pstmt.setString(3, member.getPassword()); // 실제로는 암호화된 비밀번호
             pstmt.setString(4, member.getPhone());
             pstmt.setString(5, member.getBirthdate());
             pstmt.setString(6, member.getType() != null ? member.getType() : "free");
@@ -260,6 +260,35 @@ public class MemberDAO {
         }
         
         return false;
+    }
+
+    // 로그인 체크
+    public MemberDTO checkLogin(String email, String password) throws SQLException {
+        String sql = "SELECT * FROM members WHERE email = ? AND password = ?";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, email);
+            pstmt.setString(2, password);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                MemberDTO member = new MemberDTO();
+                member.setId(rs.getInt("id"));
+                member.setName(rs.getString("name"));
+                member.setEmail(rs.getString("email"));
+                member.setPhone(rs.getString("phone"));
+                member.setBirthdate(rs.getString("birthdate"));
+                member.setType(rs.getString("type"));
+                member.setStatus(rs.getString("status"));
+                member.setJoinDate(rs.getTimestamp("join_date"));
+                member.setLastLogin(rs.getTimestamp("last_login"));
+                return member;
+            }
+        }
+        
+        return null;
     }
 }
 

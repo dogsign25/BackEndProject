@@ -139,8 +139,7 @@
             border: none;
         }
         .btn-update {
-            background: #34C759;
-            /* Highlight color */
+            background: #34C759; /* Highlight color */
             color: #181818;
         }
         .btn-update:hover {
@@ -164,10 +163,8 @@
             font-size: 12px;
             font-weight: 600;
         }
-        .type-free { background: rgba(100, 100, 100, 0.3);
-            color: #aaa; }
-        .type-premium { background: rgba(255, 215, 0, 0.2); color: #ffd700;
-        }
+        .type-free { background: rgba(100, 100, 100, 0.3); color: #aaa; }
+        .type-premium { background: rgba(255, 215, 0, 0.2); color: #ffd700; }
         
         .action-btn-blue {
             background: #007aff;
@@ -196,222 +193,182 @@
             </div>
 
             <div class="sidebar-nav-title">Menu</div>
-           
             <a href="index.do" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
                 <div class="nav-text">Home</div>
             </a>
             <a href="discover.do" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
-         
                 <div class="nav-text">Discover</div>
-   
-             </a>
+            </a>
             <a href="library.do" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
                 <div class="nav-text">Library</div>
             </a>
             
-    
             <div class="sidebar-nav-title">Playlist</div>
-      
             <a href="myPlaylist.do" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
                 <div class="nav-text">My Playlist</div>
             </a>
             <a href="favorites.do" class="sidebar-nav-item">
-          
                 <div class="nav-icon"></div>
-              
-              <div class="nav-text">Favorites</div>
+                <div class="nav-text">Favorites</div>
             </a>
             
             <div class="sidebar-nav-title">General</div>
             <a href="myPage.do" class="sidebar-nav-item active">
-            
                 <div class="nav-icon"></div>
                 <div class="nav-text">My Info</div>
-          
             </a>
             <a href="logout.do" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
-                <div class="nav-text">로그아웃</div>
-       
+                <div class="nav-text">Logout</div>
             </a>
         </div>
         
         <div class="main-content-wrapper">
-            <div 
-                class="content-container">
+            <div class="content-container">
                 
-                <div class="admin-header">
-                    <div class="header-title">
-  
-                        <h1>마이페이지</h1>
-                      
-                        <p class="header-subtitle"><span class="highlight">Water</span>Melon 계정 관리</p>
+                <h1 style="margin-bottom: 20px;">마이페이지</h1>
+                
+                <c:if test="${not empty sessionScope.msg}">
+                    <div style="background: #2ba84d; color: white; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                        ${sessionScope.msg}
                     </div>
-                </div>
+                    <% session.removeAttribute("msg"); %>
+                </c:if>
 
-   
                 <c:if test="${not empty member}">
+                    
+                    <%-- 1. 프로필 카드: 이름, 등급, 이메일, 가입일, 최종 로그인 정보 --%>
                     <div class="profile-card">
-                  
                         <div class="profile-header">
-                     
-                            <div class="user-avatar">
-                                <%-- 이름이 있을 경우 첫 글자 표시, 없을 경우 기본값 'M' --%>
-                     
-                            
-                                <c:choose>
-                                    <c:when test="${not empty member.name}">
-                                        <c:out value="${fn:substring(member.name, 0, 1)}"/> 
-      
-           
-                                    </c:when>
-                                    <c:otherwise>M</c:otherwise>
-                                </c:choose>
-  
-     
-                            </div>
+                            <div class="user-avatar">${fn:toUpperCase(fn:substring(member.name, 0, 1))}</div>
                             <div class="user-info-text">
-                                <h2><c:out value="${member.name}"/> 님</h2>
-           
-    
-                                <p><c:out value="${member.email}"/></p>
-                            </div>
-                        </div>
-                      
-                        <div class="info-grid">
-                            
-                            <div class="info-group">
-            
-                                <label>아이디</label>
-                                <p><c:out value="${member.id}"/></p>
-                            </div>
-      
-                            <div class="info-group">
-                                <label>회원 등급</label>
-               
+                                <h2>${member.name}</h2>
                                 <p>
-     
-                                    <c:choose>
-                                        <c:when test="${member.type == 'premium'}">
-  
-                           
-                                            <span class="member-type type-premium">프리미엄</span>
-                                        </c:when>
-       
-                                        <c:otherwise>
-                                     
-                                            <span class="member-type type-free">무료</span>
-                                        </c:otherwise>
-              
-                                    </c:choose>
-  
+                                    <span class="member-type type-${member.type}">
+                                        <c:choose>
+                                            <c:when test="${member.type == 'premium'}">Premium 회원</c:when>
+                                            <c:when test="${member.type == 'admin'}">관리자</c:when>
+                                            <c:otherwise>Free 회원</c:otherwise>
+                                        </c:choose>
+                                    </span>
                                 </p>
                             </div>
-                  
-                       
- 
+                            <div style="margin-left: auto;">
+                                <a href="logout.do" class="btn-logout">로그아웃</a>
+                            </div>
+                        </div>
+                        
+                        <div class="info-grid">
+                            <div class="info-group">
+                                <label>이메일 (ID)</label>
+                                <p>${member.email}</p>
+                            </div>
+                            <div class="info-group">
+                                <label>회원 상태</label>
+                                <p>
+                                    <c:choose>
+                                        <c:when test="${member.status == 'active'}">활성</c:when>
+                                        <c:when test="${member.status == 'suspended'}">정지</c:when>
+                                        <c:otherwise>비활성</c:otherwise>
+                                    </c:choose>
+                                </p>
+                            </div>
                             <div class="info-group">
                                 <label>가입일</label>
-                             
-           
-                                <p><fmt:formatDate value="${member.joinDate}" pattern="yyyy-MM-dd"/></p>
+                                <p><fmt:formatDate value="${member.joinDate}" pattern="yyyy년 MM월 dd일"/></p>
+                            </div>
+                            <div class="info-group">
+                                <label>최종 접속일</label>
+                                <p><fmt:formatDate value="${member.lastLogin}" pattern="yyyy년 MM월 dd일 HH:mm"/></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <%-- 2. 회원 정보 수정 폼 --%>
+                    <h2 style="margin-bottom: 20px;">정보 수정</h2>
+                    <div class="form-container">
+                        <form action="memberUpdate.do" method="post">
+                            <input type="hidden" name="id" value="${member.id}">
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="name">이름</label>
+                                    <input type="text" id="name" name="name" value="${member.name}" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">이메일 (수정 불가)</label>
+                                    <input type="email" id="email" name="email" value="${member.email}" readonly />
+                                </div>
                             </div>
                             
-                            <div class="info-group">
-    
-                                <label>최근 접속일</label>
-                                <p><fmt:formatDate value="${member.lastLogin}" pattern="yyyy-MM-dd HH:mm"/></p>
-                          
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="phone">연락처</label>
+                                    <input type="text" id="phone" name="phone" value="${member.phone}" placeholder="010-1234-5678" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="birthdate">생년월일</label>
+                                    <input type="date" id="birthdate" name="birthdate" value="${member.birthdate}" />
+                                </div>
                             </div>
-              
-                        </div>
-                        
-                        <div class="action-buttons">
-            
-                            <%-- MemberController의 memberUpdateForm.do 로직과 연결 --%>
-                            <a href="memberUpdateForm.do?id=<c:out value='${member.id}'/>" class="btn-update">정보 수정</a>
-         
-                            <a href="logout.do" class="btn-logout">로그아웃</a>
-                        </div>
-                 
+                            
+                            <div class="action-buttons">
+                                <button type="submit" class="btn-update">정보 수정</button>
+                            </div>
+                        </form>
                     </div>
 
-                    <div class="section-title-wrap">
-              
-                        <div class="section-title" style="font-size: 24px;">
-                            결제 및 <span class="highlight">이용 정보</span>
-     
-                        </div>
-                    </div>
-           
-                   
+                    <%-- 3. 서비스 정보 및 통계 --%>
+                    <h2 style="margin-bottom: 20px;">서비스 이용 정보</h2>
                     <div class="form-container">
-          
                         <div class="form-row">
                             <div class="form-group">
-                
-                                 <label>현재 이용권</label>
-      
-                                 <%-- member.type 값에 따라 이용권 정보 표시 --%>
-                                <input type="text" value="${member.type == 'premium' ? 
-                                    '프리미엄 무제한 이용권' : (member.type == 'admin' ? '관리자 계정' : '무료 이용권 (광고 포함)')}" readonly />
+                                <label>회원 등급</label>
+                                <input type="text" value="${member.type == 'premium' ? '프리미엄' : '일반 (Free)'}" readonly />
                             </div>
                             <div class="form-group">
-                                <label>다음 결제일</label>
- 
-                                 <%-- member.type 값에 따라 다음 결제일 정보 표시 --%>
-                                <input type="text" value="${member.type == 'premium' ?
-                                    '2026-01-01' : '해당 없음'}" readonly />
+                                <label>프리미엄 만료일</label>
+                                <%-- member.type이 'premium'일 경우 가상의 만료일 표시 --%>
+                                <input type="text" value="${member.type == 'premium' ? '2026-01-01' : '해당 없음'}" readonly />
                             </div>
                         </div>
-                        
-                   
                         <div class="form-row">
                             <div class="form-group">
                                 <label>누적 청취 시간 (분)</label>
-                      
                                 <input type="text" value="12,450분" readonly /> <%-- 임의의 통계 데이터 --%>
                             </div>
                             <div class="form-group">
-                            
                                 <label>등록된 플레이리스트 수</label>
-   
                                 <input type="text" value="12개" readonly /> <%-- 임의의 통계 데이터 --%>
                             </div>
                         </div>
-     
+                        
                         <div class="action-buttons" style="margin-top: 10px;">
                             <a href="paymentHistory.do" class="action-btn-blue" style="padding: 10px 20px;">결제 내역 확인</a>
-                   
                             <a href="premium.do" class="action-btn-green" style="padding: 10px 20px;">이용권 변경</a>
                         </div>
                     </div>
                 </c:if>
 
                 <c:if test="${empty member}">
-       
-                    <div class="profile-card" style="text-align: center;
-                        padding: 50px;">
+                    <div class="profile-card" style="text-align: center; padding: 50px;">
                         <h2 style="color: #ff3b30;">로그인이 필요합니다.</h2>
                         <p style="margin-top: 20px;">마이페이지 정보를 보려면 로그인해 주세요.</p>
-                        <a href="login.do" class="btn-update" style="display: inline-block;
-                            margin-top: 30px;">로그인 페이지로 이동</a>
+                        <a href="login.do" class="btn-update" style="display: inline-block; margin-top: 30px;">로그인 페이지로 이동</a>
                     </div>
                 </c:if>
                 
                 <footer class="footer">
-                    <div class="footer-copyright" style="text-align: center;
-                        padding: 20px 0;">
+                    <div class="footer-copyright" style="text-align: center; padding: 20px 0;">
                         &copy; 2025 <span class="highlight">Water</span>Melon. All rights reserved.
                     </div>
                 </footer>
                 
             </div>
-    
         </div>
     </div>
 </body>
