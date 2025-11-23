@@ -8,7 +8,7 @@
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="/home/dogsign25/tomcat/apache-tomcat-10.1.46/lib/servlet-api.jar">
+	<classpathentry kind="lib" path="C:/Users/kms88/OneDrive/바탕 화면/잡둥사니/apache-tomcat-10.1.36/lib/servlet-api.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
