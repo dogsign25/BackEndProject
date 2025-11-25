@@ -358,7 +358,7 @@
                     <div class="profile-card" style="text-align: center; padding: 50px;">
                         <h2 style="color: #ff3b30;">로그인이 필요합니다.</h2>
                         <p style="margin-top: 20px;">마이페이지 정보를 보려면 로그인해 주세요.</p>
-                        <a href="login.do" class="btn-update" style="display: inline-block; margin-top: 30px;">로그인 페이지로 이동</a>
+                        <a href="loginForm.do" class="btn-update" style="display: inline-block; margin-top: 30px;">로그인 페이지로 이동</a>
                     </div>
                 </c:if>
                 

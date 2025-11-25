@@ -21,39 +21,35 @@
             <div class="sidebar-nav-title">관리자 메뉴</div>
             <a href="dashboard.do" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
-                <div class="nav-text">대시보드</div>
+                <div class="nav-text">Dash Board</div>
             </a>
             <a href="memberList.do" class="sidebar-nav-item active">
                 <div class="nav-icon"></div>
-                <div class="nav-text">회원 관리</div>
-            </a>
-            <a href="musicList.do" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">음악 관리</div>
+                <div class="nav-text">Manage Members</div>
             </a>
             <a href="playlistList.do" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
-                <div class="nav-text">플레이리스트</div>
+                <div class="nav-text">Playlist</div>
             </a>
             
-            <div class="sidebar-nav-title">통계</div>
+            <div class="sidebar-nav-title">Stat</div>
             <a href="statistics.do" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
-                <div class="nav-text">이용 통계</div>
+                <div class="nav-text">Usage Statistics</div>
             </a>
             <a href="payment.do" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
-                <div class="nav-text">결제 관리</div>
+                <div class="nav-text">Payment Management</div>
             </a>
             
-            <div class="sidebar-nav-title">설정</div>
+            <div class="sidebar-nav-title">Settings</div>
             <a href="settings.do" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
-                <div class="nav-text">시스템 설정</div>
+                <div class="nav-text">System Settings</div>
             </a>
             <a href="logout.do" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
-                <div class="nav-text">로그아웃</div>
+                <div class="nav-text">Logout</div>
             </a>
         </div>
 

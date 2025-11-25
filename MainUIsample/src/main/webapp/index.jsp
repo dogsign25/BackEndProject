@@ -88,7 +88,7 @@
                                         <a href="logout.do" class="btn btn-outline">Logout</a>
                                     </c:when>
                                     <c:otherwise>
-                                        <a href="login.do" class="btn btn-outline">Login</a>
+                                        <a href="loginForm.do" class="btn btn-outline">Login</a>
                                         <a href="signupForm.do" class="btn btn-fill">Sign Up</a>
                                     </c:otherwise>
                                 </c:choose>
@@ -112,59 +112,33 @@
                     </div>
                 </div>
                 
-                <div class="song-section">
-                    <div class="section-title-wrap">
-                        <div class="section-title">
-                            Weekly Top <span class="highlight">Songs</span>
+               <!-- Weekly Top Songs 섹션 -->
+<div class="song-section">
+    <div class="section-title-wrap">
+        <div class="section-title">
+            Weekly Top <span class="highlight">Songs</span>
+        </div>
+    </div>
+    <div class="song-card-list">
+        <!-- JSTL로 Spotify 데이터 표시 -->
+                <c:forEach var="song" items="${weeklyTopSongs}">
+                    <div class="song-card-item">
+                        <div class="song-card-content">
+                            <img class="song-card-image" src="${song.imageUrl}" alt="${song.title} Album Cover" />
+                            <div class="song-card-info">
+                                <div class="song-title">${song.title}</div>
+                                <div class="song-artist">${song.artist}</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="song-card-list">
-                        <div class="song-card-item">
-                            <div class="song-card-content">
-                                <img class="song-card-image" src="./src/WhateverItTakes.png" alt="Album Cover" />
-                                <div class="song-card-info">
-                                    <div class="song-title">Whatever It Takes</div>
-                                    <div class="song-artist">Imagine Dragons</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="song-card-item">
-                            <div class="song-card-content">
-                                <img class="song-card-image" src="./src/SkyFall.png" alt="Album Cover" />
-                                <div class="song-card-info">
-                                    <div class="song-title">Skyfall</div>
-                                    <div class="song-artist">Adele</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="song-card-item">
-                            <div class="song-card-content">
-                                <img class="song-card-image" src="./src/SuperMan.png" alt="Album Cover" />
-                                <div class="song-card-info">
-                                    <div class="song-title">Superman</div>
-                                    <div class="song-artist">Eminiem</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="song-card-item">
-                            <div class="song-card-content">
-                                <img class="song-card-image" src="./src/Softcore.png" alt="Album Cover" />
-                                <div class="song-card-info">
-                                    <div class="song-title">Softcore</div>
-                                    <div class="song-artist">The Neighberhood</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="view-all-card">
+                </c:forEach>
+            <div class="view-all-card">
                             <div class="view-all-circle">
                                 <div><div></div></div>
                             </div>
                             <div class="song-title">View All</div>
                         </div>
-                    </div>
-                </div>
-                
+            
                 <div class="song-section">
                     <div class="section-title-wrap">
                         <div class="section-title">
@@ -193,50 +167,26 @@
                     </div>
                 </div>
                 
-                <div class="song-section">
-                    <div class="section-title-wrap">
-                        <div class="section-title">
-                            Top <span class="highlight">Music Video</span>
+                
+               <div class="song-section">
+    <div class="section-title-wrap">
+        <div class="section-title">
+            Top <span class="highlight">Albums</span>
+        </div>
+    </div>
+    <div class="song-card-list">
+        <!-- JSTL로 Spotify 데이터 표시 -->
+                <c:forEach var="album" items="${topAlbums}">
+                    <div class="song-card-item">
+                        <div class="song-card-content">
+                            <img class="song-card-image" src="${album.imageUrl}" alt="${album.title} Album Cover" />
+                            <div class="song-card-info">
+                                <div class="song-title">${album.title}</div>
+                                <div class="song-artist">${album.artist}</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="song-card-list">
-                        <div class="song-card-item">
-                            <div class="song-card-content">
-                                <img class="song-card-image" src="./src/Gossip.png" alt="Music Video Cover" />
-                                <div class="song-card-info">
-                                    <div class="song-title">Greatest Hits</div>
-                                    <div class="song-artist">Top Artists</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="song-card-item">
-                            <div class="song-card-content">
-                                <img class="song-card-image" src="./src/ShapeOfYou.png" alt="Music Video Cover" />
-                                <div class="song-card-info">
-                                    <div class="song-title">Shape Of You</div>
-                                    <div class="song-artist">Ed Sheeran</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="song-card-item">
-                            <div class="song-card-content">
-                                <img class="song-card-image" src="./src/SomeoneLikeYou.png" alt="Music Video Cover" />
-                                <div class="song-card-info">
-                                    <div class="song-title">Someone Like You</div>
-                                    <div class="song-artist">Adele</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="song-card-item">
-                            <div class="song-card-content">
-                                <img class="song-card-image" src="./src/ChillSongs.png" alt="Music Video Cover" />
-                                <div class="song-card-info">
-                                    <div class="song-title">Chill Vibes</div>
-                                    <div class="song-artist">Lo-Fi Artist</div>
-                                </div>
-                            </div>
-                        </div>
-                        
+                </c:forEach>
                         <div class="view-all-card">
                             <div class="view-all-circle">
                                 <div><div></div></div>
@@ -246,100 +196,6 @@
                     </div>
                 </div>
                 
-                <div class="song-section">
-                    <div class="section-title-wrap">
-                        <div class="section-title">
-                            Top <span class="highlight">Albums</span>
-                        </div>
-                    </div>
-                    <div class="song-card-list">
-                        <div class="song-card-item">
-                            <div class="song-card-content">
-                                <img class="song-card-image" src="./src/Adele21.png" alt="Album Cover" />
-                                <div class="song-card-info">
-                                    <div class="song-title">Adele 21</div>
-                                    <div class="song-artist">Adele</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="song-card-item">
-                            <div class="song-card-content">
-                                <img class="song-card-image" src="./src/Scorpion.png" alt="Album Cover" />
-                                <div class="song-card-info">
-                                    <div class="song-title">Electric Dreams</div>
-                                    <div class="song-artist">Synth Wave</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="song-card-item">
-                            <div class="song-card-content">
-                                <img class="song-card-image" src="./src/HarrysHouse.png" alt="Album Cover" />
-                                <div class="song-card-info">
-                                    <div class="song-title">Classic Jams</div>
-                                    <div class="song-artist">Old School</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="song-card-item">
-                            <div class="song-card-content">
-                                <img class="song-card-image" src="./src/BornToDie.png" alt="Album Cover" />
-                                <div class="song-card-info">
-                                    <div class="song-title">Born To Die</div>
-                                    <div class="song-artist">Lana Del Rey</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="view-all-card">
-                            <div class="view-all-circle">
-                                <div><div></div></div>
-                            </div>
-                            <div class="song-title">View All</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="song-section">
-                    <div class="section-title-wrap">
-                        <div class="section-title">
-                            Top <span class="highlight">Playlists</span>
-                        </div>
-                    </div>
-                    <div class="song-card-list">
-                        <div class="song-card-item">
-                            <div class="song-card-content">
-                                <img class="song-card-image" src="./src/GymMix.png" alt="Playlist Cover" />
-                                <div class="song-card-info">
-                                    <div class="song-title">Workout Mix</div>
-                                    <div class="song-artist">Pump Up Jams</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="song-card-item">
-                            <div class="song-card-content">
-                                <img class="song-card-image" src="./src/RelaxingJazz.png" alt="Playlist Cover" />
-                                <div class="song-card-info">
-                                    <div class="song-title">Relaxing Jazz</div>
-                                    <div class="song-artist">Soft Jazz</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="song-card-item">
-                            <div class="song-card-content">
-                                <img class="song-card-image" src="./src/LoveSongs.png" alt="Playlist Cover" />
-                                <div class="song-card-info">
-                                    <div class="song-title">Road Trip Mix</div>
-                                    <div class="song-artist">Indie Rock</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="view-all-card">
-                            <div class="view-all-circle">
-                                <div><div></div></div>
-                            </div>
-                            <div class="song-title">View All</div>
-                        </div>
-                    </div>
-                </div>
                 
                 <div class="cta-banner">
                     <div class="cta-text-group">
@@ -347,7 +203,7 @@
                         <div class="cta-subtitle">Stream unlimited music and discover new artists today.</div>
                     </div>
                     <div class="cta-button-wrapper">
-                        <a href="#" class="cta-button">Sign Up Now</a>
+                        <a href="signupForm.do" class="cta-button">Sign Up Now</a>
                     </div>
                 </div>
                 
