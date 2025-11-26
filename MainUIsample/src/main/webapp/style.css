@@ -206,6 +206,25 @@ a {
     font-weight: 300;
 }
 
+.search-input {
+    flex-grow: 1; /* 남은 공간을 채우도록 설정 */
+    height: 100%; 
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 14px;
+    font-weight: 400;
+    outline: none; /* 포커스 시 기본 테두리 제거 */
+    padding: 0;
+    margin-left: 5px; /* 아이콘과의 간격 조정 */
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    font-weight: 300;
+}
+
 .desktop-nav-links {
     flex: 1 1 0;
     display: flex;

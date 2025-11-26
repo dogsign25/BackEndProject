@@ -73,14 +73,68 @@ public class SpotifyService {
     }
 
     /**
-     * Get New Releases (Albums)
+     * Get New Releases (Albums) - 이미지 고화질 추출 로직 포함 (index 0)
      */
     public List<AlbumDTO> getNewReleases(String accessToken) {
         List<AlbumDTO> list = new ArrayList<>();
+        // 새로운 릴리즈를 가져오는 Mock API URL
         String apiUrl = "https://api.spotify.com/v1/browse/new-releases?limit=4"; 
 
         try {
-            list = fetchAlbumsFromAPI(accessToken, apiUrl, "New Releases");
+            URL url = new URL(apiUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+            
+            int responseCode = conn.getResponseCode();
+            if (responseCode != 200) {
+                System.err.println("[Spotify API] New Releases 요청 실패. 응답 코드: " + responseCode);
+                return list;
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                response.append(line);
+            }
+            br.close();
+
+            // JSON 파싱 시작
+            JSONObject root = new JSONObject(response.toString());
+            // New Releases는 'albums' 객체 안에 있습니다.
+            JSONObject albums = root.getJSONObject("albums");
+            JSONArray items = albums.getJSONArray("items");
+            
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject item = items.getJSONObject(i);
+                
+                String title = item.getString("name");
+                
+                // 아티스트 정보 추출 (첫 번째 아티스트)
+                String artist = item.getJSONArray("artists").getJSONObject(0).getString("name");
+                
+                // 이미지 추출 로직 수정: 가장 큰 이미지 (index 0) 사용
+                JSONArray images = item.getJSONArray("images");
+                String image = "";
+                if (images.length() > 0) {
+                    // images 배열의 첫 번째 요소(index 0)에 가장 큰 이미지가 위치합니다.
+                    image = images.getJSONObject(0).getString("url");
+                }
+                
+                // 앨범 목록이므로 길이는 포함되지 않습니다.
+                String duration = ""; 
+                
+                // 발매일 가져오기
+                String releaseDate = item.getString("release_date");
+                String formattedDate = formatReleaseDate(releaseDate);
+
+                // AlbumDTO에 데이터 추가
+                list.add(new AlbumDTO(title, artist, image, duration, formattedDate));
+            }
+            
+            System.out.println("[Spotify API] Successfully processed " + list.size() + " New Releases");
+
         } catch (Exception e) {
             System.err.println("[Spotify API] Exception during New Releases fetch:");
             e.printStackTrace();
@@ -441,6 +495,74 @@ public class SpotifyService {
         } catch (Exception e) {
             return releaseDate;
         }
+    }
+    
+    public List<AlbumDTO> searchTracks(String accessToken, String searchQuery) {
+        List<AlbumDTO> list = new ArrayList<>();
+        
+        try {
+            // 사용자 검색어를 UTF-8로 인코딩
+            String query = URLEncoder.encode(searchQuery, "UTF-8");
+            // API URL: 트랙 검색, 20개 제한
+            // NOTE: 실제 Spotify API 엔드포인트는 "https://api.spotify.com/v1/search?q=" 입니다.
+            String apiUrl = "https://api.spotify.com/v1/search?q=?q=" + query + "&type=track&limit=20";
+
+            URL url = new URL(apiUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+            
+            int responseCode = conn.getResponseCode();
+            if (responseCode != 200) {
+                System.err.println("[Spotify API] Search Tracks 요청 실패. 응답 코드: " + responseCode);
+                return list;
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                response.append(line);
+            }
+            br.close();
+
+            // JSON 파싱
+            JSONObject root = new JSONObject(response.toString());
+            JSONObject tracks = root.getJSONObject("tracks");
+            JSONArray items = tracks.getJSONArray("items");
+            
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject item = items.getJSONObject(i);
+                
+                String title = item.getString("name");
+                String artist = item.getJSONArray("artists").getJSONObject(0).getString("name");
+                
+                // 이미지 URL 가져오기: 중간 크기 이미지를 선호
+                JSONArray images = item.getJSONObject("album").getJSONArray("images");
+                String image = "";
+                if (images.length() > 0) {
+                    int imageIndex = images.length() > 1 ? 1 : 0; 
+                    image = images.getJSONObject(imageIndex).getString("url");
+                }
+                
+                // duration_ms를 분:초 형식으로 변환
+                int durationMs = item.getInt("duration_ms");
+                String duration = formatDuration(durationMs);
+                
+                // release_date 가져오기
+                String releaseDate = item.getJSONObject("album").getString("release_date");
+                String formattedDate = formatReleaseDate(releaseDate);
+
+                // AlbumDTO는 duration과 releaseDate 필드를 모두 가지고 있습니다.
+                list.add(new AlbumDTO(title, artist, image, duration, formattedDate));
+            }
+
+        } catch (Exception e) {
+            System.err.println("[Spotify API] Search Tracks 파싱 중 Exception 발생:");
+            e.printStackTrace();
+        }
+        
+        return list;
     }
     
 }

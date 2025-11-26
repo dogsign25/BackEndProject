@@ -56,12 +56,16 @@
                     
                     <img class="hero-image" src="./src/MainBackground.png" alt="Hero Background" />
                     <div class="header-overlay">
-                        <div class="nav-bar">
-                            <div class="search-container">
-                                <div class="search-icon"><div></div></div>
-                                <div><div class="search-placeholder">Search For Musics, Artists, ...</div></div>
-                            </div>
-                            <div class="desktop-nav-links">
+                	<div class="nav-bar">
+                    <form action="search.do" method="get" class="search-container">
+                        <div class="search-icon" onclick="this.closest('form').submit();"><div></div></div>
+                        <input type="text" 
+                               name="query" 
+                               placeholder="Search For Musics, Artists, ..." 
+                               class="search-input" 
+                               required />
+                    </form>
+                    <div class="desktop-nav-links">
                                 <a href="#" class="nav-link">About Us</a>
                                 <a href="#" class="nav-link">Contact</a>
                                 <a href="#" class="nav-link">Premium</a>
