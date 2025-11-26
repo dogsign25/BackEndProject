@@ -60,3 +60,5 @@ INSERT INTO members (name, email, password, phone, type, status, birthdate, join
 
 만약에 취향 같은거 넣을거면 users에 필드 추가
 
+<img width="963" height="843" alt="spotify" src="https://github.com/user-attachments/assets/9694b550-ea96-4ef3-b098-de7bbf652857" />
+
