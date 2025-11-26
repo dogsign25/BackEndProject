@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -265,6 +266,77 @@ public class SpotifyService {
         return list;
     }
 
+ // Trending Songs 가져오기 (Search API 사용)
+    public List<AlbumDTO> getTrendingSongs(String accessToken) {
+        List<AlbumDTO> list = new ArrayList<>();
+        
+        try {
+            // 인기 키워드로 검색 (trending, popular 등)
+            String query = URLEncoder.encode("year:2024-2025", "UTF-8");
+            String apiUrl = "https://api.spotify.com/v1/search?q=" + query + "&type=track&limit=10";
+
+            URL url = new URL(apiUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+            
+            int responseCode = conn.getResponseCode();
+            if (responseCode != 200) {
+                System.err.println("[Spotify API] Trending Songs 요청 실패. 응답 코드: " + responseCode);
+                return list;
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                response.append(line);
+            }
+            br.close();
+
+            String jsonString = response.toString();
+            System.out.println("[Spotify API] Trending Songs JSON: " + 
+                               jsonString.substring(0, Math.min(jsonString.length(), 500)) + "...");
+            
+            JSONObject root = new JSONObject(jsonString);
+            JSONObject tracks = root.getJSONObject("tracks");
+            JSONArray items = tracks.getJSONArray("items");
+            
+            if (items.length() == 0) {
+                System.out.println("[Spotify API] 0개의 트렌딩 곡 검색됨.");
+            }
+
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject item = items.getJSONObject(i);
+                
+                String title = item.getString("name");
+                String artist = item.getJSONArray("artists").getJSONObject(0).getString("name");
+                
+                // 이미지 URL 가져오기 (album.images 배열)
+                String image = item.getJSONObject("album")
+                                   .getJSONArray("images")
+                                   .getJSONObject(0)
+                                   .getString("url");
+                
+                // duration_ms를 분:초 형식으로 변환
+                int durationMs = item.getInt("duration_ms");
+                String duration = formatDuration(durationMs);
+                
+                // release_date 가져오기
+                String releaseDate = item.getJSONObject("album").getString("release_date");
+                String formattedDate = formatReleaseDate(releaseDate);
+
+                list.add(new AlbumDTO(title, artist, image, duration, formattedDate));
+            }
+
+        } catch (Exception e) {
+            System.err.println("[Spotify API] Trending Songs 파싱 중 Exception 발생:");
+            e.printStackTrace();
+        }
+        
+        return list;
+    }
+    
     /**
      * Helper method to fetch albums from API
      */
@@ -341,4 +413,34 @@ public class SpotifyService {
         
         return list;
     }
+    // duration_ms를 "분:초" 형식으로 변환
+    private String formatDuration(int durationMs) {
+        int totalSeconds = durationMs / 1000;
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+        return String.format("%d:%02d", minutes, seconds);
+    }
+    
+    // release_date를 "Nov 4, 2023" 형식으로 변환
+    private String formatReleaseDate(String releaseDate) {
+        try {
+            // releaseDate 형식: "2023-11-04" 또는 "2023" 또는 "2023-11"
+            String[] parts = releaseDate.split("-");
+            if (parts.length == 3) {
+                String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+                int month = Integer.parseInt(parts[1]);
+                int day = Integer.parseInt(parts[2]);
+                String year = parts[0];
+                return months[month - 1] + " " + day + ", " + year;
+            } else if (parts.length == 2) {
+                return parts[1] + ", " + parts[0]; // "11, 2023"
+            } else {
+                return releaseDate; // "2023"
+            }
+        } catch (Exception e) {
+            return releaseDate;
+        }
+    }
+    
 }

@@ -25,75 +25,72 @@ public class MainController extends HttpServlet {
         System.out.println("[MainController] Initialized successfully.");
     }
 
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
-        System.out.println("[MainController] GET request received for index.do");
-        
+        SpotifyService service = new SpotifyService();
         List<AlbumDTO> newReleases = Collections.emptyList();
+        List<AlbumDTO> trendingSongs = Collections.emptyList();
         List<AlbumDTO> weeklyTopSongs = Collections.emptyList();
         List<AlbumDTO> topAlbums = Collections.emptyList();
         
         try {
-            // 1. Get Access Token
-            String accessToken = spotifyService.getAccessToken();
+            // 액세스 토큰 획득
+            String accessToken = service.getAccessToken();
             
             if (accessToken != null) {
-                System.out.println("[MainController] Access token acquired successfully");
-                
-                // 2. Fetch New Releases
-                try {
-                    newReleases = spotifyService.getNewReleases(accessToken);
-                    System.out.println("[MainController] New Releases: " + 
-                                      (newReleases != null ? newReleases.size() : 0) + " albums");
-                } catch (Exception e) {
-                    System.err.println("[MainController] Error fetching new releases:");
-                    e.printStackTrace();
+                // 1. New Releases 가져오기
+                newReleases = service.getNewReleases(accessToken);
+                if (newReleases != null && !newReleases.isEmpty()) {
+                    System.out.println("[Controller] New Releases: " + newReleases.size() + "개");
+                } else {
+                    newReleases = Collections.emptyList();
                 }
                 
-                // 3. Fetch Weekly Top Songs
-                try {
-                    weeklyTopSongs = spotifyService.getWeeklyTopSongs(accessToken);
-                    System.out.println("[MainController] Weekly Top Songs: " + 
-                                      (weeklyTopSongs != null ? weeklyTopSongs.size() : 0) + " songs");
-                } catch (Exception e) {
-                    System.err.println("[MainController] Error fetching weekly top songs:");
-                    e.printStackTrace();
+                // 2. Trending Songs 가져오기
+                trendingSongs = service.getTrendingSongs(accessToken);
+                if (trendingSongs != null && !trendingSongs.isEmpty()) {
+                    System.out.println("[Controller] Trending Songs: " + trendingSongs.size() + "개");
+                } else {
+                    trendingSongs = Collections.emptyList();
                 }
                 
-                // 4. Fetch Top Albums
-                try {
-                    topAlbums = spotifyService.getTopAlbums(accessToken);
-                    System.out.println("[MainController] Top Albums: " + 
-                                      (topAlbums != null ? topAlbums.size() : 0) + " albums");
-                } catch (Exception e) {
-                    System.err.println("[MainController] Error fetching top albums:");
-                    e.printStackTrace();
+                // 3. Weekly Top Songs 가져오기
+                weeklyTopSongs = service.getWeeklyTopSongs(accessToken);
+                if (weeklyTopSongs != null && !weeklyTopSongs.isEmpty()) {
+                    System.out.println("[Controller] Weekly Top Songs: " + weeklyTopSongs.size() + "개");
+                } else {
+                    weeklyTopSongs = Collections.emptyList();
+                }
+                
+                // 4. Top Albums 가져오기
+                topAlbums = service.getTopAlbums(accessToken);
+                if (topAlbums != null && !topAlbums.isEmpty()) {
+                    System.out.println("[Controller] Top Albums: " + topAlbums.size() + "개");
+                } else {
+                    topAlbums = Collections.emptyList();
                 }
                 
             } else {
-                System.err.println("[MainController] Failed to acquire access token");
-                request.setAttribute("errorMessage", "Failed to connect to Spotify API. Please try again later.");
+                System.err.println("[Controller] 액세스 토큰 획득 실패.");
+                request.setAttribute("errorMessage", "음악 데이터를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.");
             }
             
         } catch (Exception e) {
-            System.err.println("[MainController] Fatal error while processing Spotify data:");
+            System.err.println("[Controller] 예외 발생:");
             e.printStackTrace();
-            request.setAttribute("errorMessage", "An error occurred while loading music data. Please try again.");
+            request.setAttribute("errorMessage", "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
         }
         
-        // 5. Set all data to request attributes
-        request.setAttribute("newReleases", newReleases != null ? newReleases : Collections.emptyList());
-        request.setAttribute("weeklyTopSongs", weeklyTopSongs != null ? weeklyTopSongs : Collections.emptyList());
-        request.setAttribute("topAlbums", topAlbums != null ? topAlbums : Collections.emptyList());
+        // JSP에 데이터 전달
+        request.setAttribute("newReleases", newReleases);
+        request.setAttribute("trendingSongs", trendingSongs);
+        request.setAttribute("weeklyTopSongs", weeklyTopSongs);
+        request.setAttribute("topAlbums", topAlbums);
         
-        System.out.println("[MainController] Forwarding to index.jsp with:");
-        System.out.println("  - New Releases: " + (newReleases != null ? newReleases.size() : 0));
-        System.out.println("  - Weekly Top Songs: " + (weeklyTopSongs != null ? weeklyTopSongs.size() : 0));
-        System.out.println("  - Top Albums: " + (topAlbums != null ? topAlbums.size() : 0));
+        System.out.println("[Controller] JSP로 데이터 전달 완료.");
         
-        // 6. Forward to JSP
+        // index.jsp로 포워딩
         RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
         dispatcher.forward(request, response);
     }
