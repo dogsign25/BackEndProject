@@ -1,16 +1,22 @@
 # 이번주 해야 할 일!!!!
-- 적으세요 각자
 
-# 1.음악 API
-https://developer.spotify.com/documentation/web-api
+# 노래 재생 - 김동진
 
-# 2.음악 추천 알고리즘
+# Discover
 
-# 3.음악 숏폼화
+# 플레이리스트 만들기
 
-# 4.음악 관련 영상 띄우기
+# 좋아요 누르기
 
-# 5.음악 커버곡 등록
+# 유튜브 API랑 연동 - 나민혁
+
+# 회원 등급에 따른 혜택 구현
+
+# 뮤직 퀴즈 챌린지
+
+# Ai Api사용해서 노래 추천 받기
+
+# 관리자 페이지 기능 추가 - 김동진
 
 # 데이터베이스
 회원 테이블
@@ -43,7 +49,6 @@ CREATE TABLE IF NOT EXISTS members (
 삽입
 
 ```
-
 INSERT INTO members (name, email, password, phone, type, status, birthdate, join_date, last_login) VALUES
 ('김철수', 'kim@example.com', '$2y$10$abcdefghijklmnopqrstuvwxyz', '010-1234-5678', 'premium', 'active', '1990-05-15', '2024-01-15', '2024-11-15'),
 ('이영희', 'lee@example.com', '$2y$10$abcdefghijklmnopqrstuvwxyz', '010-2345-6789', 'free', 'active', '1992-08-20', '2024-02-20', '2024-11-14'),
