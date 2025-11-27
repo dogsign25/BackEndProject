@@ -14,7 +14,8 @@ import java.util.List;
  * Main Page Controller
  * Handles index.do request and fetches all Spotify data
  */
-@WebServlet("/index.do")
+// 🟢 수정: index.do와 discover.do를 모두 처리하도록 매핑 수정
+@WebServlet({"/index.do", "/discover.do"})
 public class MainController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private SpotifyService spotifyService;
@@ -39,7 +40,7 @@ public class MainController extends HttpServlet {
             String accessToken = service.getAccessToken();
             
             if (accessToken != null) {
-                // 1. New Releases 가져오기
+                // 1. New Releases 가져오기 (메소드 이름 수정: getNewReleases)
                 newReleases = service.getNewReleases(accessToken);
                 if (newReleases != null && !newReleases.isEmpty()) {
                     System.out.println("[Controller] New Releases: " + newReleases.size() + "개");
@@ -82,16 +83,27 @@ public class MainController extends HttpServlet {
             request.setAttribute("errorMessage", "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
         }
         
-        // JSP에 데이터 전달
+        // JSP에 데이터 전달 (index.do와 discover.do 모두 동일한 데이터를 받습니다)
         request.setAttribute("newReleases", newReleases);
         request.setAttribute("trendingSongs", trendingSongs);
         request.setAttribute("weeklyTopSongs", weeklyTopSongs);
         request.setAttribute("topAlbums", topAlbums);
         
-        System.out.println("[Controller] JSP로 데이터 전달 완료.");
+        // 🟢 추가: 요청 경로에 따라 포워딩할 JSP 결정
+        String uri = request.getRequestURI();
+        String command = uri.substring(uri.lastIndexOf("/") + 1); // index.do 또는 discover.do
         
-        // index.jsp로 포워딩
-        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+        String viewPage = "index.jsp"; // 기본값은 index.jsp
+        
+        // 요청이 discover.do인 경우, discover.jsp로 포워딩
+        if ("discover.do".equals(command)) {
+            viewPage = "discover.jsp"; 
+        }
+        
+        System.out.println("[Controller] " + viewPage + "로 데이터 전달 완료.");
+        
+        // 최종 JSP로 포워딩
+        RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
         dispatcher.forward(request, response);
     }
     

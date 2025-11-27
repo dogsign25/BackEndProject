@@ -45,6 +45,10 @@ public class MemberController extends HttpServlet {
                     memberView(request, response);
                     break;
                     
+                case "discover.do":
+                    request.getRequestDispatcher("discover.jsp").forward(request, response);
+                    break;
+                    
                 case "memberInsertForm.do":
                     request.getRequestDispatcher("memberForm.jsp").forward(request, response);
                     break;
@@ -252,7 +256,7 @@ public class MemberController extends HttpServlet {
             session.setAttribute("userType", member.getType());
             session.setAttribute("userId", member.getId());
             
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("index.do");
         } else {
             request.setAttribute("errorMessage", "Invalid email or password");
             request.getRequestDispatcher("login.jsp").forward(request, response);
