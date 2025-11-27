@@ -56,16 +56,12 @@
                     
                     <img class="hero-image" src="./src/MainBackground.png" alt="Hero Background" />
                     <div class="header-overlay">
-                	<div class="nav-bar">
-                    <form action="search.do" method="get" class="search-container">
-                        <div class="search-icon" onclick="this.closest('form').submit();"><div></div></div>
-                        <input type="text" 
-                               name="query" 
-                               placeholder="Search For Musics, Artists, ..." 
-                               class="search-input" 
-                               required />
-                    </form>
-                    <div class="desktop-nav-links">
+                        <div class="nav-bar">
+                            <div class="search-container">
+                                <div class="search-icon"><div></div></div>
+                                <div><div class="search-placeholder">Search For Musics, Artists, ...</div></div>
+                            </div>
+                            <div class="desktop-nav-links">
                                 <a href="#" class="nav-link">About Us</a>
                                 <a href="#" class="nav-link">Contact</a>
                                 <a href="#" class="nav-link">Premium</a>
@@ -204,7 +200,8 @@
                     </div>
                     
                     <c:forEach var="song" items="${trendingSongs}" varStatus="status">
-                        <div class="table-row">
+                    <!-- onclick으로 인해 songDetail.do로 이동-->
+                        <div class="table-row" onclick="location.href='songDetail.do?id=${song.spotifyId}'" style="cursor: pointer;">
                             <div class="row-col-hash">#${status.index + 1}</div>
                             <div class="row-col-track-artist">
                                 <img class="track-album-cover" src="${song.imageUrl}" alt="${song.title} Album Cover" />
@@ -224,7 +221,8 @@
                 </div>
             </div>
             
-             <footer class="footer">
+            <!-- Footer -->
+            <footer class="footer">
                 <div class="footer-container">
                     <div class="footer-col">
                         <div class="footer-heading">Company</div>
@@ -260,3 +258,4 @@
     </div>
 </body>
 </html>
+   

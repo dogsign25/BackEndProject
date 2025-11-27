@@ -6,6 +6,7 @@ public class AlbumDTO {
     private String imageUrl;   // 앨범 커버 이미지 URL
     private String duration;   // 음악 길이 (3:26 형식)
     private String releaseDate; // 발매일 (옵션)
+    private String spotifyId;   // Spotify 트랙 ID (재생용)
     
     // 기본 생성자 (3개 파라미터)
     public AlbumDTO(String title, String artist, String imageUrl) {
@@ -22,13 +23,14 @@ public class AlbumDTO {
         this.duration = duration;
     }
     
-    // 모든 필드 포함 생성자 (5개 파라미터)
-    public AlbumDTO(String title, String artist, String imageUrl, String duration, String releaseDate) {
+    // 모든 필드 포함 생성자 (6개 파라미터)
+    public AlbumDTO(String title, String artist, String imageUrl, String duration, String releaseDate, String spotifyId) {
         this.title = title;
         this.artist = artist;
         this.imageUrl = imageUrl;
         this.duration = duration;
         this.releaseDate = releaseDate;
+        this.spotifyId = spotifyId;
     }
     
     public String getTitle() {
@@ -69,5 +71,13 @@ public class AlbumDTO {
     
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
+    }
+    
+    public String getSpotifyId() {
+        return spotifyId;
+    }
+    
+    public void setSpotifyId(String spotifyId) {
+        this.spotifyId = spotifyId;
     }
 }

@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,15 +18,15 @@ import java.util.List;
  */
 @WebServlet("*.do")
 public class MemberController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private MemberDAO memberDAO;
+    private static final long serialVersionUID = 1L;
+    private MemberDAO memberDAO;
     
-	@Override
+    @Override
     public void init() throws ServletException {
         memberDAO = new MemberDAO();
         System.out.println("[MemberController] Initialized successfully.");
     }
-	
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
@@ -46,7 +45,7 @@ public class MemberController extends HttpServlet {
                     break;
                     
                 case "memberInsertForm.do":
-                    request.getRequestDispatcher("memberForm.jsp").forward(request, response);
+                    request.getRequestDispatcher("/admin/memberForm.jsp").forward(request, response);
                     break;
                     
                 case "memberUpdateForm.do":
@@ -155,7 +154,7 @@ public class MemberController extends HttpServlet {
         
         request.setAttribute("members", members);
         request.setAttribute("stats", stats);
-        request.getRequestDispatcher("memberManage.jsp").forward(request, response);
+        request.getRequestDispatcher("/admin/memberManage.jsp").forward(request, response);
     }
     
     private void memberView(HttpServletRequest request, HttpServletResponse response) 
@@ -165,7 +164,7 @@ public class MemberController extends HttpServlet {
         MemberDTO member = memberDAO.getMemberById(id);
         
         request.setAttribute("member", member);
-        request.getRequestDispatcher("memberView.jsp").forward(request, response);
+        request.getRequestDispatcher("/admin/memberView.jsp").forward(request, response);
     }
     
     private void memberUpdateForm(HttpServletRequest request, HttpServletResponse response) 
@@ -175,7 +174,7 @@ public class MemberController extends HttpServlet {
         MemberDTO member = memberDAO.getMemberById(id);
         
         request.setAttribute("member", member);
-        request.getRequestDispatcher("memberUpdateForm.jsp").forward(request, response);
+        request.getRequestDispatcher("/admin/memberUpdateForm.jsp").forward(request, response);
     }
     
     private void memberInsert(HttpServletRequest request, HttpServletResponse response) 
@@ -252,7 +251,7 @@ public class MemberController extends HttpServlet {
             session.setAttribute("userType", member.getType());
             session.setAttribute("userId", member.getId());
             
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("index.do");
         } else {
             request.setAttribute("errorMessage", "Invalid email or password");
             request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -265,7 +264,7 @@ public class MemberController extends HttpServlet {
         MemberDTO member = new MemberDTO();
         member.setName(request.getParameter("name"));
         member.setEmail(request.getParameter("email"));
-        member.setPassword(request.getParameter("password")); // TODO: Hash password
+        member.setPassword(request.getParameter("password"));
         member.setPhone(request.getParameter("phone"));
         member.setBirthdate(request.getParameter("birthdate"));
         member.setType("free");
