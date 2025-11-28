@@ -44,6 +44,10 @@ public class MemberController extends HttpServlet {
                     memberView(request, response);
                     break;
                     
+                case "discover.do":
+                    request.getRequestDispatcher("discover.jsp").forward(request, response);
+                    break;
+                    
                 case "memberInsertForm.do":
                     request.getRequestDispatcher("/admin/memberForm.jsp").forward(request, response);
                     break;

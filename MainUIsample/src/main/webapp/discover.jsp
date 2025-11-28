@@ -1,14 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-    
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0;url=index.do" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WaterMelon Music Platform</title>
-    <link rel="stylesheet" href="./style.css">
+    <title>WaterMelon Music Platform - Discover</title> <link rel="stylesheet" href="./style.css">
 </head>
 <body>
     <div class="page-layout">
@@ -17,12 +14,10 @@
                 <span class="highlight">Water</span>Melon
             </div>
             <div class="sidebar-nav-title">Menu</div>
-            <a href="index.do" class="sidebar-nav-item active">
-                <div class="nav-icon"></div>
+            <a href="index.do" class="sidebar-nav-item"> <div class="nav-icon"></div>
                 <div class="nav-text">Home</div>
             </a>
-            <a href="discover.do" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
+            <a href="discover.do" class="sidebar-nav-item active"> <div class="nav-icon"></div>
                 <div class="nav-text">Discover</div>
             </a>
             <a href="#" class="sidebar-nav-item">
@@ -51,55 +46,6 @@
         
         <div class="main-content-wrapper">
             <div class="content-container">
-                <div class="hero-section">
-                    <c:if test="${not empty errorMessage}">
-                        <p style="color:red; text-align:center; margin-top: 10px;">${errorMessage}</p>
-                    </c:if>
-                    
-                    <img class="hero-image" src="./src/MainBackground.png" alt="Hero Background" />
-                    <div class="header-overlay">
-                        <div class="nav-bar">
-                            <div class="search-container">
-                                <div class="search-icon"><div></div></div>
-                                <div><div class="search-placeholder">Search For Musics, Artists, ...</div></div>
-                            </div>
-                            <div class="desktop-nav-links">
-                                <a href="#" class="nav-link">About Us</a>
-                                <a href="#" class="nav-link">Contact</a>
-                                <a href="#" class="nav-link">Premium</a>
-                            </div>
-                            <div class="auth-buttons">
-                                <c:choose>
-                                    <c:when test="${not empty sessionScope.userName}">
-                                        <span style="color:white; margin-right: 15px;">환영합니다, ${sessionScope.userName}님!</span>
-                                        <a href="logout.do" class="btn btn-outline">Logout</a>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <a href="loginForm.do" class="btn btn-outline">Login</a>
-                                        <a href="signupForm.do" class="btn btn-fill">Sign Up</a>
-                                    </c:otherwise>
-                                </c:choose>
-                            </div>
-                        </div>
-                    </div> 
-                    
-                    <div class="hero-text-block">
-                        <div class="hero-title">
-                            All the <span class="highlight">Best Songs</span><br/>in One Place
-                        </div>
-                        <div class="hero-description">
-                            On our website, you can access an amazing collection of popular and new songs.
-                            Stream your favorite tracks in high quality and enjoy without interruptions.
-                            Whatever your taste in music, we have it all for you!
-                        </div>
-                        <div class="hero-actions">
-                            <a href="#" class="action-btn-green">Discover Now</a>
-                            <a href="#" class="action-btn-blue">Create Playlist</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Weekly Top Songs 섹션 -->
                 <div class="song-section">
                     <div class="section-title-wrap">
                         <div class="section-title">
@@ -125,7 +71,6 @@
                     </div>
                 </div>
                 
-                <!-- New Release Songs 섹션 -->
                 <div class="song-section">
                     <div class="section-title-wrap">
                         <div class="section-title">
@@ -151,7 +96,6 @@
                     </div>
                 </div>
                 
-                <!-- Top Albums 섹션 -->
                 <div class="song-section">
                     <div class="section-title-wrap">
                         <div class="section-title">
@@ -187,7 +131,6 @@
                     </div>
                 </div>
                 
-                <!-- Trending Songs 테이블 (Spotify API 데이터로 채움) -->
                 <div class="trending-table-container">
                     <div class="section-title">
                         Trending <span class="highlight">Songs</span>
@@ -202,8 +145,7 @@
                     </div>
                     
                     <c:forEach var="song" items="${trendingSongs}" varStatus="status">
-                    <!-- onclick으로 인해 songDetail.do로 이동-->
-                        <div class="table-row" onclick="location.href='songDetail.do?id=${song.spotifyId}'" style="cursor: pointer;">
+                        <div class="table-row">
                             <div class="row-col-hash">#${status.index + 1}</div>
                             <div class="row-col-track-artist">
                                 <img class="track-album-cover" src="${song.imageUrl}" alt="${song.title} Album Cover" />
@@ -222,9 +164,8 @@
                     </c:forEach>
                 </div>
             </div>
-            
-            <!-- Footer -->
-            <footer class="footer">
+       
+             <footer class="footer">
                 <div class="footer-container">
                     <div class="footer-col">
                         <div class="footer-heading">Company</div>
@@ -260,4 +201,3 @@
     </div>
 </body>
 </html>
-   
