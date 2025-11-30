@@ -34,18 +34,8 @@ public class SpotifyService {
             conn.getOutputStream().flush(); 
 
             int responseCode = conn.getResponseCode();
-            System.out.println("[Spotify API] Token Request Response Code: " + responseCode);
-
             if (responseCode != 200) {
-                System.err.println("[Spotify API] 토큰 요청 실패:");
-                BufferedReader errorBr = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-                String errorLine;
-                StringBuilder errorResponse = new StringBuilder();
-                while ((errorLine = errorBr.readLine()) != null) {
-                    errorResponse.append(errorLine);
-                }
-                errorBr.close();
-                System.err.println(errorResponse.toString());
+                System.err.println("[Spotify API] 토큰 요청 실패");
                 return null;
             }
 
@@ -70,7 +60,9 @@ public class SpotifyService {
         }
     }
 
-    // 신곡 데이터 가져오기 (New Releases)
+    /**
+     * Get New Releases (앨범 리스트)
+     */
     public List<AlbumDTO> getNewReleases(String accessToken) {
         List<AlbumDTO> list = new ArrayList<>();
         String apiUrl = "https://api.spotify.com/v1/browse/new-releases?limit=4"; 
@@ -83,7 +75,7 @@ public class SpotifyService {
             
             int responseCode = conn.getResponseCode();
             if (responseCode != 200) {
-                System.err.println("[Spotify API] New Releases 요청 실패. 응답 코드: " + responseCode);
+                System.err.println("[Spotify API] New Releases 요청 실패");
                 return list;
             }
 
@@ -95,46 +87,154 @@ public class SpotifyService {
             }
             br.close();
 
-            String jsonString = response.toString();
-            System.out.println("[Spotify API] New Releases JSON: " + 
-                               jsonString.substring(0, Math.min(jsonString.length(), 500)) + "...");
-            
-            JSONObject root = new JSONObject(jsonString);
+            JSONObject root = new JSONObject(response.toString());
             JSONObject albums = root.getJSONObject("albums");
             JSONArray items = albums.getJSONArray("items");
-            
-            if (items.length() == 0) {
-                System.out.println("[Spotify API] 0개의 신규 앨범 검색됨.");
-            }
 
             for (int i = 0; i < items.length(); i++) {
                 JSONObject item = items.getJSONObject(i);
                 
-                String title = item.getString("name"); 
+                String albumName = item.getString("name"); 
                 String artist = item.getJSONArray("artists").getJSONObject(0).getString("name");
-                JSONArray images = item.getJSONArray("images");
-                String image = "";
-                if (images.length() > 0) {
-                    // images 배열의 첫 번째 요소(index 0)에 가장 큰 이미지가 위치합니다.
-                    image = images.getJSONObject(0).getString("url");
-                }
-                list.add(new AlbumDTO(title, artist, image));
+                String image = item.getJSONArray("images").getJSONObject(0).getString("url");
+                String albumId = item.getString("id");
+                
+                list.add(new AlbumDTO(albumName, artist, image, albumId));
             }
 
         } catch (Exception e) {
-            System.err.println("[Spotify API] New Releases 파싱 중 Exception 발생:");
+            System.err.println("[Spotify API] New Releases 파싱 중 Exception:");
             e.printStackTrace();
         }
         
         return list;
     }
-
-    // Trending Songs 가져오기 (Search API 사용)
-    public List<AlbumDTO> getTrendingSongs(String accessToken) {
+    
+    /**
+     * Get Top Albums (앨범 리스트)
+     */
+    public List<AlbumDTO> getTopAlbums(String accessToken) {
         List<AlbumDTO> list = new ArrayList<>();
+        String apiUrl = "https://api.spotify.com/v1/search?q=year:2024&type=album&limit=4";
+
+        try {
+            URL url = new URL(apiUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+            
+            int responseCode = conn.getResponseCode();
+            if (responseCode != 200) {
+                System.err.println("[Spotify API] Top Albums 요청 실패");
+                return list;
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                response.append(line);
+            }
+            br.close();
+
+            JSONObject root = new JSONObject(response.toString());
+            JSONObject albums = root.getJSONObject("albums");
+            JSONArray items = albums.getJSONArray("items");
+
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject item = items.getJSONObject(i);
+                
+                String albumName = item.getString("name");
+                String artist = item.getJSONArray("artists").getJSONObject(0).getString("name");
+                String image = item.getJSONArray("images").getJSONObject(0).getString("url");
+                String albumId = item.getString("id");
+
+                list.add(new AlbumDTO(albumName, artist, image, albumId));
+            }
+
+        } catch (Exception e) {
+            System.err.println("[Spotify API] Top Albums 파싱 중 Exception:");
+            e.printStackTrace();
+        }
+        
+        return list;
+    }
+    
+    /**
+     * Get Album Details (앨범 상세 정보 + 트랙 리스트)
+     */
+    public AlbumDTO getAlbumDetails(String accessToken, String albumId) {
+        try {
+            String apiUrl = "https://api.spotify.com/v1/albums/" + albumId;
+
+            URL url = new URL(apiUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+            
+            int responseCode = conn.getResponseCode();
+            if (responseCode != 200) {
+                System.err.println("[Spotify API] Album Details 요청 실패");
+                return null;
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                response.append(line);
+            }
+            br.close();
+
+            JSONObject album = new JSONObject(response.toString());
+            
+            String albumName = album.getString("name");
+            String artist = album.getJSONArray("artists").getJSONObject(0).getString("name");
+            String image = album.getJSONArray("images").getJSONObject(0).getString("url");
+            String releaseDate = album.getString("release_date");
+            String formattedDate = formatReleaseDate(releaseDate);
+            int totalTracks = album.getInt("total_tracks");
+            
+            AlbumDTO albumDTO = new AlbumDTO(albumName, artist, image, formattedDate, albumId, totalTracks);
+            
+            // 트랙 리스트 파싱
+            List<TrackDTO> tracks = new ArrayList<>();
+            JSONArray tracksArray = album.getJSONObject("tracks").getJSONArray("items");
+            
+            for (int i = 0; i < tracksArray.length(); i++) {
+                JSONObject track = tracksArray.getJSONObject(i);
+                
+                String trackTitle = track.getString("name");
+                String trackArtist = track.getJSONArray("artists").getJSONObject(0).getString("name");
+                int durationMs = track.getInt("duration_ms");
+                String duration = formatDuration(durationMs);
+                String trackId = track.getString("id");
+                
+                TrackDTO trackDTO = new TrackDTO(trackTitle, trackArtist, image, duration, 
+                                                  formattedDate, trackId, albumName);
+                tracks.add(trackDTO);
+            }
+            
+            albumDTO.setTracks(tracks);
+            
+            System.out.println("[Spotify API] Album Details 조회 성공: " + albumName + " (" + tracks.size() + " tracks)");
+            return albumDTO;
+
+        } catch (Exception e) {
+            System.err.println("[Spotify API] Album Details 파싱 중 Exception:");
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+
+    /**
+     * Get Trending Songs (트랙 리스트)
+     */
+    public List<TrackDTO> getTrendingSongs(String accessToken) {
+        List<TrackDTO> list = new ArrayList<>();
         
         try {
-            // 인기 키워드로 검색 (trending, popular 등)
             String query = URLEncoder.encode("year:2024-2025", "UTF-8");
             String apiUrl = "https://api.spotify.com/v1/search?q=" + query + "&type=track&limit=10";
 
@@ -145,7 +245,7 @@ public class SpotifyService {
             
             int responseCode = conn.getResponseCode();
             if (responseCode != 200) {
-                System.err.println("[Spotify API] Trending Songs 요청 실패. 응답 코드: " + responseCode);
+                System.err.println("[Spotify API] Trending Songs 요청 실패");
                 return list;
             }
 
@@ -157,46 +257,83 @@ public class SpotifyService {
             }
             br.close();
 
-            String jsonString = response.toString();
-            System.out.println("[Spotify API] Trending Songs JSON: " + 
-                               jsonString.substring(0, Math.min(jsonString.length(), 500)) + "...");
-            
-            JSONObject root = new JSONObject(jsonString);
+            JSONObject root = new JSONObject(response.toString());
             JSONObject tracks = root.getJSONObject("tracks");
             JSONArray items = tracks.getJSONArray("items");
-            
-            if (items.length() == 0) {
-                System.out.println("[Spotify API] 0개의 트렌딩 곡 검색됨.");
-            }
 
             for (int i = 0; i < items.length(); i++) {
                 JSONObject item = items.getJSONObject(i);
                 
                 String title = item.getString("name");
                 String artist = item.getJSONArray("artists").getJSONObject(0).getString("name");
+                String image = item.getJSONObject("album").getJSONArray("images").getJSONObject(0).getString("url");
                 
-                // 이미지 URL 가져오기 (album.images 배열)
-                String image = item.getJSONObject("album")
-                                   .getJSONArray("images")
-                                   .getJSONObject(0)
-                                   .getString("url");
-                
-                // duration_ms를 분:초 형식으로 변환
                 int durationMs = item.getInt("duration_ms");
                 String duration = formatDuration(durationMs);
                 
-                // release_date 가져오기
                 String releaseDate = item.getJSONObject("album").getString("release_date");
                 String formattedDate = formatReleaseDate(releaseDate);
                 
-                // Spotify Track ID 추출
                 String spotifyId = item.getString("id");
+                String albumName = item.getJSONObject("album").getString("name");
 
-                list.add(new AlbumDTO(title, artist, image, duration, formattedDate, spotifyId));
+                list.add(new TrackDTO(title, artist, image, duration, formattedDate, spotifyId, albumName));
             }
 
         } catch (Exception e) {
-            System.err.println("[Spotify API] Trending Songs 파싱 중 Exception 발생:");
+            System.err.println("[Spotify API] Trending Songs 파싱 중 Exception:");
+            e.printStackTrace();
+        }
+        
+        return list;
+    }
+    
+    /**
+     * Get Weekly Top Songs (트랙 리스트)
+     */
+    public List<TrackDTO> getWeeklyTopSongs(String accessToken) {
+        List<TrackDTO> list = new ArrayList<>();
+        
+        try {
+            String query = URLEncoder.encode("genre:pop", "UTF-8");
+            String apiUrl = "https://api.spotify.com/v1/search?q=" + query + "&type=track&limit=4";
+
+            URL url = new URL(apiUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+            
+            int responseCode = conn.getResponseCode();
+            if (responseCode != 200) {
+                System.err.println("[Spotify API] Weekly Top Songs 요청 실패");
+                return list;
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                response.append(line);
+            }
+            br.close();
+
+            JSONObject root = new JSONObject(response.toString());
+            JSONObject tracks = root.getJSONObject("tracks");
+            JSONArray items = tracks.getJSONArray("items");
+
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject item = items.getJSONObject(i);
+                
+                String title = item.getString("name");
+                String artist = item.getJSONArray("artists").getJSONObject(0).getString("name");
+                String image = item.getJSONObject("album").getJSONArray("images").getJSONObject(0).getString("url");
+                String spotifyId = item.getString("id");
+
+                list.add(new TrackDTO(title, artist, image, spotifyId));
+            }
+
+        } catch (Exception e) {
+            System.err.println("[Spotify API] Weekly Top Songs 파싱 중 Exception:");
             e.printStackTrace();
         }
         
@@ -206,7 +343,7 @@ public class SpotifyService {
     /**
      * Get Track Details by Spotify ID
      */
-    public AlbumDTO getTrackDetails(String accessToken, String trackId) {
+    public TrackDTO getTrackDetails(String accessToken, String trackId) {
         try {
             String apiUrl = "https://api.spotify.com/v1/tracks/" + trackId;
 
@@ -217,7 +354,7 @@ public class SpotifyService {
             
             int responseCode = conn.getResponseCode();
             if (responseCode != 200) {
-                System.err.println("[Spotify API] Track Details 요청 실패. 응답 코드: " + responseCode);
+                System.err.println("[Spotify API] Track Details 요청 실패");
                 return null;
             }
 
@@ -242,26 +379,28 @@ public class SpotifyService {
             String formattedDate = formatReleaseDate(releaseDate);
             
             String spotifyId = track.getString("id");
+            String albumName = track.getJSONObject("album").getString("name");
 
             System.out.println("[Spotify API] Track Details 조회 성공: " + title);
-            return new AlbumDTO(title, artist, image, duration, formattedDate, spotifyId);
+            return new TrackDTO(title, artist, image, duration, formattedDate, spotifyId, albumName);
 
         } catch (Exception e) {
-            System.err.println("[Spotify API] Track Details 파싱 중 Exception 발생:");
+            System.err.println("[Spotify API] Track Details 파싱 중 Exception:");
             e.printStackTrace();
         }
         
         return null;
     }
     
-    // Weekly Top Songs 가져오기 (Search API 사용 - 다른 키워드)
-    public List<AlbumDTO> getWeeklyTopSongs(String accessToken) {
-        List<AlbumDTO> list = new ArrayList<>();
+    /**
+     * Search Tracks
+     */
+    public List<TrackDTO> searchTracks(String accessToken, String searchQuery) {
+        List<TrackDTO> list = new ArrayList<>();
         
         try {
-            // 장르나 인기 아티스트로 검색
-            String query = URLEncoder.encode("genre:pop", "UTF-8");
-            String apiUrl = "https://api.spotify.com/v1/search?q=" + query + "&type=track&limit=4";
+            String query = URLEncoder.encode(searchQuery, "UTF-8");
+            String apiUrl = "https://api.spotify.com/v1/search?q=" + query + "&type=track&limit=20";
 
             URL url = new URL(apiUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -270,7 +409,7 @@ public class SpotifyService {
             
             int responseCode = conn.getResponseCode();
             if (responseCode != 200) {
-                System.err.println("[Spotify API] Weekly Top Songs 요청 실패. 응답 코드: " + responseCode);
+                System.err.println("[Spotify API] Search Tracks 요청 실패");
                 return list;
             }
 
@@ -285,78 +424,41 @@ public class SpotifyService {
             JSONObject root = new JSONObject(response.toString());
             JSONObject tracks = root.getJSONObject("tracks");
             JSONArray items = tracks.getJSONArray("items");
-
-            for (int i = 0; i < items.length(); i++) {
-                JSONObject item = items.getJSONObject(i);
-                
-                String title = item.getString("name");
-                String artist = item.getJSONArray("artists").getJSONObject(0).getString("name");
-                String image = item.getJSONObject("album")
-                                   .getJSONArray("images")
-                                   .getJSONObject(0)
-                                   .getString("url");
-
-                list.add(new AlbumDTO(title, artist, image));
-            }
-
-        } catch (Exception e) {
-            System.err.println("[Spotify API] Weekly Top Songs 파싱 중 Exception 발생:");
-            e.printStackTrace();
-        }
-        
-        return list;
-    }
-    
-    // Top Albums 가져오기 (Search API 사용)
-    public List<AlbumDTO> getTopAlbums(String accessToken) {
-        List<AlbumDTO> list = new ArrayList<>();
-        
-        try {
-            String query = URLEncoder.encode("year:2024", "UTF-8");
-            String apiUrl = "https://api.spotify.com/v1/search?q=" + query + "&type=album&limit=4";
-
-            URL url = new URL(apiUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
             
-            int responseCode = conn.getResponseCode();
-            if (responseCode != 200) {
-                System.err.println("[Spotify API] Top Albums 요청 실패. 응답 코드: " + responseCode);
-                return list;
-            }
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            StringBuilder response = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                response.append(line);
-            }
-            br.close();
-
-            JSONObject root = new JSONObject(response.toString());
-            JSONObject albums = root.getJSONObject("albums");
-            JSONArray items = albums.getJSONArray("items");
-
             for (int i = 0; i < items.length(); i++) {
                 JSONObject item = items.getJSONObject(i);
                 
                 String title = item.getString("name");
                 String artist = item.getJSONArray("artists").getJSONObject(0).getString("name");
-                String image = item.getJSONArray("images").getJSONObject(0).getString("url");
+                
+                JSONArray images = item.getJSONObject("album").getJSONArray("images");
+                String image = "";
+                if (images.length() > 0) {
+                    int imageIndex = images.length() > 1 ? 1 : 0; 
+                    image = images.getJSONObject(imageIndex).getString("url");
+                }
+                
+                int durationMs = item.getInt("duration_ms");
+                String duration = formatDuration(durationMs);
+                
+                String releaseDate = item.getJSONObject("album").getString("release_date");
+                String formattedDate = formatReleaseDate(releaseDate);
+                
+                String spotifyId = item.getString("id");
+                String albumName = item.getJSONObject("album").getString("name");
 
-                list.add(new AlbumDTO(title, artist, image));
+                list.add(new TrackDTO(title, artist, image, duration, formattedDate, spotifyId, albumName));
             }
 
         } catch (Exception e) {
-            System.err.println("[Spotify API] Top Albums 파싱 중 Exception 발생:");
+            System.err.println("[Spotify API] Search Tracks 파싱 중 Exception:");
             e.printStackTrace();
         }
         
         return list;
     }
     
-    // duration_ms를 "분:초" 형식으로 변환
+    // Helper Methods
     private String formatDuration(int durationMs) {
         int totalSeconds = durationMs / 1000;
         int minutes = totalSeconds / 60;
@@ -364,10 +466,8 @@ public class SpotifyService {
         return String.format("%d:%02d", minutes, seconds);
     }
     
-    // release_date를 "Nov 4, 2023" 형식으로 변환
     private String formatReleaseDate(String releaseDate) {
         try {
-            // releaseDate 형식: "2023-11-04" 또는 "2023" 또는 "2023-11"
             String[] parts = releaseDate.split("-");
             if (parts.length == 3) {
                 String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", 
@@ -377,80 +477,12 @@ public class SpotifyService {
                 String year = parts[0];
                 return months[month - 1] + " " + day + ", " + year;
             } else if (parts.length == 2) {
-                return parts[1] + ", " + parts[0]; // "11, 2023"
+                return parts[1] + ", " + parts[0];
             } else {
-                return releaseDate; // "2023"
+                return releaseDate;
             }
         } catch (Exception e) {
             return releaseDate;
         }
-    }
-    
-    public List<AlbumDTO> searchTracks(String accessToken, String searchQuery) {
-        List<AlbumDTO> list = new ArrayList<>();
-        
-        try {
-            // 사용자 검색어를 UTF-8로 인코딩
-            String query = URLEncoder.encode(searchQuery, "UTF-8");
-            // API URL: 트랙 검색, 20개 제한
-            // NOTE: 실제 Spotify API 엔드포인트는 "https://api.spotify.com/v1/search?q=" 입니다.
-            String apiUrl = "https://api.spotify.com/v1/search?q=?q=" + query + "&type=track&limit=20";
-
-            URL url = new URL(apiUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
-            
-            int responseCode = conn.getResponseCode();
-            if (responseCode != 200) {
-                System.err.println("[Spotify API] Search Tracks 요청 실패. 응답 코드: " + responseCode);
-                return list;
-            }
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            StringBuilder response = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                response.append(line);
-            }
-            br.close();
-
-            // JSON 파싱
-            JSONObject root = new JSONObject(response.toString());
-            JSONObject tracks = root.getJSONObject("tracks");
-            JSONArray items = tracks.getJSONArray("items");
-            
-            for (int i = 0; i < items.length(); i++) {
-                JSONObject item = items.getJSONObject(i);
-                
-                String title = item.getString("name");
-                String artist = item.getJSONArray("artists").getJSONObject(0).getString("name");
-                
-                // 이미지 URL 가져오기: 중간 크기 이미지를 선호
-                JSONArray images = item.getJSONObject("album").getJSONArray("images");
-                String image = "";
-                if (images.length() > 0) {
-                    int imageIndex = images.length() > 1 ? 1 : 0; 
-                    image = images.getJSONObject(imageIndex).getString("url");
-                }
-                
-                // duration_ms를 분:초 형식으로 변환
-                int durationMs = item.getInt("duration_ms");
-                String duration = formatDuration(durationMs);
-                
-                // release_date 가져오기
-                String releaseDate = item.getJSONObject("album").getString("release_date");
-                String formattedDate = formatReleaseDate(releaseDate);
-
-                // AlbumDTO는 duration과 releaseDate 필드를 모두 가지고 있습니다.
-                list.add(new AlbumDTO(title, artist, image, duration));
-            }
-
-        } catch (Exception e) {
-            System.err.println("[Spotify API] Search Tracks 파싱 중 Exception 발생:");
-            e.printStackTrace();
-        }
-        
-        return list;
     }
 }

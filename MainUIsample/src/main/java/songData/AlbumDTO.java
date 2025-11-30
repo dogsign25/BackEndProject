@@ -1,44 +1,56 @@
 package songData;
 
+import java.util.List;
+
+/**
+ * 앨범 정보를 담는 DTO (여러 트랙 포함 가능)
+ */
 public class AlbumDTO {
-    private String title;      // 노래 제목
-    private String artist;     // 가수 이름
-    private String imageUrl;   // 앨범 커버 이미지 URL
-    private String duration;   // 음악 길이 (3:26 형식)
-    private String releaseDate; // 발매일 (옵션)
-    private String spotifyId;   // Spotify 트랙 ID (재생용)
+    private String albumName;      // 앨범 제목
+    private String artist;         // 아티스트 이름
+    private String imageUrl;       // 앨범 커버 이미지 URL
+    private String releaseDate;    // 발매일
+    private String spotifyAlbumId; // Spotify 앨범 ID
+    private int totalTracks;       // 총 트랙 수
+    private List<TrackDTO> tracks; // 앨범에 포함된 트랙 리스트
     
-    // 기본 생성자 (3개 파라미터)
-    public AlbumDTO(String title, String artist, String imageUrl) {
-        this.title = title;
+    // 기본 생성자
+    public AlbumDTO() {
+    }
+    
+    // 기본 생성자 (3개 파라미터 - 카드 표시용)
+    public AlbumDTO(String albumName, String artist, String imageUrl) {
+        this.albumName = albumName;
         this.artist = artist;
         this.imageUrl = imageUrl;
     }
     
-    // duration 포함 생성자 (4개 파라미터)
-    public AlbumDTO(String title, String artist, String imageUrl, String duration) {
-        this.title = title;
+    // 앨범 ID 포함 생성자 (4개 파라미터)
+    public AlbumDTO(String albumName, String artist, String imageUrl, String spotifyAlbumId) {
+        this.albumName = albumName;
         this.artist = artist;
         this.imageUrl = imageUrl;
-        this.duration = duration;
+        this.spotifyAlbumId = spotifyAlbumId;
     }
     
-    // 모든 필드 포함 생성자 (6개 파라미터)
-    public AlbumDTO(String title, String artist, String imageUrl, String duration, String releaseDate, String spotifyId) {
-        this.title = title;
+    // 전체 생성자
+    public AlbumDTO(String albumName, String artist, String imageUrl, String releaseDate, 
+                    String spotifyAlbumId, int totalTracks) {
+        this.albumName = albumName;
         this.artist = artist;
         this.imageUrl = imageUrl;
-        this.duration = duration;
         this.releaseDate = releaseDate;
-        this.spotifyId = spotifyId;
+        this.spotifyAlbumId = spotifyAlbumId;
+        this.totalTracks = totalTracks;
     }
     
-    public String getTitle() {
-        return title;
+    // Getters and Setters
+    public String getAlbumName() {
+        return albumName;
     }
     
-    public void setTitle(String title) {
-        this.title = title;
+    public void setAlbumName(String albumName) {
+        this.albumName = albumName;
     }
     
     public String getArtist() {
@@ -57,14 +69,6 @@ public class AlbumDTO {
         this.imageUrl = imageUrl;
     }
     
-    public String getDuration() {
-        return duration;
-    }
-    
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
-    
     public String getReleaseDate() {
         return releaseDate;
     }
@@ -73,11 +77,27 @@ public class AlbumDTO {
         this.releaseDate = releaseDate;
     }
     
-    public String getSpotifyId() {
-        return spotifyId;
+    public String getSpotifyAlbumId() {
+        return spotifyAlbumId;
     }
     
-    public void setSpotifyId(String spotifyId) {
-        this.spotifyId = spotifyId;
+    public void setSpotifyAlbumId(String spotifyAlbumId) {
+        this.spotifyAlbumId = spotifyAlbumId;
+    }
+    
+    public int getTotalTracks() {
+        return totalTracks;
+    }
+    
+    public void setTotalTracks(int totalTracks) {
+        this.totalTracks = totalTracks;
+    }
+    
+    public List<TrackDTO> getTracks() {
+        return tracks;
+    }
+    
+    public void setTracks(List<TrackDTO> tracks) {
+        this.tracks = tracks;
     }
 }

@@ -5,7 +5,6 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0;url=index.do" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WaterMelon Music Platform</title>
     <link rel="stylesheet" href="./style.css">
@@ -108,7 +107,7 @@
                     </div>
                     <div class="song-card-list">
                         <c:forEach var="song" items="${weeklyTopSongs}">
-                            <div class="song-card-item">
+                            <div class="song-card-item" onclick="location.href='songDetail.do?id=${song.spotifyId}'">
                                 <div class="song-card-content">
                                     <img class="song-card-image" src="${song.imageUrl}" alt="${song.title} Album Cover" />
                                     <div class="song-card-info">
@@ -134,11 +133,11 @@
                     </div>
                     <div class="song-card-list">
                         <c:forEach var="album" items="${newReleases}">
-                            <div class="song-card-item">
+                            <div class="song-card-item" onclick="location.href='albumDetail.do?id=${album.spotifyAlbumId}'">
                                 <div class="song-card-content">
-                                    <img class="song-card-image" src="${album.imageUrl}" alt="${album.title} Album Cover" />
+                                    <img class="song-card-image" src="${album.imageUrl}" alt="${album.albumName} Album Cover" />
                                     <div class="song-card-info">
-                                        <div class="song-title">${album.title}</div>
+                                        <div class="song-title">${album.albumName}</div>
                                         <div class="song-artist">${album.artist}</div>
                                     </div>
                                 </div>
@@ -160,11 +159,11 @@
                     </div>
                     <div class="song-card-list">
                         <c:forEach var="album" items="${topAlbums}">
-                            <div class="song-card-item">
+                            <div class="song-card-item" onclick="location.href='albumDetail.do?id=${album.spotifyAlbumId}'">
                                 <div class="song-card-content">
-                                    <img class="song-card-image" src="${album.imageUrl}" alt="${album.title} Album Cover" />
+                                    <img class="song-card-image" src="${album.imageUrl}" alt="${album.albumName} Album Cover" />
                                     <div class="song-card-info">
-                                        <div class="song-title">${album.title}</div>
+                                        <div class="song-title">${album.albumName}</div>
                                         <div class="song-artist">${album.artist}</div>
                                     </div>
                                 </div>

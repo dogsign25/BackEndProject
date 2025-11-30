@@ -32,7 +32,7 @@ public class SearchController extends HttpServlet {
         
         request.setCharacterEncoding("UTF-8");
         String searchQuery = request.getParameter("query");
-        List<AlbumDTO> searchResults = Collections.emptyList();
+        List<TrackDTO> searchResults = Collections.emptyList();
         
         System.out.println("[SearchController] Search query received: " + searchQuery);
         
