@@ -211,6 +211,34 @@ CREATE TABLE playlist_songs (
 
 ### 3.4. SpotifyService (API 연동)
 - **`songData/SpotifyService.java`**:
+  - **`getTrackDetails` 오버로드**: `List<String>` 형태의 트랙 ID 목록을 받아 여러 트랙의 상세 정보를 한 번에 가져오는 `public List<TrackDTO> getTrackDetails(List<String> trackIds, String accessToken)` 메서드를 추가했습니다. 이는 Spotify API의 `v1/tracks?ids=` 엔드포인트에 단일 배치 요청으로 처리하며, 효율성을 높이고 타입 불일치 오류를 해결합니다.
+
+---
+
+### 3.5. 서블릿 매핑 전략: `@WebServlet("*.do")`와 명시적 패턴
+
+초기에는 `MemberController.java`가 `@WebServlet("*.do")`를 사용하여 모든 `.do` 요청을 처리하는 단일 프론트 컨트롤러 역할을 하였습니다. 이러한 방식은 서블릿을 추가할 때 매핑을 신경 쓸 필요가 없어 구현이 매우 단순하다는 장점이 있습니다.
+
+그러나 프로젝트가 확장되고 `MainController.java`와 같이 특정 `.do` 패턴(예: `"/index.do"`, `"/discover.do"`)을 처리하는 다른 서블릿이 추가되면서 문제가 발생했습니다. Tomcat과 같은 서블릿 컨테이너는 여러 서블릿이 중복되거나 겹치는 URL 패턴을 가질 경우, 어떤 서블릿이 요청을 처리할지 예측하기 어려운 충돌을 일으킬 수 있습니다. 특히 `*.do`와 같은 포괄적인 패턴은 특정 패턴보다 우선순위가 낮거나 높게 처리될 수 있어, 의도치 않게 다른 서블릿의 요청을 가로채 "HTTP 404 - Not Found" 오류를 유발할 수 있었습니다.
+
+**변경 사항:**
+
+1.  **`MemberController.java`**: 기존의 `@WebServlet("*.do")`를 제거하고, `MemberController`가 실제로 처리하는 모든 `.do` 요청들을 명시적으로 목록화했습니다. (예: `"/memberList.do", "/loginForm.do", ...`)
+2.  **`MainController.java` & `PlaylistController.java`**: 이 서블릿들은 원래부터 자신들이 처리하는 특정 `.do` 패턴을 명시적으로 `@WebServlet` 어노테이션에 지정하고 있었습니다.
+
+**변경 이유 및 이점:**
+
+*   **매핑 충돌 해결**: 각 서블릿이 담당하는 URL 패턴이 서로 명확하게 구분되면서, 서블릿 컨테이너 내에서 발생하는 라우팅 충돌을 근본적으로 해결했습니다. 이로 인해 "HTTP 404 - Not Found" 오류가 해소되었습니다.
+*   **예측 가능한 동작**: 어떤 URL 요청이 어떤 서블릿에 의해 처리될지 예측 가능해져, 시스템의 안정성과 디버깅 용이성이 향상되었습니다.
+*   **명확한 책임 분리**: 각 서블릿의 역할과 책임이 URL 매핑을 통해 더욱 명확해졌습니다.
+
+이러한 변경은 다수의 서블릿이 특정 URL을 처리해야 하는 과제 특성을 고려할 때, 비록 `@WebServlet` 어노테이션의 내용이 길어졌지만, 시스템의 안정성과 유지보수성을 확보하기 위한 필수적인 조치였습니다.
+
+
+---
+
+### 3.6. SpotifyService (API 연동)
+- **`songData/SpotifyService.java`**:
   - **`getTrackDetails` 오버로드**: `List<String>` 형태의 트랙 ID 목록을 받아 여러 트랙의 상세 정보를 한 번에 가져오는 `public List<TrackDTO> getTrackDetails(List<String> trackIds, String accessToken)` 메서드를 추가했습니다. 이는 Spotify API의 `v1/tracks?ids=` 엔드포인트를 활용하여 단일 배치 요청으로 처리하며, 효율성을 높이고 타입 불일치 오류를 해결합니다.
 
 ---
