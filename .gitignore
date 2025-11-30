@@ -2,6 +2,7 @@
 .project
 .classpath
 .settings/
+MainUIsample/.classpath
 
 # Eclipse metadata
 .metadata
