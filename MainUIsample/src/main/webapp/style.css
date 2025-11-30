@@ -1,5 +1,5 @@
 /* ================================== */
-/* ê¸°ë³¸ ì„¤ì • ë° ìœ í‹¸ë¦¬í‹° í´ëž˜ìŠ¤ */
+/* 기본 설정 및 유틸리티 클래스 */
 /* ================================== */
 body {
     margin: 0;
@@ -20,7 +20,7 @@ a {
 }
 
 /* ================================== */
-/* ì „ì²´ ë ˆì´ì•„ì›ƒ (ì‚¬ì´ë“œë°” + ë©”ì¸ ì½˜í…ì¸ ) */
+/* 전체 레이아웃 (사이드바 + 메인 콘텐츠) */
 /* ================================== */
 .page-layout {
     display: flex;
@@ -28,7 +28,7 @@ a {
     flex-wrap: wrap;
 }
 
-/* ì™¼ìª½ ì‚¬ì´ë“œë°” ìŠ¤íƒ€ì¼ */
+/* 왼쪽 사이드바 스타일 */
 .sidebar {
     width: 250px;
     background: #1E1E1E;
@@ -101,7 +101,7 @@ a {
     font-weight: 500;
 }
 
-/* ë©”ì¸ ì½˜í…ì¸  ì˜ì—­ */
+/* 메인 콘텐츠 영역 */
 .main-content-wrapper {
     flex: 1;
     padding-bottom: 0;
@@ -120,7 +120,7 @@ a {
 }
 
 /* ================================== */
-/* Hero ì„¹ì…˜ ë° ìƒë‹¨ ë©”ë‰´ */
+/* Hero 섹션 및 상단 메뉴 */
 /* ================================== */
 .hero-section {
     padding-top: 30px;
@@ -375,7 +375,7 @@ a {
 }
 
 /* ================================== */
-/* Song Card Sections */
+/* Song Card 섹션 */
 /* ================================== */
 .song-section {
     width: 100%;
@@ -757,7 +757,7 @@ a {
 }
 
 /* ================================== */
-/* CTA Banner (Join Our Platform) */
+/* CTA 배너 (Join Our Platform) */
 /* ================================== */
 .cta-banner {
     width: 100%;
@@ -824,7 +824,7 @@ a {
 }
 
 /* ================================== */
-/* Footer ì„¹ì…˜ ìŠ¤íƒ€ì¼ */
+/* Footer 섹션 스타일 */
 /* ================================== */
 .footer {
     width: 100%;
@@ -916,10 +916,10 @@ a {
 }
 
 /* ================================== */
-/* ë°˜ì‘í˜• ë””ìžì¸ (Responsive Design) */
+/* 반응형 디자인 (Responsive Design) */
 /* ================================== */
 
-/* íƒœë¸”ë¦¿ ë° ìž‘ì€ ë°ìŠ¤í¬íƒ‘ (max-width: 1200px) */
+/* 태블릿 및 작은 데스크톱 (max-width: 1200px) */
 @media screen and (max-width: 1200px) {
     .sidebar {
         width: 70px;
@@ -952,7 +952,7 @@ a {
     }
 }
 
-/* íƒœë¸”ë¦¿ (max-width: 992px) */
+/* 태블릿 (max-width: 992px) */
 @media screen and (max-width: 992px) {
     .sidebar {
         display: none;
@@ -1022,7 +1022,7 @@ a {
     }
 }
 
-/* ëª¨ë°”ì¼ (max-width: 768px) */
+/* 모바일 (max-width: 768px) */
 @media screen and (max-width: 768px) {
     .content-container {
         padding: 0 15px;
@@ -1123,7 +1123,7 @@ a {
     }
 }
 
-/* ì†Œí˜• ëª¨ë°”ì¼ (max-width: 480px) */
+/* 소형 모바일 (max-width: 480px) */
 @media screen and (max-width: 480px) {
     .nav-bar {
         flex-direction: column;
@@ -1255,7 +1255,7 @@ a {
     }
 }
 
-/* ì´ˆì†Œí˜• ëª¨ë°”ì¼ (max-width: 360px) */
+/* 초소형 모바일 (max-width: 360px) */
 @media screen and (max-width: 360px) {
     .hero-image {
         max-height: 300px;
@@ -2066,4 +2066,5 @@ input[readonly], input[disabled] {
     background-color: #282828; /* 기존 배경색과 맞춤 */
     cursor: not-allowed;
 }
+
 

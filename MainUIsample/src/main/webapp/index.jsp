@@ -5,7 +5,6 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0;url=index.do" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WaterMelon Music Platform</title>
     <link rel="stylesheet" href="./style.css">
