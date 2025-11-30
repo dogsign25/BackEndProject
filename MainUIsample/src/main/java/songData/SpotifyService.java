@@ -327,9 +327,17 @@ public class SpotifyService {
                 String title = item.getString("name");
                 String artist = item.getJSONArray("artists").getJSONObject(0).getString("name");
                 String image = item.getJSONObject("album").getJSONArray("images").getJSONObject(0).getString("url");
+                
+                int durationMs = item.getInt("duration_ms");
+                String duration = formatDuration(durationMs);
+                
+                String releaseDate = item.getJSONObject("album").getString("release_date");
+                String formattedDate = formatReleaseDate(releaseDate);
+                
                 String spotifyId = item.getString("id");
+                String albumName = item.getJSONObject("album").getString("name");
 
-                list.add(new TrackDTO(title, artist, image, spotifyId));
+                list.add(new TrackDTO(title, artist, image, duration, formattedDate, spotifyId, albumName));
             }
 
         } catch (Exception e) {
@@ -390,6 +398,80 @@ public class SpotifyService {
         }
         
         return null;
+    }
+    
+    /**
+     * Get Track Details by a list of Spotify IDs (batch request)
+     */
+    public List<TrackDTO> getTrackDetails(List<String> trackIds, String accessToken) {
+        List<TrackDTO> tracks = new ArrayList<>();
+        if (trackIds == null || trackIds.isEmpty()) {
+            return tracks;
+        }
+
+        // Spotify API allows up to 50 track IDs in a single request
+        // Join the track IDs with commas
+        String idsParam = String.join(",", trackIds);
+
+        try {
+            String apiUrl = "https://api.spotify.com/v1/tracks?ids=" + idsParam;
+
+            URL url = new URL(apiUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode != 200) {
+                System.err.println("[Spotify API] Batch Track Details 요청 실패. Response Code: " + responseCode);
+                return tracks;
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                response.append(line);
+            }
+            br.close();
+
+            JSONObject root = new JSONObject(response.toString());
+            JSONArray items = root.getJSONArray("tracks");
+
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject item = items.getJSONObject(i);
+                if (item == null || item.keySet().isEmpty()) { // Handle null tracks for invalid IDs
+                    continue;
+                }
+
+                String title = item.getString("name");
+                String artist = item.getJSONArray("artists").getJSONObject(0).getString("name");
+                
+                JSONArray images = item.getJSONObject("album").getJSONArray("images");
+                String image = "";
+                if (images.length() > 0) {
+                    image = images.getJSONObject(0).getString("url"); // Get first image
+                }
+                
+                int durationMs = item.getInt("duration_ms");
+                String duration = formatDuration(durationMs);
+                
+                String releaseDate = item.getJSONObject("album").getString("release_date");
+                String formattedDate = formatReleaseDate(releaseDate);
+                
+                String spotifyId = item.getString("id");
+                String albumName = item.getJSONObject("album").getString("name");
+
+                tracks.add(new TrackDTO(title, artist, image, duration, formattedDate, spotifyId, albumName));
+            }
+
+            System.out.println("[Spotify API] Batch Track Details 조회 성공: " + tracks.size() + " tracks");
+        } catch (Exception e) {
+            System.err.println("[Spotify API] Batch Track Details 파싱 중 Exception:");
+            e.printStackTrace();
+        }
+        
+        return tracks;
     }
     
     /**

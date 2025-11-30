@@ -16,7 +16,11 @@ import java.util.List;
  * 회원 관리 컨트롤러
  * *.do 패턴으로 모든 회원 관련 요청 처리
  */
-@WebServlet("*.do")
+@WebServlet({
+    "/memberList.do", "/memberView.do", "/memberInsertForm.do", "/memberUpdateForm.do",
+    "/memberDelete.do", "/loginForm.do", "/signupForm.do", "/logout.do", "/myPage.do",
+    "/login.do", "/signup.do", "/memberInsert.do", "/memberUpdate.do", "/memberBulkAction.do"
+})
 public class MemberController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private MemberDAO memberDAO;
@@ -44,9 +48,7 @@ public class MemberController extends HttpServlet {
                     memberView(request, response);
                     break;
                     
-                case "discover.do":
-                    request.getRequestDispatcher("discover.jsp").forward(request, response);
-                    break;
+
                     
                 case "memberInsertForm.do":
                     request.getRequestDispatcher("/admin/memberForm.jsp").forward(request, response);

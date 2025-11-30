@@ -155,7 +155,7 @@
                                 </div>
                             </div>
                             <div class="row-col-date">${song.releaseDate}</div>
-                            <div class="row-col-album">${song.title}</div>
+                            <div class="row-col-album">${song.albumName}</div>
                             <div class="row-col-time">
                                 <div class="play-icon-container"><div class="play-icon"></div></div>
                                 <div style="width: 34px;">${song.duration}</div>

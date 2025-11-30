@@ -6,7 +6,9 @@
 
 ## Discover 같은 사이드바 기능 구현
 
-## 플레이리스트 만들기
+## 플레이리스트 만들기 - 나민혁 (완)
+디버깅 전에 플레이리스트 테이블 확인
+자세한 내용은 CODE_REVIEW.md 참고
 
 ## 좋아요 누르기
 
@@ -21,7 +23,28 @@
 ## 관리자 페이지 기능 추가 - 김동진 (진행 중)
 
 # 데이터베이스
-회원 테이블
+
+## 플레이리스트 테이블
+```sql
+CREATE TABLE playlists (
+    playlist_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES members(id) ON DELETE CASCADE
+);
+
+CREATE TABLE playlist_songs (
+    playlist_song_id INT AUTO_INCREMENT PRIMARY KEY,
+    playlist_id INT NOT NULL,
+    track_spotify_id VARCHAR(255) NOT NULL,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (playlist_id) REFERENCES playlists(playlist_id) ON DELETE CASCADE,
+    UNIQUE KEY (playlist_id, track_spotify_id)
+);
+```
+
+## 회원 테이블
 
 ```
 

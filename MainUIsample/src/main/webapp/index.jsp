@@ -29,7 +29,7 @@
                 <div class="nav-text">Library</div>
             </a>
             <div class="sidebar-nav-title">Playlist</div>
-            <a href="#" class="sidebar-nav-item">
+            <a href="<c:choose><c:when test="${not empty sessionScope.userId}">myPlaylist.do</c:when><c:otherwise>login.jsp</c:otherwise></c:choose>" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
                 <div class="nav-text">My Playlist</div>
             </a>
@@ -92,12 +92,18 @@
                             Whatever your taste in music, we have it all for you!
                         </div>
                         <div class="hero-actions">
-                            <a href="#" class="action-btn-green">Discover Now</a>
-                            <a href="#" class="action-btn-blue">Create Playlist</a>
+                            <a href="discover.do" class="action-btn-green">Discover Now</a>
+                            <a href="javascript:void(0);" onclick="promptAndCreatePlaylist();" class="action-btn-blue">Create Playlist</a>
                         </div>
                     </div>
                 </div>
                 
+                <!-- Hidden Form for Playlist Creation -->
+                <form id="createPlaylistForm" action="playlist.do" method="post" style="display:none;">
+                    <input type="hidden" name="action" value="create">
+                    <input type="hidden" id="playlistNameInput" name="playlistName">
+                </form>
+
                 <!-- Weekly Top Songs 섹션 -->
                 <div class="song-section">
                     <div class="section-title-wrap">
@@ -212,7 +218,7 @@
                                 </div>
                             </div>
                             <div class="row-col-date">${song.releaseDate}</div>
-                            <div class="row-col-album">${song.title}</div>
+                            <div class="row-col-album">${song.albumName}</div>
                             <div class="row-col-time">
                                 <div class="play-icon-container"><div class="play-icon"></div></div>
                                 <div style="width: 34px;">${song.duration}</div>
@@ -257,6 +263,22 @@
             </footer>
         </div>
     </div>
+    <script>
+        function promptAndCreatePlaylist() {
+            // Check if user is logged in
+            <c:if test="${empty sessionScope.userId}">
+                alert("로그인이 필요합니다.");
+                window.location.href = "login.jsp";
+                return;
+            </c:if>
+
+            const playlistName = prompt("새 플레이리스트의 이름을 입력하세요:", "My New Playlist");
+            if (playlistName && playlistName.trim() !== "") {
+                document.getElementById("playlistNameInput").value = playlistName.trim();
+                document.getElementById("createPlaylistForm").submit();
+            }
+        }
+    </script>
 </body>
 </html>
    

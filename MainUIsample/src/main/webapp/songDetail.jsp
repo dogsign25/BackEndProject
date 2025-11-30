@@ -225,6 +225,59 @@
             background: #e6352b;
             transform: translateY(-2px);
         }
+
+        /* Playlist Modal Styles */
+        .playlist-modal-container {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        .playlist-modal-content {
+            background-color: #282828;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .playlist-modal-content h3 {
+            color: white;
+            margin-top: 0;
+        }
+        .playlist-modal-list {
+            list-style: none;
+            padding: 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .playlist-modal-list li {
+            background: #333;
+            color: white;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .playlist-modal-list li:hover {
+            background: #34C759;
+        }
+        .playlist-modal-close {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #555;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -267,26 +320,103 @@
                 </c:if>
                 
                 <div class="action-buttons">
-                    <button class="action-button btn-add-playlist">플레이리스트에 추가</button>
+                    <button class="action-button btn-add-playlist" onclick="openPlaylistModal()">플레이리스트에 추가</button>
                     <button class="action-button btn-add-favorite">좋아요 ♥</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Playlist Selection Modal -->
+    <div id="playlistModal" class="playlist-modal-container">
+        <div class="playlist-modal-content">
+            <h3>내 플레이리스트</h3>
+            <ul id="playlistModalList" class="playlist-modal-list">
+                <!-- Playlists will be dynamically inserted here -->
+            </ul>
+            <button class="playlist-modal-close" onclick="closePlaylistModal()">닫기</button>
+        </div>
+    </div>
     
     <script>
+        const trackSpotifyId = "${song.spotifyId}";
+
         function closeModal(event) {
             if (event.target.classList.contains('song-modal-overlay')) {
                 window.history.back();
             }
         }
         
+        function openPlaylistModal() {
+            <c:if test="${empty sessionScope.userId}">
+                alert("로그인이 필요합니다.");
+                window.location.href = "login.jsp";
+                return;
+            </c:if>
+
+            fetch("playlist.do")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("플레이리스트를 불러오는 데 실패했습니다. 다시 로그인해주세요.");
+                    }
+                    return response.json();
+                })
+                .then(playlists => {
+                    const playlistList = document.getElementById("playlistModalList");
+                    playlistList.innerHTML = ""; // Clear previous list
+                    
+                    if (playlists.length === 0) {
+                        playlistList.innerHTML = '<li>플레이리스트가 없습니다. 먼저 플레이리스트를 만들어주세요.</li>';
+                    } else {
+                        playlists.forEach(playlist => {
+                            const li = document.createElement("li");
+                            li.textContent = playlist.name;
+                            li.onclick = () => addSongToSpecificPlaylist(playlist.id);
+                            playlistList.appendChild(li);
+                        });
+                    }
+                    document.getElementById("playlistModal").style.display = "flex";
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        }
+
+        function closePlaylistModal() {
+            document.getElementById("playlistModal").style.display = "none";
+        }
+
+        function addSongToSpecificPlaylist(playlistId) {
+            const params = new URLSearchParams();
+            params.append('action', 'addSong');
+            params.append('playlistId', playlistId);
+            params.append('trackSpotifyId', trackSpotifyId);
+
+            fetch("playlist.do", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: params
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.success) {
+                    closePlaylistModal();
+                }
+            })
+            .catch(error => {
+                console.error("Error adding song:", error);
+                alert("오류가 발생했습니다.");
+            });
+        }
+
         // 앨범 아트 회전 애니메이션 (재생 중일 때)
         const albumArt = document.getElementById('albumArt');
         const iframe = document.querySelector('.spotify-embed');
         
         if (iframe) {
-            // Spotify 플레이어가 재생되면 앨범 아트 회전
             iframe.addEventListener('load', function() {
                 albumArt.classList.add('playing');
             });
