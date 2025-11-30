@@ -81,9 +81,9 @@
                         <c:forEach var="album" items="${newReleases}">
                             <div class="song-card-item">
                                 <div class="song-card-content">
-                                    <img class="song-card-image" src="${album.imageUrl}" alt="${album.title} Album Cover" />
+                                    <img class="song-card-image" src="${album.imageUrl}" alt="${album.albumName} Album Cover" />
                                     <div class="song-card-info">
-                                        <div class="song-title">${album.title}</div>
+                                        <div class="song-title">${album.albumName}</div>
                                         <div class="song-artist">${album.artist}</div>
                                     </div>
                                 </div>
@@ -106,9 +106,9 @@
                         <c:forEach var="album" items="${topAlbums}">
                             <div class="song-card-item">
                                 <div class="song-card-content">
-                                    <img class="song-card-image" src="${album.imageUrl}" alt="${album.title} Album Cover" />
+                                    <img class="song-card-image" src="${album.imageUrl}" alt="${album.albumName} Album Cover" />
                                     <div class="song-card-info">
-                                        <div class="song-title">${album.title}</div>
+                                        <div class="song-title">${album.albumName}</div>
                                         <div class="song-artist">${album.artist}</div>
                                     </div>
                                 </div>
