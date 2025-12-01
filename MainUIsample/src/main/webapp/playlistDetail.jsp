@@ -67,8 +67,9 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            padding: 15px 0;
+            padding: 15px 5px;
             border-bottom: 1px solid #282828;
+            border-radius: 10px;
             color: #E0E0E0;
         }
         .track-item:last-child {
@@ -102,6 +103,13 @@
             padding: 50px;
             font-size: 20px;
             color: #AAAAAA;
+        }
+        .track-item:hover {
+            background-color: #34C759; /* A slightly lighter background on hover */
+            cursor: pointer;
+            transform: translateY(-2px); /* A slight lift effect */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* A subtle shadow */
+            transition: all 0.2s ease-in-out; /* Smooth transition for all changes */
         }
     </style>
 </head>
