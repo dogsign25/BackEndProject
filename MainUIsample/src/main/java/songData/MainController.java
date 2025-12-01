@@ -77,13 +77,17 @@ public class MainController extends HttpServlet {
                 
             } else {
                 System.err.println("[Controller] 액세스 토큰 획득 실패.");
-                request.setAttribute("errorMessage", "음악 데이터를 불러올 수 없습니다.");
+                request.setAttribute("errorMsg", "음악 데이터를 불러올 수 없습니다. Spotify API에 연결할 수 없습니다.");
+                request.getRequestDispatcher("/error.jsp").forward(request, response);
+                return;
             }
             
         } catch (Exception e) {
             System.err.println("[Controller] 예외 발생:");
             e.printStackTrace();
-            request.setAttribute("errorMessage", "서버 오류가 발생했습니다.");
+            request.setAttribute("errorMsg", "서버 오류가 발생했습니다: " + e.getMessage());
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            return;
         }
         
         // JSP에 데이터 전달

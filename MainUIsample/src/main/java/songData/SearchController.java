@@ -49,13 +49,17 @@ public class SearchController extends HttpServlet {
                     }
                 } else {
                     System.err.println("[SearchController] 액세스 토큰 획득 실패.");
-                    request.setAttribute("errorMessage", "검색 기능을 사용할 수 없습니다. 잠시 후 다시 시도해주세요.");
+                    request.setAttribute("errorMsg", "검색 기능을 사용할 수 없습니다. Spotify API에 연결할 수 없습니다.");
+                    request.getRequestDispatcher("/error.jsp").forward(request, response);
+                    return;
                 }
                 
             } catch (Exception e) {
                 System.err.println("[SearchController] 예외 발생:");
                 e.printStackTrace();
-                request.setAttribute("errorMessage", "검색 중 서버 오류가 발생했습니다.");
+                request.setAttribute("errorMsg", "검색 중 서버 오류가 발생했습니다: " + e.getMessage());
+                request.getRequestDispatcher("/error.jsp").forward(request, response);
+                return;
             }
         }
         

@@ -68,7 +68,8 @@ public class PlaylistController extends HttpServlet {
             } catch (Exception e) {
                 System.err.println("Error in playlistDetail.do: " + e.getMessage());
                 e.printStackTrace();
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error loading playlist details.");
+                request.setAttribute("errorMsg", "플레이리스트 상세 정보를 불러오는 중 오류가 발생했습니다: " + e.getMessage());
+                request.getRequestDispatcher("/error.jsp").forward(request, response);
             }
         }
         else if ("playlist.do".equals(command)) {

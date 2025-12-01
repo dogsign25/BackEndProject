@@ -20,9 +20,6 @@
                     '${searchQuery}'에 대한 <span class="highlight">검색 결과</span>
                 </h2>
                 
-                <c:if test="${not empty errorMessage}">
-                    <p style="color:red; text-align:center; margin-top: 20px;">${errorMessage}</p>
-                </c:if>
 
                 <c:choose>
                     <c:when test="${not empty searchResults}">

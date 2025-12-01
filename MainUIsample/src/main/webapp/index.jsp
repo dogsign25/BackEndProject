@@ -51,9 +51,6 @@
         <div class="main-content-wrapper">
             <div class="content-container">
                 <div class="hero-section">
-                    <c:if test="${not empty errorMessage}">
-                        <p style="color:red; text-align:center; margin-top: 10px;">${errorMessage}</p>
-                    </c:if>
                     
                     <img class="hero-image" src="./src/MainBackground.png" alt="Hero Background" />
                     <div class="header-overlay">

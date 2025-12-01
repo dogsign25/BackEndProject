@@ -33,6 +33,7 @@
             text-decoration: none;
             font-weight: bold;
             transition: background 0.3s ease;
+            display: inline-block;
         }
         .create-playlist-btn:hover {
             background: #2ba84d;
@@ -41,6 +42,13 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 25px;
+            width: 100%;
+        }
+        .playlist-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
         }
         .playlist-card {
             background: #1F1F1F;
@@ -48,21 +56,43 @@
             padding: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: flex-start;
         }
         .playlist-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        .playlist-card-image-wrapper {
+            width: 100%;
+            padding-bottom: 100%;
+            position: relative;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #2A2A2A;
         }
         .playlist-card img {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 10px;
+            height: 100%;
+            object-fit: cover;
         }
         .playlist-card h3 {
             font-size: 18px;
-            margin: 0 0 5px 0;
+            margin: 10px 0 5px 0;
             color: #E0E0E0;
+            word-break: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
         }
         .playlist-card p {
             font-size: 14px;
@@ -79,7 +109,7 @@
 </head>
 <body>
     <div class="page-layout">
-        <%-- Sidebar (assuming it's similar to myPage.jsp) --%>
+        <%-- Sidebar --%>
         <div class="sidebar">
             <div class="sidebar-logo">
                 <span class="highlight">Water</span>Melon
@@ -130,19 +160,15 @@
                     <c:when test="${not empty playlists}">
                         <div class="playlist-grid">
                             <c:forEach var="playlist" items="${playlists}">
-                                <a href="playlistDetail.do?playlistId=${playlist.playlist_id}" style="text-decoration: none; color: inherit;">
+                                <a href="playlistDetail.do?playlistId=${playlist.playlist_id}" class="playlist-card-link">
                                     <div class="playlist-card">
-                                        <%-- 플레이리스트 커버 이미지는 현재 PlaylistDTO에 없으므로 임시 이미지 사용 --%>
-                                        <img src="https://via.placeholder.com/200x200?text=Playlist" alt="Playlist Cover">
+                                        <div class="playlist-card-image-wrapper">
+                                            <img src="example" alt="Playlist Cover">
+                                        </div>
                                         <h3>${playlist.name}</h3>
-                                        <p>${playlist.songCount} 곡</p> <%-- PlaylistDTO에 songCount 필드가 있다고 가정 --%>
+                                        <p>${playlist.songCount} 곡</p>
                                     </div>
-                                </a>"playlist-card">
-                                    <%-- 플레이리스트 커버 이미지는 현재 PlaylistDTO에 없으므로 임시 이미지 사용 --%>
-                                    <img src="https://via.placeholder.com/200x200?text=Playlist" alt="Playlist Cover">
-                                    <h3>${playlist.name}</h3>
-                                    <p>${playlist.songCount} 곡</p> <%-- PlaylistDTO에 songCount 필드가 있다고 가정 --%>
-                                </div>
+                                </a>
                             </c:forEach>
                         </div>
                     </c:when>

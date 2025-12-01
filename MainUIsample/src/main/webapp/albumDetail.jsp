@@ -172,9 +172,6 @@
             ← 뒤로 가기
         </a>
         
-        <c:if test="${not empty errorMessage}">
-            <p style="color:red; text-align:center; margin-top: 10px;">${errorMessage}</p>
-        </c:if>
         
         <c:if test="${not empty album}">
             <!-- 앨범 헤더 -->
