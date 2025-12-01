@@ -15,9 +15,11 @@
         <div class="sidebar">
             <div class="sidebar-logo"><span class="highlight">Water</span>Melon</div>
             <div class="sidebar-nav-title">관리자 메뉴</div>
-            <a href="dashboard.do" class="sidebar-nav-item"><div class="nav-icon"></div><div class="nav-text">대시보드</div></a>
-            <a href="memberList.do" class="sidebar-nav-item active"><div class="nav-icon"></div><div class="nav-text">회원 관리</div></a>
-            <a href="logout.do" class="sidebar-nav-item"><div class="nav-icon"></div><div class="nav-text">로그아웃</div></a>
+            
+            <%-- 🚨 수정: 절대 경로로 변경 --%>
+            <a href="<c:url value="/admin/dashboard.do"/>" class="sidebar-nav-item"><div class="nav-icon"></div><div class="nav-text">대시보드</div></a>
+            <a href="<c:url value="/admin/memberList.do"/>" class="sidebar-nav-item active"><div class="nav-icon"></div><div class="nav-text">회원 관리</div></a>
+            <a href="<c:url value="/logout.do"/>" class="sidebar-nav-item"><div class="nav-icon"></div><div class="nav-text">로그아웃</div></a>
         </div>
 
         <div class="main-content-wrapper">
@@ -83,10 +85,13 @@
                     </div>
 
                     <div class="modal-footer" style="border-top: 1px solid #333; padding-top: 20px; margin-top: 20px;">
-                        <button type="button" class="btn-cancel" onclick="location.href='memberList.do'">목록으로</button>
+                        <%-- 🚨 수정: 절대 경로로 변경 --%>
+                        <button type="button" class="btn-cancel" onclick="location.href='<c:url value="/admin/memberList.do"/>'">목록으로</button>
                         <div style="display: flex; gap: 10px;">
                             <button type="button" class="action-btn btn-delete" style="padding: 12px 20px; font-size: 14px;" onclick="confirmDelete(${member.id})">삭제</button>
-                            <button type="button" class="btn-save" onclick="location.href='memberUpdateForm.do?id=${member.id}'">수정하기</button>
+                            
+                            <%-- 🚨 수정: 절대 경로로 변경 --%>
+                            <button type="button" class="btn-save" onclick="location.href='<c:url value="/admin/memberUpdateForm.do"/>?id=${member.id}'">수정하기</button>
                         </div>
                     </div>
                 </div>
@@ -97,7 +102,8 @@
     <script>
         function confirmDelete(id) {
             if(confirm("정말로 이 회원을 삭제하시겠습니까?")) {
-                location.href = "memberDelete.do?id=" + id;
+                <%-- 🚨 수정: JSTL을 사용하여 절대 경로를 JS 변수에 삽입 --%>
+                location.href = "<c:url value="/admin/memberDelete.do"/>?id=" + id;
             }
         }
     </script>

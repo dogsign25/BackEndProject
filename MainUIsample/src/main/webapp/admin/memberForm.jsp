@@ -16,13 +16,13 @@
                 <span class="highlight">Water</span>Melon
             </div>
             <div class="sidebar-nav-title">관리자 메뉴</div>
-            <a href="dashboard.do" class="sidebar-nav-item">
+            <a href="<c:url value="/admin/dashboard.do"/>" class="sidebar-nav-item">
                 <div class="nav-icon"></div><div class="nav-text">대시보드</div>
             </a>
-            <a href="memberList.do" class="sidebar-nav-item active">
+            <a href="<c:url value="/admin/memberList.do"/>" class="sidebar-nav-item active">
                 <div class="nav-icon"></div><div class="nav-text">회원 관리</div>
             </a>
-            <a href="logout.do" class="sidebar-nav-item">
+            <a href="<c:url value="/logout.do"/>" class="sidebar-nav-item">
                 <div class="nav-icon"></div><div class="nav-text">로그아웃</div>
             </a>
         </div>
@@ -40,7 +40,7 @@
                 </div>
 
                 <div class="member-table-container" style="padding: 30px;">
-                    <form action="memberInsert.do" method="post">
+                    <form action="<c:url value="/admin/memberInsert.do"/>" method="post">
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="name">이름</label>
@@ -90,7 +90,7 @@
                         </div>
 
                         <div class="modal-footer" style="border:none; padding: 20px 0 0 0;">
-                            <button type="button" class="btn-cancel" onclick="location.href='memberList.do'">취소</button>
+                            <button type="button" class="btn-cancel" onclick="location.href='<c:url value="/admin/memberList.do"/>'">취소</button>
                             <button type="submit" class="btn-save">등록하기</button>
                         </div>
                     </form>

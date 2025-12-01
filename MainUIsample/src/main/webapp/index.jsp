@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WaterMelon Music Platform</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="<c:url value="/style.css"/>">
 </head>
 <body>
     <div class="page-layout">
@@ -15,6 +15,7 @@
             <div class="sidebar-logo">
                 <span class="highlight">Water</span>Melon
             </div>
+            
             <div class="sidebar-nav-title">Menu</div>
             <a href="index.do" class="sidebar-nav-item active">
                 <div class="nav-icon"></div>
@@ -28,6 +29,7 @@
                 <div class="nav-icon"></div>
                 <div class="nav-text">Library</div>
             </a>
+            
             <div class="sidebar-nav-title">Playlist</div>
             <a href="<c:choose><c:when test="${not empty sessionScope.userId}">myPlaylist.do</c:when><c:otherwise>login.jsp</c:otherwise></c:choose>" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
@@ -37,69 +39,90 @@
                 <div class="nav-icon"></div>
                 <div class="nav-text">Favorites</div>
             </a>
+            
+            <!-- 관리자 전용 메뉴 -->
+            <c:if test="${not empty sessionScope.userType && sessionScope.userType == 'admin'}">
+                <div class="sidebar-nav-title">Admin</div>
+                <a href="<c:url value="/admin/memberList.do"/>" class="sidebar-nav-item">
+                    <div class="nav-icon"></div>
+                    <div class="nav-text">Manage Members</div>
+                </a>
+            </c:if>
+            
             <div class="sidebar-nav-title">General</div>
-            <a href="myPage.do" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">My Info</div>
-            </a>
-            <a href="logout.do" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">Logout</div>
-            </a>
+            <c:if test="${not empty sessionScope.userId}">
+                <a href="myPage.do" class="sidebar-nav-item">
+                    <div class="nav-icon"></div>
+                    <div class="nav-text">My Info</div>
+                </a>
+                <a href="logout.do" class="sidebar-nav-item">
+                    <div class="nav-icon"></div>
+                    <div class="nav-text">Logout</div>
+                </a>
+            </c:if>
         </div>
         
         <div class="main-content-wrapper">
+            
             <div class="content-container">
-                <div class="hero-section">
-                    
-                    <img class="hero-image" src="./src/MainBackground.png" alt="Hero Background" />
-                    <div class="header-overlay">
-                        <div class="nav-bar">
-                            <div class="search-container">
-                                <div class="search-icon"><div></div></div>
-                                <div><div class="search-placeholder">Search For Musics, Artists, ...</div></div>
-                            </div>
-                            <div class="desktop-nav-links">
-                                <a href="#" class="nav-link">About Us</a>
-                                <a href="#" class="nav-link">Contact</a>
-                                <a href="#" class="nav-link">Premium</a>
-                            </div>
-                            <div class="auth-buttons">
-                                <c:choose>
-                                    <c:when test="${not empty sessionScope.userName}">
-                                        <span style="color:white; margin-right: 15px;">환영합니다, ${sessionScope.userName}님!</span>
-                                        <a href="logout.do" class="btn btn-outline">Logout</a>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <a href="loginForm.do" class="btn btn-outline">Login</a>
-                                        <a href="signupForm.do" class="btn btn-fill">Sign Up</a>
-                                    </c:otherwise>
-                                </c:choose>
-                            </div>
-                        </div>
-                    </div> 
-                    
-                    <div class="hero-text-block">
-                        <div class="hero-title">
-                            All the <span class="highlight">Best Songs</span><br/>in One Place
-                        </div>
-                        <div class="hero-description">
-                            On our website, you can access an amazing collection of popular and new songs.
-                            Stream your favorite tracks in high quality and enjoy without interruptions.
-                            Whatever your taste in music, we have it all for you!
-                        </div>
-                        <div class="hero-actions">
-                            <a href="discover.do" class="action-btn-green">Discover Now</a>
-                            <a href="javascript:void(0);" onclick="promptAndCreatePlaylist();" class="action-btn-blue">Create Playlist</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Hidden Form for Playlist Creation -->
-                <form id="createPlaylistForm" action="playlist.do" method="post" style="display:none;">
-                    <input type="hidden" name="action" value="create">
-                    <input type="hidden" id="playlistNameInput" name="playlistName">
-                </form>
+            
+               <div class="hero-section">
+    
+    <%-- 1. Background Image (Absolute) --%>
+    <img class="hero-image" src="<c:url value="/src/MainBackground.png"/>" alt="Hero Background" />
+    
+    <%-- 2. Overlay (Absolute) --%>
+    <div class="header-overlay"></div> 
+    
+    <%-- 🚨 수정 1: Nav-Bar를 Absolute로 설정 (Flex 흐름에서 제외하고 상단에 고정) --%>
+    <%-- nav-bar의 위치는 top: 0, left: 0 기준으로 고정됩니다. --%>
+    <div class="nav-bar" style="position: absolute; top: 30px; left: 0; width: 100%; box-sizing: border-box; z-index: 5;">
+        <div class="search-container">
+            <div class="search-icon"><div></div></div>
+            <div><div class="search-placeholder">Search For Musics, Artists, ...</div></div>
+        </div>
+        <div class="desktop-nav-links">
+            <a href="#" class="nav-link">About Us</a>
+            <a href="#" class="nav-link">Contact</a>
+            <a href="#" class="nav-link">Premium</a>
+        </div>
+        <div class="auth-buttons">
+            <c:choose>
+                <c:when test="${not empty sessionScope.userName}">
+                    <span style="color:white; margin-right: 15px;">환영합니다, ${sessionScope.userName}님!</span>
+                    <c:if test="${sessionScope.userType == 'admin'}">
+                        <a href="<c:url value="/admin/memberList.do"/>" class="btn btn-fill">Admin</a>
+                    </c:if>
+                    <a href="<c:url value="/logout.do"/>" class="btn btn-outline">Logout</a>
+                </c:when>
+                <c:otherwise>
+                    <a href="<c:url value="/loginForm.do"/>" class="btn btn-outline">Login</a>
+                    <a href="<c:url value="/signupForm.do"/>" class="btn btn-fill">Sign Up</a>
+                </c:otherwise>
+            </c:choose>
+        </div>
+    </div> 
+   
+    <%-- 3. Hero Text Block (Flex child, justify-content: flex-end;로 바닥에 위치) --%>
+    <div class="hero-text-block">
+        <div class="hero-title">
+            All the <span class="highlight">Best Songs</span><br/>in One Place
+        </div>
+        <div class="hero-description">
+            On our website, you can access an amazing collection of popular and new songs.
+            Stream your favorite tracks in high quality and enjoy without interruptions.
+            Whatever your taste in music, we have it all for you!
+        </div>
+        <div class="hero-actions">
+            <a href="<c:url value="/discover.do"/>" class="action-btn-green">Discover Now</a>
+            <a href="javascript:void(0);" onclick="promptAndCreatePlaylist();" class="action-btn-blue">Create Playlist</a>
+        </div>
+    </div>    
+</div>                
+<form id="createPlaylistForm" action="<c:url value="/playlist.do"/>" method="post" style="display:none;">
+    <input type="hidden" name="action" value="create">
+    <input type="hidden" id="playlistNameInput" name="playlistName">
+</form>
 
                 <!-- Weekly Top Songs 섹션 -->
                 <div class="song-section">
@@ -204,7 +227,6 @@
                     </div>
                     
                     <c:forEach var="song" items="${trendingSongs}" varStatus="status">
-                    <!-- onclick으로 인해 songDetail.do로 이동-->
                         <div class="table-row" onclick="location.href='songDetail.do?id=${song.spotifyId}'" style="cursor: pointer;">
                             <div class="row-col-hash">#${status.index + 1}</div>
                             <div class="row-col-track-artist">
@@ -278,4 +300,3 @@
     </script>
 </body>
 </html>
-   

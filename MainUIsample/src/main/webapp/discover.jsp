@@ -121,15 +121,7 @@
                     </div>
                 </div>
                 
-                <div class="cta-banner">
-                    <div class="cta-text-group">
-                        <div class="cta-title">Join Our Platform</div>
-                        <div class="cta-subtitle">Stream unlimited music and discover new artists today.</div>
-                    </div>
-                    <div class="cta-button-wrapper">
-                        <a href="signupForm.do" class="cta-button">Sign Up Now</a>
-                    </div>
-                </div>
+                
                 
                 <div class="trending-table-container">
                     <div class="section-title">

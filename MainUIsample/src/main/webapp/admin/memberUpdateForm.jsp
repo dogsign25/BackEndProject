@@ -16,13 +16,17 @@
                 <span class="highlight">Water</span>Melon
             </div>
             <div class="sidebar-nav-title">관리자 메뉴</div>
-            <a href="dashboard.do" class="sidebar-nav-item">
+            
+            <%--  수정: 절대 경로로 변경 --%>
+            <a href="<c:url value="/admin/dashboard.do"/>" class="sidebar-nav-item">
                 <div class="nav-icon"></div><div class="nav-text">대시보드</div>
             </a>
-            <a href="memberList.do" class="sidebar-nav-item active">
+            <%--  수정: 절대 경로로 변경 --%>
+            <a href="<c:url value="/admin/memberList.do"/>" class="sidebar-nav-item active">
                 <div class="nav-icon"></div><div class="nav-text">회원 관리</div>
             </a>
-            <a href="logout.do" class="sidebar-nav-item">
+            <%--  수정: 절대 경로로 변경 --%>
+            <a href="<c:url value="/logout.do"/>" class="sidebar-nav-item">
                 <div class="nav-icon"></div><div class="nav-text">로그아웃</div>
             </a>
         </div>
@@ -42,7 +46,8 @@
                 </div>
 
                 <div class="member-table-container" style="padding: 30px;">
-                    <form action="memberUpdate.do" method="post">
+                    <%--  수정: 폼 액션을 절대 경로로 변경 --%>
+                    <form action="<c:url value="/admin/memberUpdate.do"/>" method="post">
                         <input type="hidden" name="id" value="${member.id}">
 
                         <div class="form-row">
@@ -95,7 +100,8 @@
                         </div>
 
                         <div class="modal-footer" style="border:none; padding: 20px 0 0 0;">
-                            <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
+                            <%--  수정: 취소 버튼을 회원 목록으로 명시적 이동하도록 변경 --%>
+                            <button type="button" class="btn-cancel" onclick="location.href='<c:url value="/admin/memberList.do"/>'">취소</button>
                             <button type="submit" class="btn-save">수정 완료</button>
                         </div>
                     </form>

@@ -19,35 +19,28 @@
             </div>
 
             <div class="sidebar-nav-title">관리자 메뉴</div>
-            <a href="dashboard.do" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">Dash Board</div>
-            </a>
-            <a href="memberList.do" class="sidebar-nav-item active">
+           
+            <a href="<c:url value="/admin/memberList.do"/>" class="sidebar-nav-item active">
                 <div class="nav-icon"></div>
                 <div class="nav-text">Manage Members</div>
             </a>
-            <a href="playlistList.do" class="sidebar-nav-item">
+            
+            <a href="<c:url value="/playlist.do"/>" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
                 <div class="nav-text">Playlist</div>
             </a>
             
             <div class="sidebar-nav-title">Stat</div>
-            <a href="statistics.do" class="sidebar-nav-item">
+            <a href="<c:url value="/statistics.do"/>" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
                 <div class="nav-text">Usage Statistics</div>
             </a>
-            <a href="payment.do" class="sidebar-nav-item">
+            <a href="<c:url value="/payment.do"/>" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
                 <div class="nav-text">Payment Management</div>
             </a>
             
-            <div class="sidebar-nav-title">Settings</div>
-            <a href="settings.do" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">System Settings</div>
-            </a>
-            <a href="logout.do" class="sidebar-nav-item">
+            <a href="<c:url value="/logout.do"/>" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
                 <div class="nav-text">Logout</div>
             </a>
@@ -118,7 +111,7 @@
 
                 <!-- 검색 및 필터 -->
                 <div class="control-panel">
-                    <form action="memberList.do" method="get" class="search-filter-group">
+                    <form action="<c:url value="/admin/memberList.do"/>"" method="get" class="search-filter-group">
                         <div class="search-box">
                             <input type="text" name="search" id="searchInput" 
                                    value="${param.search}" 
@@ -145,7 +138,7 @@
                             </select>
                         </div>
                     </form>
-                    <button class="btn-add-member" onclick="location.href='memberInsertForm.do'">
+                    <button class="btn-add-member" onclick="location.href='<c:url value="/admin/memberInsertForm.do"/>'">
                         + 회원 추가
                     </button>
                 </div>
@@ -244,11 +237,11 @@
                                                 <td>
                                                     <div class="action-buttons">
                                                         <button type="button" class="action-btn btn-view" 
-                                                                onclick="location.href='memberView.do?id=${member.id}'">
+                                                                onclick="location.href='<c:url value="/admin/memberView.do"/>?id=${member.id}'">
                                                             보기
                                                         </button>
                                                         <button type="button" class="action-btn btn-edit" 
-                                                                onclick="location.href='memberUpdateForm.do?id=${member.id}'">
+                                                                onclick="location.href='<c:url value="/admin/memberUpdateForm.do"/>?id=${member.id}'">
                                                             수정
                                                         </button>
                                                         <button type="button" class="action-btn btn-delete" 
