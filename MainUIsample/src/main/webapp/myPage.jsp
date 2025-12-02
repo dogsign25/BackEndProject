@@ -291,7 +291,7 @@
                     <%-- 2. 회원 정보 수정 폼 --%>
                     <h2 style="margin-bottom: 20px;">정보 수정</h2>
                     <div class="form-container">
-                        <form action="memberUpdate.do" method="post">
+                        <form action="admin/memberUpdateForm.do" method="get">
                             <input type="hidden" name="id" value="${member.id}">
                             
                             <div class="form-row">

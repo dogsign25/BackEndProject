@@ -17,18 +17,19 @@
             <div class="sidebar-logo">
                 <span class="highlight">Water</span>Melon
             </div>
-
+			
             <div class="sidebar-nav-title">관리자 메뉴</div>
+           
+           <a href="<c:url value="/index.do"/>" class="sidebar-nav-item">
+                <div class="nav-icon"></div>
+                <div class="nav-text">Home</div>
+            </a>
            
             <a href="<c:url value="/admin/memberList.do"/>" class="sidebar-nav-item active">
                 <div class="nav-icon"></div>
                 <div class="nav-text">Manage Members</div>
             </a>
-            
-            <a href="<c:url value="/playlist.do"/>" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">Playlist</div>
-            </a>
+           
             
             <div class="sidebar-nav-title">Stat</div>
             <a href="<c:url value="/statistics.do"/>" class="sidebar-nav-item">

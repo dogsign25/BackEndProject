@@ -153,7 +153,7 @@
             <div class="content-container">
                 <div class="playlist-header">
                     <h1>내 플레이리스트</h1>
-                    <a href="#" class="create-playlist-btn" onclick="promptAndCreatePlaylist();">새 플레이리스트 만들기</a>
+                    <a href="javascript:void(0);" onclick="promptAndCreatePlaylist();" class="create-playlist-btn">새 플레이리스트 만들기</a>
                 </div>
 
                 <c:choose>

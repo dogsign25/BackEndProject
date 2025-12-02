@@ -77,10 +77,14 @@
     <%-- 🚨 수정 1: Nav-Bar를 Absolute로 설정 (Flex 흐름에서 제외하고 상단에 고정) --%>
     <%-- nav-bar의 위치는 top: 0, left: 0 기준으로 고정됩니다. --%>
     <div class="nav-bar" style="position: absolute; top: 30px; left: 0; width: 100%; box-sizing: border-box; z-index: 5;">
-        <div class="search-container">
-            <div class="search-icon"><div></div></div>
-            <div><div class="search-placeholder">Search For Musics, Artists, ...</div></div>
-        </div>
+         <form action="search.do" method="get" class="search-container">
+                        <div class="search-icon" onclick="this.closest('form').submit();"><div></div></div>
+                        <input type="text" 
+                               name="query" 
+                               placeholder="Search For Musics, Artists, ..." 
+                               class="search-input" 
+                               required />
+                    </form>
         <div class="desktop-nav-links">
             <a href="#" class="nav-link">About Us</a>
             <a href="#" class="nav-link">Contact</a>
@@ -115,7 +119,7 @@
         </div>
         <div class="hero-actions">
             <a href="<c:url value="/discover.do"/>" class="action-btn-green">Discover Now</a>
-            <a href="javascript:void(0);" onclick="promptAndCreatePlaylist();" class="action-btn-blue">Create Playlist</a>
+            <a href="" onclick="promptAndCreatePlaylist();" class="action-btn-blue">Create Playlist</a>
         </div>
     </div>    
 </div>                

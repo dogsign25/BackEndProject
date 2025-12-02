@@ -25,7 +25,7 @@
                     <c:when test="${not empty searchResults}">
                         <div class="song-card-list">
                             <c:forEach var="track" items="${searchResults}">
-                                <div class="song-card-item">
+                                <div class="song-card-item" onclick="location.href='songDetail.do?id=${track.spotifyId}'" style="cursor: pointer;">
                                     <div class="song-card-content">
                                         <img class="song-card-image" src="${track.imageUrl}" alt="${track.title} Album Cover" />
                                         <div class="song-card-info">
