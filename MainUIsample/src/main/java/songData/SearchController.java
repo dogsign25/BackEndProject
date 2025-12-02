@@ -50,17 +50,17 @@ public class SearchController extends HttpServlet {
                 } else {
                     System.err.println("[SearchController] 액세스 토큰 획득 실패.");
                     request.setAttribute("errorMsg", "검색 기능을 사용할 수 없습니다. Spotify API에 연결할 수 없습니다.");
-                    request.getRequestDispatcher("/error.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/views/mainUI/error.jsp").forward(request, response);
                     return;
                 }
                 
-            } catch (Exception e) {
-                System.err.println("[SearchController] 예외 발생:");
-                e.printStackTrace();
-                request.setAttribute("errorMsg", "검색 중 서버 오류가 발생했습니다: " + e.getMessage());
-                request.getRequestDispatcher("/error.jsp").forward(request, response);
-                return;
-            }
+        } catch (Exception e) {
+            System.err.println("[SearchController] 예외 발생:");
+            e.printStackTrace();
+            request.setAttribute("errorMsg", "서버 오류가 발생했습니다: " + e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/views/mainUI/error.jsp").forward(request, response);
+            return;
+        }
         }
         
         // JSP에 데이터 전달
@@ -68,7 +68,7 @@ public class SearchController extends HttpServlet {
         request.setAttribute("searchResults", searchResults);
         
         // searchResult.jsp로 포워딩
-        RequestDispatcher dispatcher = request.getRequestDispatcher("searchResult.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/song/searchResult.jsp");
         dispatcher.forward(request, response);
     }
     

@@ -71,6 +71,10 @@
             border-bottom: 1px solid #282828;
             color: #E0E0E0;
         }
+        .track-item:hover {
+        backround-color: #34C759;
+        border-radius: 10px;
+        }
         .track-item:last-child {
             border-bottom: none;
         }
@@ -154,7 +158,7 @@
                         <div class="playlist-cover-large">
                             <%-- Assuming PlaylistDTO has an imageUrl or cover for the playlist itself --%>
                             <%-- For now, using a placeholder --%>
-                            <img src="/src/112.png" alt="Playlist Cover">
+                            <img src="/assets/images/112.png" alt="Playlist Cover">
                         </div>
                         <div class="playlist-info">
                             <h1>${playlist.name}</h1>

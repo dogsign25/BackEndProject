@@ -22,7 +22,7 @@ public class PlaylistController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("userId") == null) {
-            response.sendRedirect("login.jsp"); // Redirect to login if not logged in
+            response.sendRedirect("loginForm.do");
             return;
         }
 
@@ -35,7 +35,7 @@ public class PlaylistController extends HttpServlet {
         if ("myPlaylist.do".equals(command)) {
             List<PlaylistDTO> playlists = playlistDAO.getPlaylistsByUserId(userId);
             request.setAttribute("playlists", playlists);
-            request.getRequestDispatcher("myPlaylists.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/list/myPlaylists.jsp").forward(request, response);
         } else if ("playlistDetail.do".equals(command)) {
             try {
                 int playlistId = Integer.parseInt(request.getParameter("playlistId"));
@@ -61,7 +61,7 @@ public class PlaylistController extends HttpServlet {
                 
                 request.setAttribute("playlist", playlist);
                 request.setAttribute("tracks", tracks);
-                request.getRequestDispatcher("playlistDetail.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/views/list/playlistDetail.jsp").forward(request, response);
 
             } catch (NumberFormatException e) {
                 response.sendRedirect("myPlaylist.do"); // Redirect if playlistId is invalid
@@ -69,7 +69,7 @@ public class PlaylistController extends HttpServlet {
                 System.err.println("Error in playlistDetail.do: " + e.getMessage());
                 e.printStackTrace();
                 request.setAttribute("errorMsg", "플레이리스트 상세 정보를 불러오는 중 오류가 발생했습니다: " + e.getMessage());
-                request.getRequestDispatcher("/error.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/views/mainUI/error.jsp").forward(request, response);
             }
         }
         else if ("playlist.do".equals(command)) {
@@ -108,7 +108,7 @@ public class PlaylistController extends HttpServlet {
     private void createPlaylist(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("userId") == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("loginForm.do");
             return;
         }
 

@@ -29,7 +29,7 @@
                 <div class="nav-text">Library</div>
             </a>
             <div class="sidebar-nav-title">Playlist</div>
-            <a href="<c:choose><c:when test="${not empty sessionScope.userId}">myPlaylist.do</c:when><c:otherwise>login.jsp</c:otherwise></c:choose>" class="sidebar-nav-item">
+            <a href="<c:choose><c:when test="${not empty sessionScope.userId}">myPlaylist.do</c:when><c:otherwise>loginForm.do</c:otherwise></c:choose>" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
                 <div class="nav-text">My Playlist</div>
             </a>
@@ -52,7 +52,7 @@
             <div class="content-container">
                 <div class="hero-section">
                     
-                    <img class="hero-image" src="./src/MainBackground.png" alt="Hero Background" />
+                    <img class="hero-image" src="./assets/images/MainBackground.png" alt="Hero Background" />
                     <div class="header-overlay">
                         <div class="nav-bar">
                             <div class="search-container">
@@ -265,7 +265,7 @@
             // Check if user is logged in
             <c:if test="${empty sessionScope.userId}">
                 alert("로그인이 필요합니다.");
-                window.location.href = "login.jsp";
+                window.location.href = "loginForm.do";
                 return;
             </c:if>
 

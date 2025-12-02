@@ -78,15 +78,14 @@ public class MainController extends HttpServlet {
             } else {
                 System.err.println("[Controller] 액세스 토큰 획득 실패.");
                 request.setAttribute("errorMsg", "음악 데이터를 불러올 수 없습니다. Spotify API에 연결할 수 없습니다.");
-                request.getRequestDispatcher("/error.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/views/mainUI/error.jsp").forward(request, response);
                 return;
             }
             
         } catch (Exception e) {
             System.err.println("[Controller] 예외 발생:");
             e.printStackTrace();
-            request.setAttribute("errorMsg", "서버 오류가 발생했습니다: " + e.getMessage());
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+request.getRequestDispatcher("/WEB-INF/views/mainUI/error.jsp").forward(request, response);
             return;
         }
         
@@ -100,9 +99,9 @@ public class MainController extends HttpServlet {
         String uri = request.getRequestURI();
         String command = uri.substring(uri.lastIndexOf("/") + 1);
         
-        String viewPage = "index.jsp";
+        String viewPage = "/WEB-INF/views/mainUI/index.jsp";
         if ("discover.do".equals(command)) {
-            viewPage = "discover.jsp"; 
+            viewPage = "/WEB-INF/views/mainUI/discover.jsp"; 
         }
         
         System.out.println("[Controller] " + viewPage + "로 데이터 전달 완료.");

@@ -350,7 +350,7 @@
         function openPlaylistModal() {
             <c:if test="${empty sessionScope.userId}">
                 alert("로그인이 필요합니다.");
-                window.location.href = "login.jsp";
+                window.location.href = "/views/mainUI/login.jsp";
                 return;
             </c:if>
 
