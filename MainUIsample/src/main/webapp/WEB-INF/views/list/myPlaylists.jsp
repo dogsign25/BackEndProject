@@ -44,27 +44,57 @@
             gap: 25px;
             width: 100%;
         }
-        .playlist-card-link {
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            flex-direction: column;
-        }
         .playlist-card {
             background: #1F1F1F;
             border-radius: 10px;
             padding: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            text-align: center;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             display: flex;
             flex-direction: column;
             height: 100%;
             justify-content: flex-start;
+            position: relative; /* For positioning the options menu */
         }
         .playlist-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        .playlist-card-options {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            color: #fff;
+            z-index: 2;
+            padding: 5px;
+            border-radius: 50%;
+            transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Added box-shadow to transition */
+        }
+        .playlist-card-options:hover {
+            background-color: rgba(255, 255, 255, 0.2); /* Translucent white background */
+            transform: scale(0.95); /* Slightly scale down for sinking effect */
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5); /* Inner shadow for depth */
+        }
+        .playlist-delete-form {
+            display: none; /* Initially hidden */
+            position: absolute;
+            top: 40px;
+            right: 10px;
+            z-index: 3;
+        }
+        .btn-delete {
+            background-color: #e53935;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-delete:hover {
+            background-color: #c62828;
         }
         .playlist-card-image-wrapper {
             width: 100%;
@@ -160,15 +190,21 @@
                     <c:when test="${not empty playlists}">
                         <div class="playlist-grid">
                             <c:forEach var="playlist" items="${playlists}">
-                                <a href="playlistDetail.do?playlistId=${playlist.playlist_id}" class="playlist-card-link">
-                                    <div class="playlist-card">
+                                <div class="playlist-card">
+                                    <div class="playlist-card-options" data-playlist-id="${playlist.playlist_id}">&#8942;</div>
+                                    <form action="playlist.do" method="post" class="playlist-delete-form" id="delete-form-${playlist.playlist_id}">
+                                        <input type="hidden" name="action" value="deletePlaylist">
+                                        <input type="hidden" name="playlistId" value="${playlist.playlist_id}">
+                                        <button type="submit" class="btn-delete" onclick="return confirm('정말로 이 플레이리스트를 삭제하시겠습니까?');">삭제</button>
+                                    </form>
+                                    <a href="playlistDetail.do?playlistId=${playlist.playlist_id}" class="playlist-card-link">
                                         <div class="playlist-card-image-wrapper">
-                                            <img src="example" alt="Playlist Cover">
+                                            <img src="/assets/images/112.png" alt="Playlist Cover">
                                         </div>
                                         <h3>${playlist.name}</h3>
                                         <p>${playlist.songCount} 곡</p>
-                                    </div>
-                                </a>
+                                    </a>
+                                </div>
                             </c:forEach>
                         </div>
                     </c:when>
@@ -188,7 +224,6 @@
             </div>
         </div>
     </div>
-
     <form id="createPlaylistForm" action="<c:url value="/playlist.do"/>" method="post" style="display:none;">
         <input type="hidden" name="action" value="create">
         <input type="hidden" id="playlistNameInput" name="playlistName">
@@ -209,6 +244,30 @@
                 document.getElementById("createPlaylistForm").submit();
             }
         }
+
+        document.addEventListener('click', function(e) {
+            // Check if the clicked element is an options button
+            if (e.target.classList.contains('playlist-card-options')) {
+                const playlistId = e.target.dataset.playlistId;
+                const form = document.getElementById('delete-form-' + playlistId);
+                
+                // Toggle display of the corresponding form
+                if (form) {
+                    const isVisible = form.style.display === 'block';
+                    // Hide all other forms first
+                    document.querySelectorAll('.playlist-delete-form').forEach(f => f.style.display = 'none');
+                    // Toggle the current form
+                    form.style.display = isVisible ? 'none' : 'block';
+                }
+            } else {
+                // If clicking anywhere else on the page, hide all delete forms
+                let isDeleteButton = e.target.classList.contains('btn-delete');
+                let isOptionsMenu = e.target.classList.contains('playlist-card-options');
+                if (!isDeleteButton && !isOptionsMenu) {
+                    document.querySelectorAll('.playlist-delete-form').forEach(f => f.style.display = 'none');
+                }
+            }
+        });
     </script>
 </body>
 </html>

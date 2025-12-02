@@ -73,17 +73,11 @@
             color: #E0E0E0;
         }
         .track-item:hover {
-        backround-color: #34C759;
+        background-color: #282828;
         border-radius: 10px;
         }
         .track-item:last-child {
             border-bottom: none;
-        }
-        .track-item img {
-            width: 50px;
-            height: 50px;
-            border-radius: 5px;
-            object-fit: cover;
         }
         .track-details {
             flex-grow: 1;
@@ -114,6 +108,23 @@
             transform: translateY(-2px); /* A slight lift effect */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* A subtle shadow */
             transition: all 0.2s ease-in-out; /* Smooth transition for all changes */
+        }
+        .btn-delete-icon {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            border-radius: 50%;
+            padding: 5px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease;
+        }
+        .btn-delete-icon:hover {
+            background-color: rgba(255, 68, 68, 0.5); /* Translucent red background on hover */
         }
     </style>
 </head>
@@ -181,17 +192,22 @@
                         <c:choose>
                             <c:when test="${not empty tracks}">
                                 <c:forEach var="track" items="${tracks}">
-                                <a href="songDetail.do?id=${track.spotifyId}" style="text-decoration: none; color: inherit;">
                                     <div class="track-item">
-                                        <img src="${track.imageUrl}" alt="${track.title} cover">
-                                        <div class="track-details">
-                                            <h4>${track.title}</h4>
-                                            <p>${track.artist}</p>
-                                        </div>
-                                        <div class="track-duration">${track.duration}</div>
-                                        <%-- Add a play/remove button here if needed --%>
+                                    	<a href="songDetail.do?id=${track.spotifyId}" style="text-decoration: none; color: inherit; display: flex; flex-grow: 1; align-items: center; gap: 15px;">
+	                                        <img src="${track.imageUrl}" alt="${track.title} cover">
+	                                        <div class="track-details">
+	                                            <h4>${track.title}</h4>
+	                                            <p>${track.artist}</p>
+	                                        </div>
+	                                        <div class="track-duration">${track.duration}</div>
+                                        </a>
+                                        <form action="playlist.do" method="post" style="margin-left: auto;">
+                                            <input type="hidden" name="action" value="removeSong">
+                                            <input type="hidden" name="playlistId" value="${playlist.playlist_id}">
+                                            <input type="hidden" name="trackSpotifyId" value="${track.spotifyId}">
+                                            <button type="submit" class="btn-delete-icon">🗑️</button>
+                                        </form>
                                     </div>
-                                </a>
                                 </c:forEach>
                             </c:when>
                             <c:otherwise>

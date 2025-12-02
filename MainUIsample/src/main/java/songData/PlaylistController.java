@@ -100,8 +100,48 @@ public class PlaylistController extends HttpServlet {
             createPlaylist(request, response);
         } else if ("addSong".equals(action)) {
             addSongToPlaylist(request, response);
+        } else if ("removeSong".equals(action)) {
+            removeSongFromPlaylist(request, response);
+        } else if ("deletePlaylist".equals(action)) {
+            deletePlaylist(request, response);
         } else {
             response.sendRedirect("index.do");
+        }
+    }
+
+    private void removeSongFromPlaylist(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            int playlistId = Integer.parseInt(request.getParameter("playlistId"));
+            String trackSpotifyId = request.getParameter("trackSpotifyId");
+
+            PlaylistDAO playlistDAO = new PlaylistDAO();
+            playlistDAO.removeSongFromPlaylist(playlistId, trackSpotifyId);
+
+            // Redirect back to the playlist detail page
+            response.sendRedirect("playlistDetail.do?playlistId=" + playlistId);
+
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid ID for removing song from playlist: " + e.getMessage());
+            response.sendRedirect("myPlaylist.do"); // Or an error page
+        }
+    }
+
+    private void deletePlaylist(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            int playlistId = Integer.parseInt(request.getParameter("playlistId"));
+
+            PlaylistDAO playlistDAO = new PlaylistDAO();
+            // First, delete all song associations
+            playlistDAO.deleteAllSongsFromPlaylist(playlistId);
+            // Then, delete the playlist itself
+            playlistDAO.deletePlaylist(playlistId);
+
+            // Redirect to the playlists page
+            response.sendRedirect("myPlaylist.do?deleted=true");
+
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid ID for deleting playlist: " + e.getMessage());
+            response.sendRedirect("myPlaylist.do"); // Or an error page
         }
     }
 

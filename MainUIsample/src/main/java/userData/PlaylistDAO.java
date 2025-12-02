@@ -168,6 +168,29 @@ public class PlaylistDAO {
     }
 
     /**
+     * Deletes all songs from a specific playlist.
+     * This is useful for clearing a playlist or before deleting it.
+     * @param playlistId The ID of the playlist to clear.
+     * @return true if deletion was successful, false otherwise.
+     */
+    public boolean deleteAllSongsFromPlaylist(int playlistId) {
+        String sql = "DELETE FROM playlist_songs WHERE playlist_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, playlistId);
+            // We don't check rowsAffected > 0 because it's a success even if the playlist was empty (0 rows affected).
+            pstmt.executeUpdate();
+            return true;
+            
+        } catch (SQLException e) {
+            System.err.println("Error deleting all songs from playlist: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
      * Deletes a playlist.
      * @param playlistId The ID of the playlist to delete.
      * @return true if deletion was successful, false otherwise.
