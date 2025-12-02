@@ -231,13 +231,6 @@
 
     <script>
         function promptAndCreatePlaylist() {
-            // Check if user is logged in
-            <c:if test="${empty sessionScope.userId}">
-                alert("로그인이 필요합니다.");
-                window.location.href = "login.jsp";
-                return;
-            </c:if>
-
             const playlistName = prompt("새 플레이리스트의 이름을 입력하세요:", "My New Playlist");
             if (playlistName && playlistName.trim() !== "") {
                 document.getElementById("playlistNameInput").value = playlistName.trim();

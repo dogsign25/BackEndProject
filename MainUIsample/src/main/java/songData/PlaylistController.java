@@ -21,11 +21,6 @@ public class PlaylistController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("userId") == null) {
-            response.sendRedirect("loginForm.do");
-            return;
-        }
-
         int userId = (int) session.getAttribute("userId");
         PlaylistDAO playlistDAO = new PlaylistDAO();
         SpotifyService spotifyService = new SpotifyService(); // SpotifyService instance
@@ -147,11 +142,6 @@ public class PlaylistController extends HttpServlet {
 
     private void createPlaylist(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("userId") == null) {
-            response.sendRedirect("loginForm.do");
-            return;
-        }
-
         String playlistName = request.getParameter("playlistName");
         if (playlistName == null || playlistName.trim().isEmpty()) {
             response.sendRedirect("index.do?error=playlistNameInvalid");
@@ -171,13 +161,6 @@ public class PlaylistController extends HttpServlet {
     }
 
     private void addSongToPlaylist(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("userId") == null) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("{\"success\":false, \"message\":\"로그인이 필요합니다.\"}");
-            return;
-        }
-
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
