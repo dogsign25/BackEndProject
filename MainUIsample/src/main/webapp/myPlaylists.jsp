@@ -153,7 +153,7 @@
             <div class="content-container">
                 <div class="playlist-header">
                     <h1>내 플레이리스트</h1>
-                    <a href="#" class="create-playlist-btn">새 플레이리스트 만들기</a>
+                    <a href="#" class="create-playlist-btn" onclick="promptAndCreatePlaylist();">새 플레이리스트 만들기</a>
                 </div>
 
                 <c:choose>
@@ -175,7 +175,7 @@
                     <c:otherwise>
                         <div class="no-playlists">
                             <p>아직 생성된 플레이리스트가 없습니다.</p>
-                            <a href="#" class="create-playlist-btn" style="margin-top: 20px;">첫 플레이리스트 만들기</a>
+                            <a href="#" class="create-playlist-btn" style="margin-top: 20px;" onclick="promptAndCreatePlaylist();">첫 플레이리스트 만들기</a>
                         </div>
                     </c:otherwise>
                 </c:choose>
@@ -188,5 +188,27 @@
             </div>
         </div>
     </div>
+
+    <form id="createPlaylistForm" action="<c:url value="/playlist.do"/>" method="post" style="display:none;">
+        <input type="hidden" name="action" value="create">
+        <input type="hidden" id="playlistNameInput" name="playlistName">
+    </form>
+
+    <script>
+        function promptAndCreatePlaylist() {
+            // Check if user is logged in
+            <c:if test="${empty sessionScope.userId}">
+                alert("로그인이 필요합니다.");
+                window.location.href = "login.jsp";
+                return;
+            </c:if>
+
+            const playlistName = prompt("새 플레이리스트의 이름을 입력하세요:", "My New Playlist");
+            if (playlistName && playlistName.trim() !== "") {
+                document.getElementById("playlistNameInput").value = playlistName.trim();
+                document.getElementById("createPlaylistForm").submit();
+            }
+        }
+    </script>
 </body>
 </html>

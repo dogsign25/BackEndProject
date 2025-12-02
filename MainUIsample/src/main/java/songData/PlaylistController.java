@@ -124,7 +124,7 @@ public class PlaylistController extends HttpServlet {
         boolean success = playlistDAO.createPlaylist(playlistName.trim(), userId);
 
         if (success) {
-            response.sendRedirect("myPage.do?playlistCreated=true");
+            response.sendRedirect("myPlaylist.do");
         } else {
             response.sendRedirect("index.do?error=playlistCreationFailed");
         }
