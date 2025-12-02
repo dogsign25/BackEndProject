@@ -58,7 +58,7 @@ public class MemberController extends HttpServlet {
                     if (!checkAdmin(request, response)) {
                         return;
                     }
-                    request.getRequestDispatcher("/admin/memberForm.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/views/admin/memberForm.jsp").forward(request, response);
                     break;
                     
                 case "/admin/memberUpdateForm.do":
@@ -77,13 +77,12 @@ public class MemberController extends HttpServlet {
                     break;
                     
                 case "/loginForm.do":
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/views/mainUI/login.jsp").forward(request, response);
                     break;
                     
                 case "/signupForm.do":
-                    request.getRequestDispatcher("signup.jsp").forward(request, response);
-                    break;
-                    
+                    request.getRequestDispatcher("/WEB-INF/views/mainUI/signup.jsp").forward(request, response);
+                    break;                    
                 case "/logout.do":
                     logout(request, response);
                     break;
@@ -219,7 +218,7 @@ public class MemberController extends HttpServlet {
             throws ServletException, IOException {
         e.printStackTrace();
         request.setAttribute("errorMsg", "Error: " + e.getMessage());
-        request.getRequestDispatcher("error.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/mainUI/error.jsp").forward(request, response);
     }
     
     // ============ Business Logic Methods ============
@@ -242,7 +241,7 @@ public class MemberController extends HttpServlet {
         
         request.setAttribute("members", members);
         request.setAttribute("stats", stats);
-        request.getRequestDispatcher("/admin/memberManage.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/admin/memberManage.jsp").forward(request, response);
     }
     
     private void memberView(HttpServletRequest request, HttpServletResponse response) 
@@ -252,7 +251,7 @@ public class MemberController extends HttpServlet {
         MemberDTO member = memberDAO.getMemberById(id);
         
         request.setAttribute("member", member);
-        request.getRequestDispatcher("/admin/memberView.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/admin/memberView.jsp").forward(request, response);
     }
     
     private void memberUpdateForm(HttpServletRequest request, HttpServletResponse response) 
@@ -262,7 +261,7 @@ public class MemberController extends HttpServlet {
         MemberDTO member = memberDAO.getMemberById(id);
         
         request.setAttribute("member", member);
-        request.getRequestDispatcher("/admin/memberUpdateForm.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/admin/memberUpdateForm.jsp").forward(request, response);
     }
     
     private void memberInsert(HttpServletRequest request, HttpServletResponse response) 
@@ -352,7 +351,7 @@ public class MemberController extends HttpServlet {
         } else {
             System.out.println("[DEBUG] Login failed");
             request.setAttribute("errorMessage", "Invalid email or password");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/mainUI/login.jsp").forward(request, response);
         }
     }
     
@@ -375,7 +374,7 @@ public class MemberController extends HttpServlet {
             response.sendRedirect(request.getContextPath() +"loginForm.do");
         } else {
             request.setAttribute("errorMessage", "Signup failed");
-            request.getRequestDispatcher("signup.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/mainUI/signup.jsp").forward(request, response);
         }
     }
     
@@ -405,7 +404,7 @@ public class MemberController extends HttpServlet {
             request.setAttribute("member", member);
         }
         
-        request.getRequestDispatcher("myPage.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/mainUI/myPage.jsp").forward(request, response);
     }
     
     // ============ Utility Methods ============

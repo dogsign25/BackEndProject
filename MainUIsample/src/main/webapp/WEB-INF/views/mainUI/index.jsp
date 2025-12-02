@@ -31,7 +31,7 @@
             </a>
             
             <div class="sidebar-nav-title">Playlist</div>
-            <a href="<c:choose><c:when test="${not empty sessionScope.userId}">myPlaylist.do</c:when><c:otherwise>login.jsp</c:otherwise></c:choose>" class="sidebar-nav-item">
+            <a href="<c:choose><c:when test="${not empty sessionScope.userId}">myPlaylist.do</c:when><c:otherwise>loginForm.do</c:otherwise></c:choose>" class="sidebar-nav-item">
                 <div class="nav-icon"></div>
                 <div class="nav-text">My Playlist</div>
             </a>
@@ -65,68 +65,63 @@
         <div class="main-content-wrapper">
             
             <div class="content-container">
-            
-               <div class="hero-section">
-    
-    <%-- 1. Background Image (Absolute) --%>
-    <img class="hero-image" src="<c:url value="/src/MainBackground.png"/>" alt="Hero Background" />
-    
-    <%-- 2. Overlay (Absolute) --%>
-    <div class="header-overlay"></div> 
-    
-    <%-- 🚨 수정 1: Nav-Bar를 Absolute로 설정 (Flex 흐름에서 제외하고 상단에 고정) --%>
-    <%-- nav-bar의 위치는 top: 0, left: 0 기준으로 고정됩니다. --%>
-    <div class="nav-bar" style="position: absolute; top: 30px; left: 0; width: 100%; box-sizing: border-box; z-index: 5;">
-         <form action="search.do" method="get" class="search-container">
-                        <div class="search-icon" onclick="this.closest('form').submit();"><div></div></div>
-                        <input type="text" 
-                               name="query" 
-                               placeholder="Search For Musics, Artists, ..." 
-                               class="search-input" 
-                               required />
-                    </form>
-        <div class="desktop-nav-links">
-            <a href="#" class="nav-link">About Us</a>
-            <a href="#" class="nav-link">Contact</a>
-            <a href="#" class="nav-link">Premium</a>
-        </div>
-        <div class="auth-buttons">
-            <c:choose>
-                <c:when test="${not empty sessionScope.userName}">
-                    <span style="color:white; margin-right: 15px;">환영합니다, ${sessionScope.userName}님!</span>
-                    <c:if test="${sessionScope.userType == 'admin'}">
-                        <a href="<c:url value="/admin/memberList.do"/>" class="btn btn-fill">Admin</a>
-                    </c:if>
-                    <a href="<c:url value="/logout.do"/>" class="btn btn-outline">Logout</a>
-                </c:when>
-                <c:otherwise>
-                    <a href="<c:url value="/loginForm.do"/>" class="btn btn-outline">Login</a>
-                    <a href="<c:url value="/signupForm.do"/>" class="btn btn-fill">Sign Up</a>
-                </c:otherwise>
-            </c:choose>
-        </div>
-    </div> 
-   
-    <%-- 3. Hero Text Block (Flex child, justify-content: flex-end;로 바닥에 위치) --%>
-    <div class="hero-text-block">
-        <div class="hero-title">
-            All the <span class="highlight">Best Songs</span><br/>in One Place
-        </div>
-        <div class="hero-description">
-            On our website, you can access an amazing collection of popular and new songs.
-            Stream your favorite tracks in high quality and enjoy without interruptions.
-            Whatever your taste in music, we have it all for you!
-        </div>
-        <div class="hero-actions">
-            <a href="<c:url value="/discover.do"/>" class="action-btn-green">Discover Now</a>
-            <a href="" onclick="promptAndCreatePlaylist();" class="action-btn-blue">Create Playlist</a>
-        </div>
-    </div>    
-</div>                
-<form id="createPlaylistForm" action="<c:url value="/playlist.do"/>" method="post" style="display:none;">
-    <input type="hidden" name="action" value="create">
-    <input type="hidden" id="playlistNameInput" name="playlistName">
-</form>
+                <div class="hero-section">
+                    
+                    <img class="hero-image" src="./assets/images/MainBackground.png" alt="Hero Background" />
+                    <div class="header-overlay">
+                        <div class="nav-bar">
+                            <form action="search.do" method="get" class="search-container">
+                                <div class="search-icon" onclick="this.closest('form').submit();"><div></div></div>
+                                <input type="text" 
+                                       name="query" 
+                                       placeholder="Search For Musics, Artists, ..." 
+                                       class="search-input" 
+                                       required />
+                            </form>
+                            <div class="desktop-nav-links">
+                                <a href="#" class="nav-link">About Us</a>
+                                <a href="#" class="nav-link">Contact</a>
+                                <a href="#" class="nav-link">Premium</a>
+                            </div>
+                            <div class="auth-buttons">
+                                <c:choose>
+                                    <c:when test="${not empty sessionScope.userName}">
+                                        <span style="color:white; margin-right: 15px;">환영합니다, ${sessionScope.userName}님!</span>
+                                        <c:if test="${sessionScope.userType == 'admin'}">
+                                            <a href="<c:url value="/admin/memberList.do"/>" class="btn btn-fill">Admin</a>
+                                        </c:if>
+                                        <a href="logout.do" class="btn btn-outline">Logout</a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="loginForm.do" class="btn btn-outline">Login</a>
+                                        <a href="signupForm.do" class="btn btn-fill">Sign Up</a>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </div>
+                    </div> 
+                    
+                    <div class="hero-text-block">
+                        <div class="hero-title">
+                            All the <span class="highlight">Best Songs</span><br/>in One Place
+                        </div>
+                        <div class="hero-description">
+                            On our website, you can access an amazing collection of popular and new songs.
+                            Stream your favorite tracks in high quality and enjoy without interruptions.
+                            Whatever your taste in music, we have it all for you!
+                        </div>
+                        <div class="hero-actions">
+                            <a href="discover.do" class="action-btn-green">Discover Now</a>
+                            <a href="" onclick="promptAndCreatePlaylist();" class="action-btn-blue">Create Playlist</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hidden Form for Playlist Creation -->
+                <form id="createPlaylistForm" action="playlist.do" method="post" style="display:none;">
+                    <input type="hidden" name="action" value="create">
+                    <input type="hidden" id="playlistNameInput" name="playlistName">
+                </form>
 
                 <!-- Weekly Top Songs 섹션 -->
                 <div class="song-section">
@@ -291,7 +286,7 @@
             // Check if user is logged in
             <c:if test="${empty sessionScope.userId}">
                 alert("로그인이 필요합니다.");
-                window.location.href = "login.jsp";
+                window.location.href = "loginForm.do";
                 return;
             </c:if>
 

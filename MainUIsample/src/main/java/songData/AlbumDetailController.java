@@ -51,26 +51,25 @@ public class AlbumDetailController extends HttpServlet {
                     System.out.println("[AlbumDetailController] Total tracks: " + (album.getTracks() != null ? album.getTracks().size() : 0));
                 } else {
                     request.setAttribute("errorMsg", "앨범 정보를 찾을 수 없습니다.");
-                    request.getRequestDispatcher("/error.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/views/mainUI/error.jsp").forward(request, response);
                     return;
                 }
-            } else {
-                System.err.println("[AlbumDetailController] 액세스 토큰 획득 실패.");
-                request.setAttribute("errorMsg", "앨범 정보를 불러올 수 없습니다. Spotify API에 연결할 수 없습니다.");
-                request.getRequestDispatcher("/error.jsp").forward(request, response);
-                return;
-            }
-            
+                        } else {
+                            System.err.println("[AlbumDetailController] 액세스 토큰 획득 실패.");
+                            request.setAttribute("errorMsg", "앨범 정보를 불러올 수 없습니다. Spotify API에 연결할 수 없습니다.");
+                            request.getRequestDispatcher("/WEB-INF/views/mainUI/error.jsp").forward(request, response);
+                            return;
+                        }            
         } catch (Exception e) {
             System.err.println("[AlbumDetailController] 예외 발생:");
             e.printStackTrace();
             request.setAttribute("errorMsg", "서버 오류가 발생했습니다: " + e.getMessage());
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/mainUI/error.jsp").forward(request, response);
             return;
         }
         
         // albumDetail.jsp로 포워딩
-        RequestDispatcher dispatcher = request.getRequestDispatcher("albumDetail.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/song/albumDetail.jsp");
         dispatcher.forward(request, response);
     }
     
