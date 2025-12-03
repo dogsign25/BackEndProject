@@ -11,56 +11,9 @@
 </head>
 <body>
     <div class="page-layout">
-        <div class="sidebar">
-            <div class="sidebar-logo">
-                <span class="highlight">Water</span>Melon
-            </div>
-            
-            <div class="sidebar-nav-title">Menu</div>
-            <a href="index.do" class="sidebar-nav-item active">
-                <div class="nav-icon"></div>
-                <div class="nav-text">Home</div>
-            </a>
-            <a href="discover.do" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">Discover</div>
-            </a>
-            <a href="#" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">Library</div>
-            </a>
-            
-            <div class="sidebar-nav-title">Playlist</div>
-            <a href="<c:choose><c:when test="${not empty sessionScope.userId}">myPlaylist.do</c:when><c:otherwise>loginForm.do</c:otherwise></c:choose>" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">My Playlist</div>
-            </a>
-            <a href="#" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">Favorites</div>
-            </a>
-            
-            <!-- 관리자 전용 메뉴 -->
-            <c:if test="${not empty sessionScope.userType && sessionScope.userType == 'admin'}">
-                <div class="sidebar-nav-title">Admin</div>
-                <a href="<c:url value="/admin/memberList.do"/>" class="sidebar-nav-item">
-                    <div class="nav-icon"></div>
-                    <div class="nav-text">Manage Members</div>
-                </a>
-            </c:if>
-            
-            <div class="sidebar-nav-title">General</div>
-            <c:if test="${not empty sessionScope.userId}">
-                <a href="myPage.do" class="sidebar-nav-item">
-                    <div class="nav-icon"></div>
-                    <div class="nav-text">My Info</div>
-                </a>
-                <a href="logout.do" class="sidebar-nav-item">
-                    <div class="nav-icon"></div>
-                    <div class="nav-text">Logout</div>
-                </a>
-            </c:if>
-        </div>
+                <jsp:include page="/WEB-INF/views/common/sidebar_user.jsp">
+            <jsp:param name="activePage" value="home" />
+        </jsp:include>
         
         <div class="main-content-wrapper">
             
@@ -246,39 +199,7 @@
                 </div>
             </div>
             
-            <!-- Footer -->
-            <footer class="footer">
-                <div class="footer-container">
-                    <div class="footer-col">
-                        <div class="footer-heading">Company</div>
-                        <a href="#" class="footer-link">About Us</a>
-                        <a href="#" class="footer-link">Careers</a>
-                        <a href="#" class="footer-link">Press</a>
-                        <a href="#" class="footer-link">Advertise</a>
-                    </div>
-                    <div class="footer-col">
-                        <div class="footer-heading">Features</div>
-                        <a href="#" class="footer-link">Charts</a>
-                        <a href="#" class="footer-link">Premium</a>
-                    </div>
-                    <div class="footer-col">
-                        <div class="footer-heading">Support</div>
-                        <a href="#" class="footer-link">Help Center</a>
-                        <a href="#" class="footer-link">Contact Us</a>
-                        <a href="#" class="footer-link">Privacy Policy</a>
-                        <a href="#" class="footer-link">Terms of Service</a>
-                    </div>
-                    <div class="footer-col">
-                        <div class="footer-heading">Downloads</div>
-                        <a href="#" class="footer-link">iOS App</a>
-                        <a href="#" class="footer-link">Android App</a>
-                        <a href="#" class="footer-link">Desktop App</a>
-                    </div>
-                </div>
-                <div class="footer-copyright">
-                    &copy; 2025 MusicSite. All rights reserved.
-                </div>
-            </footer>
+            <jsp:include page="/WEB-INF/views/common/footer.jsp" />
         </div>
     </div>
     <script>

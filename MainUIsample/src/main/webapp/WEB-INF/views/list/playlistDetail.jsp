@@ -130,45 +130,9 @@
 </head>
 <body>
     <div class="page-layout">
-        <%-- Sidebar --%>
-        <div class="sidebar">
-            <div class="sidebar-logo">
-                <span class="highlight">Water</span>Melon
-            </div>
-            <div class="sidebar-nav-title">Menu</div>
-            <a href="index.do" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">Home</div>
-            </a>
-            <a href="discover.do" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">Discover</div>
-            </a>
-            <a href="library.do" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">Library</div>
-            </a>
-            
-            <div class="sidebar-nav-title">Playlist</div>
-            <a href="myPlaylist.do" class="sidebar-nav-item active">
-                <div class="nav-icon"></div>
-                <div class="nav-text">My Playlist</div>
-            </a>
-            <a href="favorites.do" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">Favorites</div>
-            </a>
-            
-            <div class="sidebar-nav-title">General</div>
-            <a href="myPage.do" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">My Info</div>
-            </a>
-            <a href="logout.do" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">Logout</div>
-            </a>
-        </div>
+                <jsp:include page="/WEB-INF/views/common/sidebar_user.jsp">
+            <jsp:param name="activePage" value="myPlaylist" />
+        </jsp:include>
 
         <div class="main-content-wrapper">
             <div class="content-container">
@@ -225,11 +189,7 @@
                     </div>
                 </c:if>
                 
-                <footer class="footer">
-                    <div class="footer-copyright" style="text-align: center; padding: 20px 0;">
-                        &copy; 2025 <span class="highlight">Water</span>Melon. All rights reserved.
-                    </div>
-                </footer>
+                <jsp:include page="/WEB-INF/views/common/footer.jsp" />
             </div>
         </div>
     </div>

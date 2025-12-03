@@ -48,7 +48,7 @@ public class PlaylistController extends HttpServlet {
                 if (!trackSpotifyIds.isEmpty()) {
                     String accessToken = spotifyService.getAccessToken(); // Ensure accessToken is available
                     if (accessToken != null) {
-                        tracks = spotifyService.getTrackDetails(trackSpotifyIds, accessToken);
+                        tracks = spotifyService.getTrackDetailsByIds(trackSpotifyIds);
                     } else {
                         System.err.println("[PlaylistController] Access token for Spotify not available.");
                     }

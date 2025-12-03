@@ -12,40 +12,9 @@
 </head>
 <body>
     <div class="page-layout">
-        <!-- 사이드바 -->
-        <div class="sidebar">
-            <div class="sidebar-logo">
-                <span class="highlight">Water</span>Melon
-            </div>
-			
-            <div class="sidebar-nav-title">관리자 메뉴</div>
-           
-           <a href="<c:url value="/index.do"/>" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">Home</div>
-            </a>
-           
-            <a href="<c:url value="/admin/memberList.do"/>" class="sidebar-nav-item active">
-                <div class="nav-icon"></div>
-                <div class="nav-text">Manage Members</div>
-            </a>
-           
-            
-            <div class="sidebar-nav-title">Stat</div>
-            <a href="<c:url value="/statistics.do"/>" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">Usage Statistics</div>
-            </a>
-            <a href="<c:url value="/payment.do"/>" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">Payment Management</div>
-            </a>
-            
-            <a href="<c:url value="/logout.do"/>" class="sidebar-nav-item">
-                <div class="nav-icon"></div>
-                <div class="nav-text">Logout</div>
-            </a>
-        </div>
+                <jsp:include page="/WEB-INF/views/common/sidebar_admin.jsp">
+            <jsp:param name="activePage" value="members" />
+        </jsp:include>
 
         <!-- 메인 콘텐츠 -->
         <div class="main-content-wrapper">

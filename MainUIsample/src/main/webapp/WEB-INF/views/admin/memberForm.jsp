@@ -11,21 +11,9 @@
 </head>
 <body>
     <div class="page-layout">
-        <div class="sidebar">
-            <div class="sidebar-logo">
-                <span class="highlight">Water</span>Melon
-            </div>
-            <div class="sidebar-nav-title">관리자 메뉴</div>
-            <a href="<c:url value="/admin/dashboard.do"/>" class="sidebar-nav-item">
-                <div class="nav-icon"></div><div class="nav-text">대시보드</div>
-            </a>
-            <a href="<c:url value="/admin/memberList.do"/>" class="sidebar-nav-item active">
-                <div class="nav-icon"></div><div class="nav-text">회원 관리</div>
-            </a>
-            <a href="<c:url value="/logout.do"/>" class="sidebar-nav-item">
-                <div class="nav-icon"></div><div class="nav-text">로그아웃</div>
-            </a>
-        </div>
+                <jsp:include page="/WEB-INF/views/common/sidebar_admin.jsp">
+            <jsp:param name="activePage" value="members" />
+        </jsp:include>
 
         <div class="main-content-wrapper">
             <div class="content-container">

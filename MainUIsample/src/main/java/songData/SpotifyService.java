@@ -403,9 +403,15 @@ public class SpotifyService {
     /**
      * Get Track Details by a list of Spotify IDs (batch request)
      */
-    public List<TrackDTO> getTrackDetails(List<String> trackIds, String accessToken) {
+    public List<TrackDTO> getTrackDetailsByIds(List<String> trackIds) {
         List<TrackDTO> tracks = new ArrayList<>();
         if (trackIds == null || trackIds.isEmpty()) {
+            return tracks;
+        }
+        
+        String accessToken = getAccessToken(); // Get token internally
+        if (accessToken == null) {
+            System.err.println("[Spotify API] Access token not available for getTrackDetailsByIds.");
             return tracks;
         }
 

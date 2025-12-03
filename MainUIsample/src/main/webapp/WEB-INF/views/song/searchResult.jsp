@@ -10,8 +10,7 @@
 </head>
 <body>
     <div class="page-layout">
-        <div class="sidebar">
-            </div>
+        <jsp:include page="/WEB-INF/views/common/sidebar_user.jsp" />
         
         <div class="main-content-wrapper">
             <div class="content-container">
@@ -48,6 +47,7 @@
                 </c:choose>
 
             </div>
+            <jsp:include page="/WEB-INF/views/common/footer.jsp" />
             </div>
     </div>
 </body>

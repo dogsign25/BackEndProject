@@ -1,1 +1,40 @@
+# ==================================
+# Java / Servlet / Tomcat Web Project
+# ==================================
+
+# 1. 빌드 결과물 및 배포 파일
+*.class
+*.war
+*.jar
+/target/
 /build/
+/bin/
+/out/
+/work/
+
+# 2. IDE 및 메타데이터 (문제 해결 항목)
+# Eclipse Workspace Metadata (Filename too long problem source)
+.metadata/
+
+# Eclipse/WTP Deployment Temp Folder
+/wtpwebapps/
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Eclipse Project Files
+.classpath
+.project
+.settings/
+
+# 3. OS 및 기타 임시 파일
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# 4. 서브모듈 오인 문제 관련 (필요시 Case A인 경우만 추가)
+# BackEndProject/
