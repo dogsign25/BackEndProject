@@ -69,8 +69,19 @@ public class AlbumDetailController extends HttpServlet {
         }
         
         // albumDetail.jsp로 포워딩
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/song/albumDetail.jsp");
-        dispatcher.forward(request, response);
+        // AJAX 요청인지 확인
+        String isAjax = request.getParameter("ajax");
+        
+        // JSP로 포워딩
+        if ("true".equals(isAjax)) {
+            // AJAX 요청인 경우 모달 콘텐츠만 포함하는 JSP fragment로 포워딩
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/song/albumDetailModalContent.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            // 일반 요청인 경우 전체 페이지 JSP로 포워딩
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/song/albumDetail.jsp");
+            dispatcher.forward(request, response);
+        }
     }
     
     @Override
