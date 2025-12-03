@@ -1,0 +1,133 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterMelon Music Platform - Discover</title> <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="page-layout">
+                <jsp:include page="/WEB-INF/views/common/sidebar_user.jsp">
+            <jsp:param name="activePage" value="discover" />
+        </jsp:include>
+        
+        <div class="main-content-wrapper">
+            <div class="content-container">
+                <div class="song-section">
+                    <div class="section-title-wrap">
+                        <div class="section-title">
+                            Weekly Top <span class="highlight">Songs</span>
+                        </div>
+                    </div>
+                    <div class="song-card-list">
+                        <c:forEach var="song" items="${weeklyTopSongs}">
+                            <div class="song-card-item" onclick="location.href='songDetail.do?id=${song.spotifyId}'" style="cursor: pointer;">
+                                <div class="song-card-content">
+                                    <img class="song-card-image" src="${song.imageUrl}" alt="${song.title} Album Cover" />
+                                    <div class="song-card-info">
+                                        <div class="song-title">${song.title}</div>
+                                        <div class="song-artist">${song.artist}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                        <div class="view-all-card">
+                            <div class="view-all-circle"><div><div></div></div></div>
+                            <div class="song-title">View All</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="song-section">
+                    <div class="section-title-wrap">
+                        <div class="section-title">
+                            New Release <span class="highlight">Songs</span>
+                        </div>
+                    </div>
+                    <div class="song-card-list">
+                        <c:forEach var="album" items="${newReleases}">
+                            <div class="song-card-item" onclick="location.href='albumDetail.do?id=${album.spotifyAlbumId}'" style="cursor: pointer;">
+                                <div class="song-card-content">
+                                    <img class="song-card-image" src="${album.imageUrl}" alt="${album.albumName} Album Cover" />
+                                    <div class="song-card-info">
+                                        <div class="song-title">${album.albumName}</div>
+                                        <div class="song-artist">${album.artist}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                        <div class="view-all-card">
+                            <div class="view-all-circle"><div><div></div></div></div>
+                            <div class="song-title">View All</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="song-section">
+                    <div class="section-title-wrap">
+                        <div class="section-title">
+                            Top <span class="highlight">Albums</span>
+                        </div>
+                    </div>
+                    <div class="song-card-list">
+                        <c:forEach var="album" items="${topAlbums}">
+                            <div class="song-card-item" onclick="location.href='albumDetail.do?id=${album.spotifyAlbumId}'" style="cursor: pointer;">
+                                <div class="song-card-content">
+                                    <img class="song-card-image" src="${album.imageUrl}" alt="${album.albumName} Album Cover" />
+                                    <div class="song-card-info">
+                                        <div class="song-title">${album.albumName}</div>
+                                        <div class="song-artist">${album.artist}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                        <div class="view-all-card">
+                            <div class="view-all-circle"><div><div></div></div></div>
+                            <div class="song-title">View All</div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                
+                <div class="trending-table-container">
+                    <div class="section-title">
+                        Trending <span class="highlight">Songs</span>
+                    </div>
+                    
+                    <div class="table-header">
+                        <div class="row-col-hash">#</div>
+                        <div class="row-col-track-artist">Track / Artist</div>
+                        <div class="row-col-date row-col-date-header">Release Date</div>
+                        <div class="row-col-album row-col-album-header">Album</div>
+                        <div class="row-col-time">Time</div>
+                    </div>
+                    
+                    <c:forEach var="song" items="${trendingSongs}" varStatus="status">
+                        <div class="table-row">
+                            <div class="row-col-hash">#${status.index + 1}</div>
+                            <div class="row-col-track-artist">
+                                <img class="track-album-cover" src="${song.imageUrl}" alt="${song.title} Album Cover" />
+                                <div class="track-info-text">
+                                    <div class="track-title-text">${song.title}</div>
+                                    <div class="track-artist-text">${song.artist}</div>
+                                </div>
+                            </div>
+                            <div class="row-col-date">${song.releaseDate}</div>
+                            <div class="row-col-album">${song.albumName}</div>
+                            <div class="row-col-time">
+                                <div class="play-icon-container"><div class="play-icon"></div></div>
+                                <div style="width: 34px;">${song.duration}</div>
+                            </div>
+                        </div>
+                    </c:forEach>
+                </div>
+            </div>
+       
+            <jsp:include page="/WEB-INF/views/common/footer.jsp" />
+        </div>
+    </div>
+</body>
+</html>

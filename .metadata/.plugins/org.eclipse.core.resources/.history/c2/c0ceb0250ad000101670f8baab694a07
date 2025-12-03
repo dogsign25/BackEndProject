@@ -1,0 +1,121 @@
+package songData;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession; // Added
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.ArrayList; // Added
+import userData.LikeDAO;
+import songData.TrackDTO;
+
+/**
+ * Main Page Controller
+ * Handles index.do and discover.do requests
+ */
+@WebServlet({"/", "/index.do", "/discover.do"})
+public class MainController extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+    private SpotifyService spotifyService;
+
+    @Override
+    public void init() throws ServletException {
+        spotifyService = new SpotifyService();
+        System.out.println("[MainController] Initialized successfully.");
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        SpotifyService service = new SpotifyService();
+        String accessToken = null; // Declare accessToken here
+
+        // Album 리스트
+        List<AlbumDTO> newReleases = Collections.emptyList();
+        List<AlbumDTO> topAlbums = Collections.emptyList();
+        
+        // Track 리스트
+        List<TrackDTO> trendingSongs = Collections.emptyList();
+        List<TrackDTO> weeklyTopSongs = Collections.emptyList();
+        
+        try {
+            System.out.println("[MainController] Fetching Spotify Access Token...");
+            accessToken = service.getAccessToken(); // Assign to the declared variable
+            
+            if (accessToken != null) {
+                System.out.println("[MainController] Access Token received successfully.");
+                // 1. New Releases (앨범)
+                newReleases = service.getNewReleases(accessToken);
+                System.out.println("[MainController] Fetched New Releases: " + (newReleases != null ? newReleases.size() : 0) + " items.");
+
+                // 2. Trending Songs (트랙)
+                trendingSongs = service.getTrendingSongs(accessToken);
+                System.out.println("[MainController] Fetched Trending Songs: " + (trendingSongs != null ? trendingSongs.size() : 0) + " items.");
+
+                // 3. Weekly Top Songs (트랙)
+                weeklyTopSongs = service.getWeeklyTopSongs(accessToken);
+                System.out.println("[MainController] Fetched Weekly Top Songs: " + (weeklyTopSongs != null ? weeklyTopSongs.size() : 0) + " items.");
+
+                // 4. Top Albums (앨범)
+                topAlbums = service.getTopAlbums(accessToken);
+                System.out.println("[MainController] Fetched Top Albums: " + (topAlbums != null ? topAlbums.size() : 0) + " items.");
+
+            } else {
+                System.err.println("[MainController] Failed to get Access Token.");
+                request.setAttribute("errorMsg", "음악 데이터를 불러올 수 없습니다. Spotify API에 연결할 수 없습니다.");
+                request.getRequestDispatcher("/WEB-INF/views/mainUI/error.jsp").forward(request, response);
+                return;
+            }
+            
+        } catch (Exception e) {
+            System.err.println("[MainController] Exception during data fetching:");
+            e.printStackTrace();
+            request.setAttribute("errorMsg", "서버 오류가 발생했습니다: " + e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/views/mainUI/error.jsp").forward(request, response);
+            return;
+        }
+        
+        // JSP에 데이터 전달
+        request.setAttribute("newReleases", newReleases);
+        request.setAttribute("trendingSongs", trendingSongs);
+        request.setAttribute("weeklyTopSongs", weeklyTopSongs);
+        request.setAttribute("topAlbums", topAlbums);
+        
+        // 요청 경로에 따라 포워딩할 JSP 결정
+        String uri = request.getRequestURI();
+        String command = uri.substring(uri.lastIndexOf("/") + 1);
+        System.out.println("[MainController] Command received: " + command);
+        
+        String viewPage = "/WEB-INF/views/mainUI/index.jsp";
+        String currentPage = "home";
+        if ("discover.do".equals(command)) {
+            viewPage = "/WEB-INF/views/mainUI/discover.jsp"; 
+            currentPage = "discover";
+
+        
+        request.setAttribute("currentPage", currentPage);
+        
+        System.out.println("[MainController] Forwarding to " + viewPage);
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
+        dispatcher.forward(request, response);
+        
+        System.out.println("[MainController] doGet() finished.");
+    }
+    
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        doGet(request, response);
+    }
+    
+    @Override
+    public void destroy() {
+        System.out.println("[MainController] Destroyed.");
+    }
+}

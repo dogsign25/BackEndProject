@@ -1,0 +1,52 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+    
+<div class="sidebar">
+    <div class="sidebar-logo">
+        [cite_start]<span class="highlight">Water</span>Melon [cite: 1]
+    </div>
+
+    [cite_start]<div class="sidebar-nav-title">Menu</div> [cite: 2]
+    [cite_start]<a href="index.do" class="sidebar-nav-item active"> [cite: 2]
+        <div class="nav-icon"></div>
+        [cite_start]<div class="nav-text">Home</div> [cite: 2]
+    </a>
+    [cite_start]<a href="discover.do" class="sidebar-nav-item"> [cite: 2]
+        [cite_start]<div class="nav-icon"></div> [cite: 3]
+        [cite_start]<div class="nav-text">Discover</div> [cite: 3]
+    </a>
+    [cite_start]<a href="#" class="sidebar-nav-item"> [cite: 3]
+        [cite_start]<div class="nav-icon"></div> [cite: 3]
+        [cite_start]<div class="nav-text">Library</div> [cite: 3]
+    [cite_start]</a> [cite: 4]
+
+    [cite_start]<div class="sidebar-nav-title">Playlist</div> [cite: 4]
+    [cite_start]<a href="<c:choose><c:when test="${not empty sessionScope.userId}">myPlaylist.do</c:when><c:otherwise>loginForm.do</c:otherwise></c:choose>" class="sidebar-nav-item"> [cite: 4]
+        [cite_start]<div class="nav-icon"></div> [cite: 4]
+        [cite_start]<div class="nav-text">My Playlist</div> [cite: 4]
+    </a>
+    [cite_start]<a href="#" class="sidebar-nav-item"> [cite: 5]
+        [cite_start]<div class="nav-icon"></div> [cite: 5]
+        [cite_start]<div class="nav-text">Favorites</div> [cite: 5]
+    </a>
+
+    [cite_start]<c:if test="${not empty sessionScope.userType && sessionScope.userType == 'admin'}"> [cite: 5]
+        [cite_start]<div class="sidebar-nav-title">Admin</div> [cite: 6]
+        [cite_start]<a href="<c:url value="/admin/memberList.do"/>" class="sidebar-nav-item"> [cite: 6]
+            [cite_start]<div class="nav-icon"></div> [cite: 6]
+            [cite_start]<div class="nav-text">Manage Members</div> [cite: 6]
+        [cite_start]</a> [cite: 7]
+    [cite_start]</c:if> [cite: 7]
+
+    [cite_start]<div class="sidebar-nav-title">General</div> [cite: 7]
+    [cite_start]<c:if test="${not empty sessionScope.userId}"> [cite: 7]
+        [cite_start]<a href="myPage.do" class="sidebar-nav-item"> [cite: 7]
+            [cite_start]<div class="nav-icon"></div> [cite: 7]
+            [cite_start]<div class="nav-text">My Info</div> [cite: 8]
+        </a>
+        [cite_start]<a href="logout.do" class="sidebar-nav-item"> [cite: 8]
+            [cite_start]<div class="nav-icon"></div> [cite: 8]
+            [cite_start]<div class="nav-text">Logout</div> [cite: 8]
+        [cite_start]</a> [cite: 9]
+    [cite_start]</c:if> [cite: 9]
+</div>
