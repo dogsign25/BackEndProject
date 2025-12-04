@@ -39,25 +39,6 @@ CREATE TABLE liked_songs (
     PRIMARY KEY (user_id, track_spotify_id),
     FOREIGN KEY (user_id) REFERENCES members(id) ON DELETE CASCADE
 );
-
-CREATE TABLE IF NOT EXISTS members (
-    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '자동으로 증가하는 회원 코드 insert X',
-    name VARCHAR(100) NOT NULL COMMENT '회원 이름',
-    email VARCHAR(255) NOT NULL UNIQUE COMMENT '이메일 (로그인 ID)',
-    password VARCHAR(255) NOT NULL COMMENT '암호화된 비밀번호',
-    phone VARCHAR(20) COMMENT '전화번호',
-    birthdate DATE COMMENT '생년월일',
-    type ENUM('free', 'premium','admin') DEFAULT 'free' COMMENT '회원 유형',
-    status ENUM('active', 'inactive', 'suspended') DEFAULT 'active' COMMENT '회원 상태',
-    join_date DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '가입일',
-    last_login DATETIME COMMENT '최근 접속일',
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일',
-    
-    INDEX idx_email (email),
-    INDEX idx_status (status),
-    INDEX idx_type (type),
-    INDEX idx_join_date (join_date)
-);
 ```
 
 ## 회원 테이블
