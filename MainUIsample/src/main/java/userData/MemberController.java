@@ -15,7 +15,8 @@ import java.util.List;
 @WebServlet({
     "/admin/memberList.do", "/admin/memberView.do", "/admin/memberInsertForm.do", "/admin/memberUpdateForm.do",
     "/admin/memberDelete.do", "/loginForm.do", "/signupForm.do", "/logout.do", "/myPage.do",
-    "/login.do", "/signup.do", "/admin/memberInsert.do", "/admin/memberUpdate.do", "/admin/memberBulkAction.do"
+    "/login.do", "/signup.do", "/admin/memberInsert.do", "/admin/memberUpdate.do", "/admin/memberBulkAction.do",
+    "/memberUpdate.do", "/memberUpdateForm.do"  // 일반 사용자용 경로 추가
 })
 public class MemberController extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -40,38 +41,33 @@ public class MemberController extends HttpServlet {
         try {
             switch (command) {
                 case "/admin/memberList.do":
-                    // 관리자 체크
-                    if (!checkAdmin(request, response)) {
-                        return;
-                    }
+                    if (!checkAdmin(request, response)) return;
                     memberList(request, response);
                     break;
                     
                 case "/admin/memberView.do":
-                    if (!checkAdmin(request, response)) {
-                        return;
-                    }
+                    if (!checkAdmin(request, response)) return;
                     memberView(request, response);
                     break;
                     
                 case "/admin/memberInsertForm.do":
-                    if (!checkAdmin(request, response)) {
-                        return;
-                    }
+                    if (!checkAdmin(request, response)) return;
                     request.getRequestDispatcher("/WEB-INF/views/admin/memberForm.jsp").forward(request, response);
                     break;
                     
                 case "/admin/memberUpdateForm.do":
-                    if (!checkAdmin(request, response)) {
-                        return;
-                    }
+                    if (!checkAdmin(request, response)) return;
                     memberUpdateForm(request, response);
                     break;
                     
+                case "/memberUpdateForm.do":
+                    // 일반 사용자용 정보수정 폼
+                    if (!checkLogin(request, response)) return;
+                    userUpdateForm(request, response);
+                    break;
+                    
                 case "/admin/memberDelete.do":
-                    if (!checkAdmin(request, response)) {
-                        return;
-                    }
+                    if (!checkAdmin(request, response)) return;
                     memberDelete(request, response);
                     response.sendRedirect(request.getContextPath() + "/admin/memberList.do");
                     break;
@@ -82,7 +78,8 @@ public class MemberController extends HttpServlet {
                     
                 case "/signupForm.do":
                     request.getRequestDispatcher("/WEB-INF/views/mainUI/signup.jsp").forward(request, response);
-                    break;                    
+                    break;
+                    
                 case "/logout.do":
                     logout(request, response);
                     break;
@@ -123,46 +120,36 @@ public class MemberController extends HttpServlet {
                     break;
                     
                 case "/admin/memberInsert.do":
-                    if (!checkAdmin(request, response)) {
-                        return;
-                    }
-                    // 🚨 예외 처리 로직 추가
+                    if (!checkAdmin(request, response)) return;
                     MemberDTO member = createMemberFromRequest(request);
                     try {
                         memberDAO.insertMember(member);
                         setSessionMessage(request, member.getName() + " 님의 회원 등록이 완료되었습니다.");
-                        response.sendRedirect(request.getContextPath() + "/admin/memberList.do"); // 성공 시 리스트로 이동
-                        
+                        response.sendRedirect(request.getContextPath() + "/admin/memberList.do");
                     } catch (SQLException e) {
                         e.printStackTrace();
-                        // SQL 오류(예: 'password' null 또는 이메일 중복) 발생 시 
                         String errorMessage = "회원 등록 실패: 데이터베이스 오류가 발생했습니다. (" + e.getMessage() + ")";
                         setSessionMessage(request, errorMessage);
-                        response.sendRedirect(request.getContextPath() + "/admin/memberInsertForm.do"); // 실패 시 폼으로 돌아가기
-                        
+                        response.sendRedirect(request.getContextPath() + "/admin/memberInsertForm.do");
                     }
                     break;
                     
                 case "/admin/memberUpdate.do":
-                    // myPage에서도 사용 가능하도록 수정
+                    if (!checkAdmin(request, response)) return;
                     memberUpdate(request, response);
+                    response.sendRedirect(request.getContextPath() + "/admin/memberList.do");
+                    break;
                     
-                    // 관리자면 memberList로, 일반 사용자면 myPage로
-                    HttpSession session = request.getSession();
-                    String userType = (String) session.getAttribute("userType");
-                    if ("admin".equals(userType)) {
-                        response.sendRedirect(request.getContextPath() + "/admin/memberList.do");
-                    } else {
-                        response.sendRedirect(request.getContextPath() +"myPage.do");
-                    }
+                case "/memberUpdate.do":
+                    // 일반 사용자용 정보수정 처리
+                    if (!checkLogin(request, response)) return;
+                    userUpdate(request, response);
                     break;
                     
                 case "/admin/memberBulkAction.do":
-                    if (!checkAdmin(request, response)) {
-                        return;
-                    }
+                    if (!checkAdmin(request, response)) return;
                     memberBulkAction(request, response);
-                    response.sendRedirect(request.getContextPath()+"/admin/memberList.do");
+                    response.sendRedirect(request.getContextPath() + "/admin/memberList.do");
                     break;
                     
                 default:
@@ -179,20 +166,18 @@ public class MemberController extends HttpServlet {
     // ============ Helper Methods ============
     
     private String getCommand(HttpServletRequest request) {
-        String uri = request.getRequestURI();          // 예: /MainUIsample/admin/memberList.do
-        String contextPath = request.getContextPath(); // 예: /MainUIsample
-
-        // Context Path를 제거하여 /admin/memberList.do 또는 /login.do 를 추출
-        String command = uri.substring(contextPath.length()); 
+        String uri = request.getRequestURI();
+        String contextPath = request.getContextPath();
+        String command = uri.substring(contextPath.length());
         
-        // Context Path가 없는 경우(예외적인 상황)를 제외하고 '/'로 시작하도록 보장
         if (!command.startsWith("/")) {
             command = "/" + command;
         }
         
-        System.out.println("[DEBUG] URI: " + uri + " -> Command: " + command); // -> 이제 "/admin/memberList.do"가 출력됨
+        System.out.println("[DEBUG] URI: " + uri + " -> Command: " + command);
         return command;
     }
+    
     /**
      * 관리자 권한 체크
      */
@@ -201,13 +186,28 @@ public class MemberController extends HttpServlet {
         HttpSession session = request.getSession(false);
         
         if (session == null || session.getAttribute("userType") == null) {
-            response.sendRedirect("loginForm.do");
+            response.sendRedirect(request.getContextPath() + "/loginForm.do");
             return false;
         }
         
         String userType = (String) session.getAttribute("userType");
         if (!"admin".equals(userType)) {
-            response.sendRedirect(request.getContextPath() + "index.do");
+            response.sendRedirect(request.getContextPath() + "/index.do");
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * 로그인 여부 체크 (일반 사용자용)
+     */
+    private boolean checkLogin(HttpServletRequest request, HttpServletResponse response) 
+            throws IOException {
+        HttpSession session = request.getSession(false);
+        
+        if (session == null || session.getAttribute("userId") == null) {
+            response.sendRedirect(request.getContextPath() + "/loginForm.do");
             return false;
         }
         
@@ -264,6 +264,21 @@ public class MemberController extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/views/admin/memberUpdateForm.jsp").forward(request, response);
     }
     
+    /**
+     * 일반 사용자용 정보수정 폼
+     */
+    private void userUpdateForm(HttpServletRequest request, HttpServletResponse response) 
+            throws SQLException, ServletException, IOException {
+        
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute("userId");
+        
+        MemberDTO member = memberDAO.getMemberById(userId);
+        
+        request.setAttribute("member", member);
+        request.getRequestDispatcher("/WEB-INF/views/mainUI/memberUpdateForm.jsp").forward(request, response);
+    }
+    
     private void memberInsert(HttpServletRequest request, HttpServletResponse response) 
             throws SQLException {
         
@@ -286,6 +301,41 @@ public class MemberController extends HttpServlet {
         setSessionMessage(request, result > 0 
             ? "Member updated successfully" 
             : "Failed to update member");
+    }
+    
+    /**
+     * 일반 사용자용 정보수정 처리
+     */
+    private void userUpdate(HttpServletRequest request, HttpServletResponse response) 
+            throws SQLException, IOException {
+        
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute("userId");
+        
+        MemberDTO member = new MemberDTO();
+        member.setId(userId);
+        member.setName(request.getParameter("name"));
+        member.setEmail(request.getParameter("email"));
+        member.setPhone(request.getParameter("phone"));
+        member.setBirthdate(request.getParameter("birthdate"));
+        
+        // 일반 사용자는 type과 status를 변경할 수 없음
+        MemberDTO currentMember = memberDAO.getMemberById(userId);
+        member.setType(currentMember.getType());
+        member.setStatus(currentMember.getStatus());
+        
+        int result = memberDAO.updateMember(member);
+        
+        if (result > 0) {
+            // 세션 정보도 업데이트
+            session.setAttribute("userName", member.getName());
+            session.setAttribute("userEmail", member.getEmail());
+            setSessionMessage(request, "정보가 성공적으로 수정되었습니다.");
+        } else {
+            setSessionMessage(request, "정보 수정에 실패했습니다.");
+        }
+        
+        response.sendRedirect(request.getContextPath() + "/myPage.do");
     }
     
     private void memberDelete(HttpServletRequest request, HttpServletResponse response) 
@@ -342,7 +392,6 @@ public class MemberController extends HttpServlet {
             
             System.out.println("[DEBUG] Login success - Type: " + member.getType());
             
-            // 관리자면 대시보드로, 일반 사용자면 index로
             if ("admin".equals(member.getType())) {
                 response.sendRedirect(request.getContextPath() + "/admin/memberList.do");
             } else {
@@ -371,7 +420,7 @@ public class MemberController extends HttpServlet {
         
         if (result > 0) {
             setSessionMessage(request, "Signup successful! Please login.");
-            response.sendRedirect(request.getContextPath() +"loginForm.do");
+            response.sendRedirect(request.getContextPath() + "/loginForm.do");
         } else {
             request.setAttribute("errorMessage", "Signup failed");
             request.getRequestDispatcher("/WEB-INF/views/mainUI/signup.jsp").forward(request, response);
@@ -385,7 +434,7 @@ public class MemberController extends HttpServlet {
         if (session != null) {
             session.invalidate();
         }
-        response.sendRedirect(request.getContextPath() +"/loginForm.do");
+        response.sendRedirect(request.getContextPath() + "/loginForm.do");
     }
     
     private void myPage(HttpServletRequest request, HttpServletResponse response) 
@@ -393,7 +442,7 @@ public class MemberController extends HttpServlet {
         
         HttpSession session = request.getSession(false);
         if (session == null) {
-            response.sendRedirect("loginForm.do");
+            response.sendRedirect(request.getContextPath() + "/loginForm.do");
             return;
         }
         

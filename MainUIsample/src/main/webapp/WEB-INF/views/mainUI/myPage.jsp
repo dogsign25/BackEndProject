@@ -4,16 +4,6 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
-<%--
-    JSP에서 사용되는 'member' 객체 필드:
-    member.id, member.name, member.email, member.type, 
-    member.joinDate, member.lastLogin
-    
-    MemberController의 memberView.do를 통해 ${member} 객체가 request에 저장되어야 함.
-    이 페이지의 경로가 myPage.do라고 가정하고, myPage.do 처리 시
-    MemberController에서 ${member} 객체를 조회하여 request에 저장하는 로직이 필요합니다.
---%>
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -24,10 +14,6 @@
     <link rel="stylesheet" href="./style.css">
     
     <style>
-        /* ================================== */
-        /* 마이페이지 전용 스타일 */
-        /* ================================== */
-        /* 💡 수정 사항 1: 메인 콘텐츠 영역 상단 여백 추가 (전체적으로 아래로 내리기) */
         .content-container {
             padding-top: 40px;
         }
@@ -51,7 +37,7 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: #34C759; /* Green highlight color */
+            background: #34C759;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -92,7 +78,6 @@
             font-weight: 400;
         }
 
-        /* 폼 요소 및 버튼 (admin 페이지 스타일 재활용) */
         .form-container {
             background: #1F1F1F;
             border-radius: 10px;
@@ -122,7 +107,6 @@
             box-sizing: border-box;
         }
         
-        /* 버튼 스타일 */
         .action-buttons {
             display: flex;
             gap: 15px;
@@ -137,9 +121,11 @@
             transition: all 0.3s ease;
             cursor: pointer;
             border: none;
+            text-decoration: none;
+            display: inline-block;
         }
         .btn-update {
-            background: #34C759; /* Highlight color */
+            background: #34C759;
             color: #181818;
         }
         .btn-update:hover {
@@ -155,7 +141,6 @@
             background: #e6352b;
         }
 
-        /* 회원 등급 뱃지 */
         .member-type {
             display: inline-block;
             padding: 5px 12px;
@@ -172,6 +157,9 @@
             border-radius: 4px;
             text-align: center;
             font-weight: 500;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: inline-block;
         }
         .action-btn-green {
             background: #34C759;
@@ -179,15 +167,24 @@
             border-radius: 4px;
             text-align: center;
             font-weight: 500;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: inline-block;
         }
-
+        .alert-success {
+            background: #2ba84d;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
 
     <div class="page-layout">
         
-                <jsp:include page="/WEB-INF/views/common/sidebar_user.jsp">
+        <jsp:include page="/WEB-INF/views/common/sidebar_user.jsp">
             <jsp:param name="activePage" value="myInfo" />
         </jsp:include>
         
@@ -197,7 +194,7 @@
                 <h1 style="margin-bottom: 20px;">마이페이지</h1>
                 
                 <c:if test="${not empty sessionScope.msg}">
-                    <div style="background: #2ba84d; color: white; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                    <div class="alert-success">
                         ${sessionScope.msg}
                     </div>
                     <% session.removeAttribute("msg"); %>
@@ -205,7 +202,6 @@
 
                 <c:if test="${not empty member}">
                     
-                    <%-- 1. 프로필 카드: 이름, 등급, 이메일, 가입일, 최종 로그인 정보 --%>
                     <div class="profile-card">
                         <div class="profile-header">
                             <div class="user-avatar">${fn:toUpperCase(fn:substring(member.name, 0, 1))}</div>
@@ -222,7 +218,7 @@
                                 </p>
                             </div>
                             <div style="margin-left: auto;">
-                                <a href="logout.do" class="btn-logout">로그아웃</a>
+                                <a href="<c:url value="/logout.do"/>" class="btn-logout">로그아웃</a>
                             </div>
                         </div>
                         
@@ -252,41 +248,35 @@
                         </div>
                     </div>
                     
-                    <%-- 2. 회원 정보 수정 폼 --%>
-                    <h2 style="margin-bottom: 20px;">정보 수정</h2>
+                    <h2 style="margin-bottom: 20px;">기본 정보</h2>
                     <div class="form-container">
-                        <form action="admin/memberUpdateForm.do" method="get">
-                            <input type="hidden" name="id" value="${member.id}">
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="name">이름</label>
-                                    <input type="text" id="name" name="name" value="${member.name}" required />
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">이메일 (수정 불가)</label>
-                                    <input type="email" id="email" name="email" value="${member.email}" readonly />
-                                </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>이름</label>
+                                <input type="text" value="${member.name}" readonly />
                             </div>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="phone">연락처</label>
-                                    <input type="text" id="phone" name="phone" value="${member.phone}" placeholder="010-1234-5678" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="birthdate">생년월일</label>
-                                    <input type="date" id="birthdate" name="birthdate" value="${member.birthdate}" />
-                                </div>
+                            <div class="form-group">
+                                <label>이메일</label>
+                                <input type="email" value="${member.email}" readonly />
                             </div>
-                            
-                            <div class="action-buttons">
-                                <button type="submit" class="btn-update">정보 수정</button>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>연락처</label>
+                                <input type="text" value="${member.phone}" readonly />
                             </div>
-                        </form>
+                            <div class="form-group">
+                                <label>생년월일</label>
+                                <input type="text" value="${member.birthdate}" readonly />
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <a href="<c:url value="/memberUpdateForm.do"/>" class="btn-update">정보 수정</a>
+                        </div>
                     </div>
 
-                    <%-- 3. 서비스 정보 및 통계 --%>
                     <h2 style="margin-bottom: 20px;">서비스 이용 정보</h2>
                     <div class="form-container">
                         <div class="form-row">
@@ -296,24 +286,23 @@
                             </div>
                             <div class="form-group">
                                 <label>프리미엄 만료일</label>
-                                <%-- member.type이 'premium'일 경우 가상의 만료일 표시 --%>
                                 <input type="text" value="${member.type == 'premium' ? '2026-01-01' : '해당 없음'}" readonly />
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>누적 청취 시간 (분)</label>
-                                <input type="text" value="12,450분" readonly /> <%-- 임의의 통계 데이터 --%>
+                                <input type="text" value="12,450분" readonly />
                             </div>
                             <div class="form-group">
                                 <label>등록된 플레이리스트 수</label>
-                                <input type="text" value="12개" readonly /> <%-- 임의의 통계 데이터 --%>
+                                <input type="text" value="12개" readonly />
                             </div>
                         </div>
                         
                         <div class="action-buttons" style="margin-top: 10px;">
-                            <a href="paymentHistory.do" class="action-btn-blue" style="padding: 10px 20px;">결제 내역 확인</a>
-                            <a href="premium.do" class="action-btn-green" style="padding: 10px 20px;">이용권 변경</a>
+                            <a href="#" class="action-btn-blue">결제 내역 확인</a>
+                            <a href="#" class="action-btn-green">이용권 변경</a>
                         </div>
                     </div>
                 </c:if>
@@ -322,7 +311,7 @@
                     <div class="profile-card" style="text-align: center; padding: 50px;">
                         <h2 style="color: #ff3b30;">로그인이 필요합니다.</h2>
                         <p style="margin-top: 20px;">마이페이지 정보를 보려면 로그인해 주세요.</p>
-                        <a href="loginForm.do" class="btn-update" style="display: inline-block; margin-top: 30px;">로그인 페이지로 이동</a>
+                        <a href="<c:url value="/loginForm.do"/>" class="btn-update" style="display: inline-block; margin-top: 30px;">로그인 페이지로 이동</a>
                     </div>
                 </c:if>
                 

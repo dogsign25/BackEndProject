@@ -20,17 +20,20 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow-y: auto;
+            padding: 40px 0;
         }
         
         .song-modal-content {
             background: #1E1E1E;
             border-radius: 20px;
             width: 90%;
-            max-width: 600px;
+            max-width: 800px;
             padding: 40px;
             position: relative;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             animation: modalSlideUp 0.3s ease;
+            margin: auto;
         }
         
         @keyframes modalSlideUp {
@@ -57,6 +60,7 @@
             font-size: 24px;
             cursor: pointer;
             transition: all 0.3s ease;
+            z-index: 10;
         }
         
         .modal-close-btn:hover {
@@ -132,56 +136,6 @@
             color: #34C759;
         }
         
-        .player-controls {
-            width: 100%;
-            margin-top: 20px;
-        }
-        
-        .play-pause-btn {
-            width: 70px;
-            height: 70px;
-            background: #34C759;
-            border: none;
-            border-radius: 50%;
-            color: white;
-            font-size: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-        }
-        
-        .play-pause-btn:hover {
-            background: #2ba84d;
-            transform: scale(1.1);
-            box-shadow: 0 8px 20px rgba(52, 199, 89, 0.4);
-        }
-        
-        .progress-bar-container {
-            width: 100%;
-            height: 6px;
-            background: #333;
-            border-radius: 3px;
-            overflow: hidden;
-            margin-bottom: 10px;
-        }
-        
-        .progress-bar {
-            height: 100%;
-            background: #34C759;
-            width: 0%;
-            transition: width 0.1s linear;
-        }
-        
-        .time-display {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.6);
-        }
-        
         .spotify-embed {
             width: 100%;
             height: 80px;
@@ -216,31 +170,23 @@
             transform: translateY(-2px);
         }
         
-        .btn-add-favorite {
+        .btn-toggle-like.liked {
             background: #ff3b30;
             color: white;
         }
         
-        .btn-add-favorite:hover {
-            background: #e6352b;
-            transform: translateY(-2px);
-        }
-        /* New style for liked songs button */
-        .btn-toggle-like.liked {
-            background: #ff3b30; /* Red for liked */
-            color: white;
-        }
         .btn-toggle-like:not(.liked) {
-            background: rgba(255, 255, 255, 0.1); /* Lighter background when not liked */
+            background: rgba(255, 255, 255, 0.1);
             color: rgba(255, 255, 255, 0.7);
         }
+        
         .btn-toggle-like:not(.liked):hover {
             background: rgba(255, 255, 255, 0.2);
         }
 
-        /* Playlist Modal Styles */
+        /* Playlist Modal */
         .playlist-modal-container {
-            display: none; /* Hidden by default */
+            display: none;
             position: fixed;
             z-index: 10000;
             left: 0;
@@ -251,6 +197,7 @@
             justify-content: center;
             align-items: center;
         }
+        
         .playlist-modal-content {
             background-color: #282828;
             padding: 20px;
@@ -259,16 +206,19 @@
             max-width: 400px;
             text-align: center;
         }
+        
         .playlist-modal-content h3 {
             color: white;
             margin-top: 0;
         }
+        
         .playlist-modal-list {
             list-style: none;
             padding: 0;
             max-height: 300px;
             overflow-y: auto;
         }
+        
         .playlist-modal-list li {
             background: #333;
             color: white;
@@ -278,9 +228,11 @@
             cursor: pointer;
             transition: background 0.2s;
         }
+        
         .playlist-modal-list li:hover {
             background: #34C759;
         }
+        
         .playlist-modal-close {
             margin-top: 15px;
             padding: 10px 20px;
@@ -289,6 +241,124 @@
             color: white;
             border-radius: 5px;
             cursor: pointer;
+        }
+        
+        /* 추천 곡 섹션 */
+        .recommendations-section {
+            width: 100%;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #333;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .recommendations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+        }
+        
+        .recommendation-card {
+            background: #252525;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .recommendation-card:hover {
+            background: #2a2a2a;
+            transform: translateY(-5px);
+        }
+        
+        .recommendation-image {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        
+        .recommendation-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .recommendation-artist {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        /* YouTube 영상 섹션 */
+        .youtube-section {
+            width: 100%;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #333;
+        }
+        
+        .youtube-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        
+        .youtube-card {
+            background: #252525;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .youtube-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .youtube-thumbnail {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            position: relative;
+        }
+        
+        .youtube-info {
+            padding: 12px;
+        }
+        
+        .youtube-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        
+        .youtube-channel {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -335,6 +405,40 @@
                     <button class="action-button btn-add-playlist" onclick="openPlaylistModal()">플레이리스트에 추가</button>
                     <button id="toggleLikeButton" class="action-button btn-toggle-like" onclick="toggleLike()">좋아요 ♥</button>
                 </div>
+                
+                <!-- 비슷한 장르 추천 곡 섹션 -->
+                <c:if test="${not empty recommendations}">
+                    <div class="recommendations-section">
+                        <h2 class="section-title">비슷한 <span style="color: #34C759;">곡 추천</span></h2>
+                        <div class="recommendations-grid">
+                            <c:forEach var="track" items="${recommendations}">
+                                <div class="recommendation-card" onclick="location.href='songDetail.do?id=${track.spotifyId}'">
+                                    <img src="${track.imageUrl}" alt="${track.title}" class="recommendation-image">
+                                    <div class="recommendation-title">${track.title}</div>
+                                    <div class="recommendation-artist">${track.artist}</div>
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </c:if>
+                
+                <!-- YouTube 라이브/커버 영상 섹션 -->
+                <c:if test="${not empty youtubeVideos}">
+                    <div class="youtube-section">
+                        <h2 class="section-title">라이브 & <span style="color: #ff0000;">커버 영상</span></h2>
+                        <div class="youtube-grid">
+                            <c:forEach var="video" items="${youtubeVideos}">
+                                <div class="youtube-card" onclick="window.open('https://www.youtube.com/watch?v=${video.videoId}', '_blank')">
+                                    <img src="${video.thumbnailUrl}" alt="${video.title}" class="youtube-thumbnail">
+                                    <div class="youtube-info">
+                                        <div class="youtube-title">${video.title}</div>
+                                        <div class="youtube-channel">${video.channelTitle}</div>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </c:if>
             </div>
         </div>
     </div>
@@ -344,7 +448,6 @@
         <div class="playlist-modal-content">
             <h3>내 플레이리스트</h3>
             <ul id="playlistModalList" class="playlist-modal-list">
-                <!-- Playlists will be dynamically inserted here -->
             </ul>
             <button class="playlist-modal-close" onclick="closePlaylistModal()">닫기</button>
         </div>
@@ -369,7 +472,7 @@
                 })
                 .then(playlists => {
                     const playlistList = document.getElementById("playlistModalList");
-                    playlistList.innerHTML = ""; // Clear previous list
+                    playlistList.innerHTML = "";
                     
                     if (playlists.length === 0) {
                         playlistList.innerHTML = '<li>플레이리스트가 없습니다. 먼저 플레이리스트를 만들어주세요.</li>';
@@ -418,7 +521,6 @@
             });
         }
 
-        // 앨범 아트 회전 애니메이션 (재생 중일 때)
         const albumArt = document.getElementById('albumArt');
         const iframe = document.querySelector('.spotify-embed');
         
@@ -428,15 +530,11 @@
             });
         }
 
-        // --- New Like Functionality ---
         const toggleLikeButton = document.getElementById('toggleLikeButton');
-        const userId = "${sessionScope.userId}"; // Assuming userId is available in session
+        const userId = "${sessionScope.userId}";
 
-        // Function to check initial like status
         async function checkLikeStatus() {
-            if (!userId || userId === "0") { // userId is 0 if not logged in
-                // If not logged in, disable like button or hide it. For now, just don't check.
-                // toggleLikeButton.disabled = true;
+            if (!userId || userId === "0") {
                 return;
             }
 
@@ -456,22 +554,20 @@
             }
         }
 
-        // Function to update the button's appearance
         function updateLikeButton(isLiked) {
             if (isLiked) {
                 toggleLikeButton.classList.add('liked');
-                toggleLikeButton.innerHTML = '좋아요 ♥'; // Filled heart or similar
+                toggleLikeButton.innerHTML = '좋아요 ♥';
             } else {
                 toggleLikeButton.classList.remove('liked');
-                toggleLikeButton.innerHTML = '좋아요 ♡'; // Empty heart
+                toggleLikeButton.innerHTML = '좋아요 ♡';
             }
         }
 
-        // Function to toggle like status
         async function toggleLike() {
             if (!userId || userId === "0") {
                 alert("로그인이 필요합니다.");
-                window.location.href = "loginForm.do"; // Redirect to login page
+                window.location.href = "loginForm.do";
                 return;
             }
 
@@ -479,7 +575,7 @@
             const action = currentIsLiked ? 'remove' : 'add';
 
             try {
-                const encodedSpotifyId = encodeURIComponent(trackSpotifyId); // Moved outside
+                const encodedSpotifyId = encodeURIComponent(trackSpotifyId);
                 const response = await fetch('likedSongs.do', {
                     method: 'POST',
                     headers: {
@@ -490,7 +586,7 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    updateLikeButton(!currentIsLiked); // Toggle button state
+                    updateLikeButton(!currentIsLiked);
                     alert(data.message);
                 } else {
                     alert("좋아요 처리 실패: " + data.message);
@@ -501,7 +597,6 @@
             }
         }
 
-        // Initial check on page load
         document.addEventListener('DOMContentLoaded', checkLikeStatus);
     </script>
 </body>

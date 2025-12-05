@@ -31,6 +31,14 @@ CREATE TABLE playlist_songs (
     FOREIGN KEY (playlist_id) REFERENCES playlists(playlist_id) ON DELETE CASCADE,
     UNIQUE KEY (playlist_id, track_spotify_id)
 );
+
+CREATE TABLE liked_songs (
+    user_id INT NOT NULL,
+    track_spotify_id VARCHAR(255) NOT NULL,
+    liked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, track_spotify_id),
+    FOREIGN KEY (user_id) REFERENCES members(id) ON DELETE CASCADE
+);
 ```
 
 ## 회원 테이블

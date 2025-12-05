@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Song Detail Controller
@@ -16,10 +17,12 @@ import java.io.IOException;
 public class SongDetailController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private SpotifyService spotifyService;
+    private YouTubeService youtubeService;
 
     @Override
     public void init() throws ServletException {
         spotifyService = new SpotifyService();
+        youtubeService = new YouTubeService();
         System.out.println("[SongDetailController] Initialized successfully.");
     }
 
@@ -41,14 +44,30 @@ public class SongDetailController extends HttpServlet {
             String accessToken = spotifyService.getAccessToken();
             
             if (accessToken != null) {
-                // Spotify API로 트랙 상세 정보 가져오기
+                // 1. Spotify API로 트랙 상세 정보 가져오기
                 TrackDTO song = spotifyService.getTrackDetails(accessToken, spotifyId);
                 
                 if (song != null) {
                     request.setAttribute("song", song);
                     System.out.println("[SongDetailController] Song details loaded: " + song.getTitle());
+                    
+                    // 2. 비슷한 장르의 추천 곡 가져오기 (4개)
+                    List<TrackDTO> recommendations = spotifyService.getRecommendationsByTrack(
+                        accessToken, spotifyId, 4
+                    );
+                    request.setAttribute("recommendations", recommendations);
+                    System.out.println("[SongDetailController] Recommendations loaded: " + recommendations.size());
+                    
+                    // 3. YouTube에서 라이브/커버 영상 검색 (4개)
+                    List<YouTubeService.YouTubeVideo> youtubeVideos = youtubeService.searchVideos(
+                        song.getArtist(), song.getTitle(), 4
+                    );
+                    request.setAttribute("youtubeVideos", youtubeVideos);
+                    System.out.println("[SongDetailController] YouTube videos loaded: " + youtubeVideos.size());
+                    
                 } else {
-request.getRequestDispatcher("/WEB-INF/views/mainUI/error.jsp").forward(request, response);
+                    request.setAttribute("errorMsg", "노래 정보를 찾을 수 없습니다.");
+                    request.getRequestDispatcher("/WEB-INF/views/mainUI/error.jsp").forward(request, response);
                     return;
                 }
             } else {

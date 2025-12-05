@@ -546,6 +546,153 @@ public class SpotifyService {
         return list;
     }
     
+    /**
+     * 특정 트랙 ID를 기반으로 비슷한 곡 추천받기
+     * 
+     * @param accessToken Spotify 액세스 토큰
+     * @param trackId 기준이 되는 트랙 ID
+     * @param limit 추천받을 곡 개수 (기본 4개)
+     * @return 추천 트랙 리스트
+     */
+    public List<TrackDTO> getRecommendationsByTrack(String accessToken, String trackId, int limit) {
+        List<TrackDTO> list = new ArrayList<>();
+        
+        try {
+            String apiUrl = String.format(
+                "https://api.spotify.com/v1/recommendations?seed_tracks=%s&limit=%d",
+                trackId, limit
+            );
+
+            URL url = new URL(apiUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+            
+            int responseCode = conn.getResponseCode();
+            if (responseCode != 200) {
+                System.err.println("[Spotify API] Recommendations 요청 실패");
+                return list;
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                response.append(line);
+            }
+            br.close();
+
+            JSONObject root = new JSONObject(response.toString());
+            JSONArray tracks = root.getJSONArray("tracks");
+
+            for (int i = 0; i < tracks.length(); i++) {
+                JSONObject item = tracks.getJSONObject(i);
+                
+                String title = item.getString("name");
+                String artist = item.getJSONArray("artists").getJSONObject(0).getString("name");
+                
+                JSONArray images = item.getJSONObject("album").getJSONArray("images");
+                String image = "";
+                if (images.length() > 0) {
+                    image = images.getJSONObject(0).getString("url");
+                }
+                
+                int durationMs = item.getInt("duration_ms");
+                String duration = formatDuration(durationMs);
+                
+                String releaseDate = item.getJSONObject("album").getString("release_date");
+                String formattedDate = formatReleaseDate(releaseDate);
+                
+                String spotifyId = item.getString("id");
+                String albumName = item.getJSONObject("album").getString("name");
+
+                list.add(new TrackDTO(title, artist, image, duration, formattedDate, spotifyId, albumName));
+            }
+
+            System.out.println("[Spotify API] " + list.size() + "개의 추천 곡을 가져왔습니다.");
+
+        } catch (Exception e) {
+            System.err.println("[Spotify API] Recommendations 파싱 중 Exception:");
+            e.printStackTrace();
+        }
+        
+        return list;
+    }
+
+    /**
+     * 아티스트 ID를 기반으로 비슷한 아티스트의 곡 추천받기
+     * 
+     * @param accessToken Spotify 액세스 토큰
+     * @param artistId 아티스트 ID
+     * @param limit 추천받을 곡 개수
+     * @return 추천 트랙 리스트
+     */
+    public List<TrackDTO> getRecommendationsByArtist(String accessToken, String artistId, int limit) {
+        List<TrackDTO> list = new ArrayList<>();
+        
+        try {
+            String apiUrl = String.format(
+                "https://api.spotify.com/v1/recommendations?seed_artists=%s&limit=%d",
+                artistId, limit
+            );
+
+            URL url = new URL(apiUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+            
+            int responseCode = conn.getResponseCode();
+            if (responseCode != 200) {
+                System.err.println("[Spotify API] Artist Recommendations 요청 실패");
+                return list;
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                response.append(line);
+            }
+            br.close();
+
+            JSONObject root = new JSONObject(response.toString());
+            JSONArray tracks = root.getJSONArray("tracks");
+
+            for (int i = 0; i < tracks.length(); i++) {
+                JSONObject item = tracks.getJSONObject(i);
+                
+                String title = item.getString("name");
+                String artist = item.getJSONArray("artists").getJSONObject(0).getString("name");
+                
+                JSONArray images = item.getJSONObject("album").getJSONArray("images");
+                String image = "";
+                if (images.length() > 0) {
+                    image = images.getJSONObject(0).getString("url");
+                }
+                
+                int durationMs = item.getInt("duration_ms");
+                String duration = formatDuration(durationMs);
+                
+                String releaseDate = item.getJSONObject("album").getString("release_date");
+                String formattedDate = formatReleaseDate(releaseDate);
+                
+                String spotifyId = item.getString("id");
+                String albumName = item.getJSONObject("album").getString("name");
+
+                list.add(new TrackDTO(title, artist, image, duration, formattedDate, spotifyId, albumName));
+            }
+
+            System.out.println("[Spotify API] " + list.size() + "개의 아티스트 기반 추천 곡을 가져왔습니다.");
+
+        } catch (Exception e) {
+            System.err.println("[Spotify API] Artist Recommendations 파싱 중 Exception:");
+            e.printStackTrace();
+        }
+        
+        return list;
+    }
+
+    
     // Helper Methods
     private String formatDuration(int durationMs) {
         int totalSeconds = durationMs / 1000;

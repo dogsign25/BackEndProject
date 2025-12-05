@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Error</title>
-<link rel="stylesheet" href="style.css">
+
 <style>
     body {
         display: flex;
@@ -15,12 +15,13 @@
         height: 100vh;
         flex-direction: column;
         text-align: center;
+        background-color: #121212;
+        color: white;
     }
     .error-container {
         padding: 40px;
         border-radius: 10px;
         background-color: #1e1e1e;
-        color: white;
     }
     .error-code {
         font-size: 5rem;
@@ -41,7 +42,9 @@
 </head>
 <body>
     <div class="error-container">
+
         <c:set var="statusCode" value="${pageContext.errorData.statusCode != 0 ? pageContext.errorData.statusCode : 500}" />
+
         <c:set var="errorMessage">
             <c:choose>
                 <c:when test="${not empty requestScope.errorMsg}">
