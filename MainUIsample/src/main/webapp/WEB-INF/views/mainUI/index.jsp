@@ -24,7 +24,7 @@
                     <div class="header-overlay">
                         <div class="nav-bar">
                             <form action="search.do" method="get" class="search-container">
-                                <div class="search-icon" onclick="this.closest('form').submit();"><div></div></div>
+                                <div class="search-icon" onclick="this.closest('form').submit();"><img src="<c:url value="/assets/icons/search_icon.png"/>" alt="Search"></div>
                                 <input type="text" 
                                        name="query" 
                                        placeholder="Search For Musics, Artists, ..." 
