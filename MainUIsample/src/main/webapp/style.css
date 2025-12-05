@@ -185,18 +185,18 @@ a {
     width: 25px;
     height: 25px;
     position: relative;
-    transform: rotate(180deg);
-    opacity: 0.60;
+    opacity: 0.6;
     background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.search-icon div {
-    width: 18.14px;
-    height: 18.14px;
-    left: 3.29px;
-    top: 3.57px;
-    position: absolute;
-    background: white;
+.search-icon img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
 }
 
 .search-placeholder {
