@@ -428,7 +428,7 @@
                         <h2 class="section-title">라이브 & <span style="color: #ff0000;">커버 영상</span></h2>
                         <div class="youtube-grid">
                             <c:forEach var="video" items="${youtubeVideos}">
-                                <div class="youtube-card" onclick="window.open('https://www.youtube.com/watch?v=${video.videoId}', '_blank')">
+                                <div class="youtube-card" onclick="openYouTubeVideo('${video.videoId}', '${video.title}', '${video.channelTitle}')">
                                     <img src="${video.thumbnailUrl}" alt="${video.title}" class="youtube-thumbnail">
                                     <div class="youtube-info">
                                         <div class="youtube-title">${video.title}</div>
@@ -598,6 +598,16 @@
         }
 
         document.addEventListener('DOMContentLoaded', checkLikeStatus);
+        
+        function openYouTubeVideo(videoId, title, artist) {
+            // 특수문자 인코딩
+            const encodedTitle = encodeURIComponent(title);
+            const encodedArtist = encodeURIComponent(artist);
+            const encodedVideoId = encodeURIComponent(videoId);
+            
+            // youtubeVideo.do로 이동
+            window.location.href = `youtubeVideo.do?videoId=${encodedVideoId}&title=${encodedTitle}&artist=${encodedArtist}`;
+        }
     </script>
 </body>
 </html>

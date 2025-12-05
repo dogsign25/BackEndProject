@@ -51,9 +51,9 @@ public class SongDetailController extends HttpServlet {
                     request.setAttribute("song", song);
                     System.out.println("[SongDetailController] Song details loaded: " + song.getTitle());
                     
-                    // 2. 비슷한 장르의 추천 곡 가져오기 (4개)
-                    List<TrackDTO> recommendations = spotifyService.getRecommendationsByTrack(
-                        accessToken, spotifyId, 4
+                    // 2. 아티스트 기반 추천 곡 가져오기 (4개)
+                    List<TrackDTO> recommendations = spotifyService.getRecommendationsByArtistName(
+                        accessToken, song.getArtist(), 4
                     );
                     request.setAttribute("recommendations", recommendations);
                     System.out.println("[SongDetailController] Recommendations loaded: " + recommendations.size());

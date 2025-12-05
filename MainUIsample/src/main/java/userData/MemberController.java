@@ -319,12 +319,23 @@ public class MemberController extends HttpServlet {
         member.setPhone(request.getParameter("phone"));
         member.setBirthdate(request.getParameter("birthdate"));
         
+        // 비밀번호 변경 확인
+        String newPassword = request.getParameter("newPassword");
+        if (newPassword != null && !newPassword.trim().isEmpty()) {
+            member.setPassword(newPassword);
+        }
+        
         // 일반 사용자는 type과 status를 변경할 수 없음
         MemberDTO currentMember = memberDAO.getMemberById(userId);
         member.setType(currentMember.getType());
         member.setStatus(currentMember.getStatus());
         
-        int result = memberDAO.updateMember(member);
+        int result;
+        if (newPassword != null && !newPassword.trim().isEmpty()) {
+            result = memberDAO.updateMemberWithPassword(member);
+        } else {
+            result = memberDAO.updateMember(member);
+        }
         
         if (result > 0) {
             // 세션 정보도 업데이트

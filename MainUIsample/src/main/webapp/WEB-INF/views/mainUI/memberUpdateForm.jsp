@@ -8,90 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>내 정보 수정 - WaterMelon</title>
     <link rel="stylesheet" href="<c:url value="/style.css"/>">
-    <style>
-        .content-container {
-            padding-top: 40px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .form-container {
-            background: #1F1F1F;
-            border-radius: 10px;
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-        .form-group label {
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 8px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-        .form-group input {
-            background: #282828;
-            border: 1px solid #333;
-            color: white;
-            padding: 12px;
-            border-radius: 5px;
-            font-size: 16px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .form-group input[readonly] {
-            background: #1a1a1a;
-            color: rgba(255, 255, 255, 0.5);
-            cursor: not-allowed;
-        }
-        .form-group input:focus:not([readonly]) {
-            outline: none;
-            border-color: #34C759;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: flex-end;
-            margin-top: 30px;
-        }
-        .btn-update, .btn-cancel {
-            padding: 12px 25px;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-update {
-            background: #34C759;
-            color: #181818;
-        }
-        .btn-update:hover {
-            background: #2ba84d;
-            color: white;
-        }
-        .btn-cancel {
-            background: #555;
-            color: white;
-        }
-        .btn-cancel:hover {
-            background: #666;
-        }
-        h1 {
-            margin-bottom: 30px;
-            color: #E0E0E0;
-        }
-    </style>
 </head>
 <body>
     <div class="page-layout">
@@ -100,11 +16,11 @@
         </jsp:include>
         
         <div class="main-content-wrapper">
-            <div class="content-container">
-                <h1>내 정보 수정</h1>
+            <div class="content-container" style="padding-top: 40px; max-width: 800px; margin: 0 auto;">
+                <h1 style="margin-bottom: 30px; color: #E0E0E0;">내 정보 수정</h1>
                 
                 <div class="form-container">
-                    <form action="<c:url value="/memberUpdate.do"/>" method="post">
+                    <form action="<c:url value="/memberUpdate.do"/>" method="post" onsubmit="return validateForm()">
                         <input type="hidden" name="id" value="${member.id}">
 
                         <div class="form-row">
@@ -129,6 +45,17 @@
                             </div>
                         </div>
 
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="newPassword">새 비밀번호 (변경 시에만 입력)</label>
+                                <input type="password" name="newPassword" id="newPassword" placeholder="새 비밀번호 입력">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">새 비밀번호 확인</label>
+                                <input type="password" name="confirmPassword" id="confirmPassword" placeholder="비밀번호 확인">
+                            </div>
+                        </div>
+
                         <div class="action-buttons">
                             <a href="<c:url value="/myPage.do"/>" class="btn-cancel">취소</a>
                             <button type="submit" class="btn-update">저장</button>
@@ -140,5 +67,27 @@
             <jsp:include page="/WEB-INF/views/common/footer.jsp" />
         </div>
     </div>
+    
+    <script>
+        function validateForm() {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // 비밀번호를 입력한 경우에만 검증
+            if (newPassword || confirmPassword) {
+                if (newPassword !== confirmPassword) {
+                    alert('새 비밀번호가 일치하지 않습니다.');
+                    return false;
+                }
+                
+                if (newPassword.length < 4) {
+                    alert('비밀번호는 최소 4자 이상이어야 합니다.');
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+    </script>
 </body>
 </html>

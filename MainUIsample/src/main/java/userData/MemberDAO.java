@@ -319,5 +319,28 @@ public class MemberDAO {
         
         return null;
     }
+    /**
+     * 회원 수정 (비밀번호 포함)
+     */
+    public int updateMemberWithPassword(MemberDTO member) throws SQLException {
+        String sql = "UPDATE members SET name=?, email=?, phone=?, birthdate=?, " +
+                    "type=?, status=?, password=? WHERE id=?";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, member.getName());
+            pstmt.setString(2, member.getEmail());
+            pstmt.setString(3, member.getPhone());
+            pstmt.setString(4, member.getBirthdate());
+            pstmt.setString(5, member.getType());
+            pstmt.setString(6, member.getStatus());
+            pstmt.setString(7, member.getPassword());
+            pstmt.setInt(8, member.getId());
+            
+            return pstmt.executeUpdate();
+        }
+    }
+
 }
 
