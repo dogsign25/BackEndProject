@@ -6,14 +6,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>노래 상세 - ${song.title}</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="<c:url value="/style.css"/>">
     <style>
+        /* 페이지 레이아웃 */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .page-layout {
+            display: flex;
+            height: 100vh;
+        }
         .song-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
+            flex: 1;
+            position: relative;
             width: 100%;
-            height: 100%;
+            height: 100vh;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(10px);
             z-index: 9999;
@@ -313,7 +323,7 @@
         
         .youtube-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 15px;
         }
         
@@ -323,6 +333,9 @@
             overflow: hidden;
             cursor: pointer;
             transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
         }
         
         .youtube-card:hover {
@@ -363,7 +376,13 @@
     </style>
 </head>
 <body>
-    <div class="song-modal-overlay" onclick="closeModal(event)">
+    <div class="page-layout">
+        <!-- 사이드바 추가 -->
+        <jsp:include page="/WEB-INF/views/common/sidebar_user.jsp">
+            <jsp:param name="activePage" value="discover" />
+        </jsp:include>
+        
+        <div class="song-modal-overlay" onclick="closeModal(event)">
         <div class="song-modal-content" onclick="event.stopPropagation()">
             <button class="modal-close-btn" onclick="window.history.back()">&times;</button>
             
@@ -428,13 +447,19 @@
                         <h2 class="section-title">라이브 & <span style="color: #ff0000;">커버 영상</span></h2>
                         <div class="youtube-grid">
                             <c:forEach var="video" items="${youtubeVideos}">
-                                <div class="youtube-card" onclick="openYouTubeVideo('${video.videoId}', '${video.title}', '${video.channelTitle}')">
+                                <c:url value="youtubeVideo.do" var="youtubeUrl">
+                                    <c:param name="videoId" value="${video.videoId}" />
+                                    <c:param name="title" value="${video.title}" />
+                                    <c:param name="artist" value="${song.artist}" />
+                                </c:url>
+                                <a href="${youtubeUrl}" 
+                                   class="youtube-card">
                                     <img src="${video.thumbnailUrl}" alt="${video.title}" class="youtube-thumbnail">
                                     <div class="youtube-info">
                                         <div class="youtube-title">${video.title}</div>
                                         <div class="youtube-channel">${video.channelTitle}</div>
                                     </div>
-                                </div>
+                                </a>
                             </c:forEach>
                         </div>
                     </div>
@@ -457,7 +482,7 @@
         const trackSpotifyId = "${song.spotifyId}";
 
         function closeModal(event) {
-            if (event.target.classList.contains('song-modal-overlay')) {
+            if (event && event.target.classList.contains('song-modal-overlay')) {
                 window.history.back();
             }
         }
@@ -598,16 +623,6 @@
         }
 
         document.addEventListener('DOMContentLoaded', checkLikeStatus);
-        
-        function openYouTubeVideo(videoId, title, artist) {
-            // 특수문자 인코딩
-            const encodedTitle = encodeURIComponent(title);
-            const encodedArtist = encodeURIComponent(artist);
-            const encodedVideoId = encodeURIComponent(videoId);
-            
-            // youtubeVideo.do로 이동
-            window.location.href = `youtubeVideo.do?videoId=${encodedVideoId}&title=${encodedTitle}&artist=${encodedArtist}`;
-        }
     </script>
 </body>
 </html>

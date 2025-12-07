@@ -62,6 +62,17 @@ public class SongDetailController extends HttpServlet {
                     List<YouTubeService.YouTubeVideo> youtubeVideos = youtubeService.searchVideos(
                         song.getArtist(), song.getTitle(), 4
                     );
+                 // 디버깅: YouTube 비디오 정보 출력
+                    if (youtubeVideos != null && !youtubeVideos.isEmpty()) {
+                        System.out.println("[SongDetailController] YouTube videos loaded: " + youtubeVideos.size());
+                        for (YouTubeService.YouTubeVideo video : youtubeVideos) {
+                            System.out.println("  - Video ID: " + video.getVideoId());
+                            System.out.println("    Title: " + video.getTitle());
+                            System.out.println("    Channel: " + video.getChannelTitle());
+                        }
+                    } else {
+                        System.out.println("[SongDetailController] No YouTube videos found");
+                    }
                     request.setAttribute("youtubeVideos", youtubeVideos);
                     System.out.println("[SongDetailController] YouTube videos loaded: " + youtubeVideos.size());
                     

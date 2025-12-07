@@ -705,11 +705,14 @@ public class SpotifyService {
         List<TrackDTO> list = new ArrayList<>();
         
         try {
+            // 더 많은 결과를 가져온 후 랜덤으로 선택
+            int fetchLimit = Math.min(limit * 5, 50); // limit의 5배 또는 최대 50개
+            
             // 아티스트 이름으로 검색
             String query = URLEncoder.encode(artistName, "UTF-8");
             String apiUrl = String.format(
                 "https://api.spotify.com/v1/search?q=artist:%s&type=track&limit=%d",
-                query, limit
+                query, fetchLimit
             );
 
             URL url = new URL(apiUrl);
@@ -759,6 +762,14 @@ public class SpotifyService {
                 list.add(new TrackDTO(title, artist, image, duration, formattedDate, spotifyId, albumName));
             }
 
+            // 랜덤으로 섞기
+            java.util.Collections.shuffle(list);
+            
+            // 요청한 개수만큼만 반환
+            if (list.size() > limit) {
+                list = list.subList(0, limit);
+            }
+
             System.out.println("[Spotify API] " + list.size() + "개의 아티스트 기반 추천 곡을 검색했습니다.");
 
         } catch (Exception e) {
@@ -769,82 +780,8 @@ public class SpotifyService {
         return list;
     }
 
-    /**
-     * 장르 기반 추천 (browse API 사용)
-     * 
-     * @param accessToken Spotify 액세스 토큰
-     * @param genreKeyword 장르 키워드 (예: "pop", "rock", "jazz")
-     * @param limit 추천받을 곡 개수
-     * @return 추천 트랙 리스트
-     */
-    public List<TrackDTO> getRecommendationsByGenre(String accessToken, String genreKeyword, int limit) {
-        List<TrackDTO> list = new ArrayList<>();
-        
-        try {
-            // 장르 키워드로 검색
-            String query = URLEncoder.encode(genreKeyword, "UTF-8");
-            String apiUrl = String.format(
-                "https://api.spotify.com/v1/search?q=genre:%s&type=track&limit=%d",
-                query, limit
-            );
 
-            URL url = new URL(apiUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
-            
-            int responseCode = conn.getResponseCode();
-            if (responseCode != 200) {
-                System.err.println("[Spotify API] Genre-based search 요청 실패. Response Code: " + responseCode);
-                // 장르 검색 실패 시 일반 검색으로 대체
-                return searchTracks(accessToken, genreKeyword);
-            }
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            StringBuilder response = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                response.append(line);
-            }
-            br.close();
-
-            JSONObject root = new JSONObject(response.toString());
-            JSONObject tracks = root.getJSONObject("tracks");
-            JSONArray items = tracks.getJSONArray("items");
-
-            for (int i = 0; i < items.length(); i++) {
-                JSONObject item = items.getJSONObject(i);
-                
-                String title = item.getString("name");
-                String artist = item.getJSONArray("artists").getJSONObject(0).getString("name");
-                
-                JSONArray images = item.getJSONObject("album").getJSONArray("images");
-                String image = "";
-                if (images.length() > 0) {
-                    image = images.getJSONObject(0).getString("url");
-                }
-                
-                int durationMs = item.getInt("duration_ms");
-                String duration = formatDuration(durationMs);
-                
-                String releaseDate = item.getJSONObject("album").getString("release_date");
-                String formattedDate = formatReleaseDate(releaseDate);
-                
-                String spotifyId = item.getString("id");
-                String albumName = item.getJSONObject("album").getString("name");
-
-                list.add(new TrackDTO(title, artist, image, duration, formattedDate, spotifyId, albumName));
-            }
-
-            System.out.println("[Spotify API] " + list.size() + "개의 장르 기반 추천 곡을 검색했습니다.");
-
-        } catch (Exception e) {
-            System.err.println("[Spotify API] Genre-based search 중 Exception:");
-            e.printStackTrace();
-        }
-        
-        return list;
-    }
+   
     
     // Helper Methods
     private String formatDuration(int durationMs) {

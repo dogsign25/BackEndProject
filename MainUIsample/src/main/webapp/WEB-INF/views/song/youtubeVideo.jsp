@@ -5,15 +5,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${title} - YouTube Video</title>
-    <link rel="stylesheet" href="./style.css">
+    <title><c:out value="${title}" /> - YouTube Video</title>
+    <link rel="stylesheet" href="<c:url value="/style.css"/>">
     <style>
+        /* 페이지 레이아웃 */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .page-layout {
+            display: flex;
+            height: 100vh;
+        }
+        
         .video-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
+            flex: 1;
+            position: relative;
             width: 100%;
-            height: 100%;
+            height: 100vh;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(10px);
             z-index: 9999;
@@ -145,6 +156,9 @@
             padding: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
         }
         
         .recommendation-card:hover {
@@ -188,15 +202,15 @@
                 <!-- YouTube 플레이어 -->
                 <div class="video-player">
                     <iframe 
-                        src="https://www.youtube.com/embed/${videoId}?autoplay=1" 
+                        src="https://www.youtube.com/embed/<c:out value="${videoId}"/>?autoplay=1" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                         allowfullscreen>
                     </iframe>
                 </div>
                 
                 <div class="video-info-section">
-                    <h1 class="video-title">${title}</h1>
-                    <p class="video-artist">${artist}</p>
+                    <h1 class="video-title"><c:out value="${title}"/></h1>
+                    <p class="video-artist"><c:out value="${artist}"/></p>
                     <span class="youtube-badge">YouTube Video</span>
                 </div>
                 
@@ -206,11 +220,11 @@
                         <h2 class="section-title">비슷한 <span style="color: #34C759;">곡 추천</span></h2>
                         <div class="recommendations-grid">
                             <c:forEach var="track" items="${recommendations}">
-                                <div class="recommendation-card" onclick="location.href='songDetail.do?id=${track.spotifyId}'">
-                                    <img src="${track.imageUrl}" alt="${track.title}" class="recommendation-image">
-                                    <div class="recommendation-title">${track.title}</div>
-                                    <div class="recommendation-artist">${track.artist}</div>
-                                </div>
+                                <a href="<c:url value="/songDetail.do"><c:param name="id" value="${track.spotifyId}"/></c:url>" class="recommendation-card">
+                                    <img src="<c:out value="${track.imageUrl}"/>" alt="<c:out value="${track.title}"/>" class="recommendation-image">
+                                    <div class="recommendation-title"><c:out value="${track.title}"/></div>
+                                    <div class="recommendation-artist"><c:out value="${track.artist}"/></div>
+                                </a>
                             </c:forEach>
                         </div>
                     </div>
@@ -221,10 +235,17 @@
     
     <script>
         function closeModal(event) {
-            if (event.target.classList.contains('video-modal-overlay')) {
+            if (event && event.target.classList.contains('video-modal-overlay')) {
                 window.history.back();
             }
         }
+        
+        // ESC 키로 닫기
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                window.history.back();
+            }
+        });
     </script>
 </body>
 </html>
