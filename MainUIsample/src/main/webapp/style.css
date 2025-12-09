@@ -445,19 +445,22 @@ a {
 }
 
 .song-card-info {
-    height: 48px;
+    height: auto;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
 }
 
 .song-title {
     color: white;
     font-size: 16px;
     font-weight: 500;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    /* 두 줄까지 보이도록 설정 */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 두 줄로 제한 */
+    -webkit-box-orient: vertical;
+    overflow: hidden; /* 잘림 기능은 유지 */
+    text-overflow: ellipsis; /* ... 표시 기능은 유지 */
     transition: color 0.3s ease;
 }
 
@@ -987,8 +990,8 @@ a {
     }
 
     .song-card-item {
-        flex: 1 1 calc(33% - 16px);
-        min-width: 160px;
+        flex: 1 1 220px;
+        min-width: 220px;
     }
 
     .footer-col {

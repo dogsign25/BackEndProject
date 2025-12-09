@@ -12,8 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class YouTubeService {
-    // YouTube Data API v3 Key - 실제로는 환경변수나 설정 파일에서 관리해야 합니다
-    private static final String API_KEY = "AIzaSyDejkq1OLtVOWv7BpTAD9TZ2krUFJ3hlV8"; // 여기에 실제 YouTube API 키를 입력하세요
+
+    private static final String API_KEY = "AIzaSyDejkq1OLtVOWv7BpTAD9TZ2krUFJ3hlV8";
     
     /**
      * YouTube 영상 정보를 담는 내부 DTO

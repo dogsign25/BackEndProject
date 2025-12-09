@@ -9,7 +9,7 @@ public class DBConnection {
 //			1단계 : 커넥터 로딩
 			Class.forName("com.mysql.cj.jdbc.Driver");
 //			2단계 : DB서버 커넥션
-			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/MusicApp", "root", "1234");
+			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/musicapp", "root", "dongyang");
 
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
