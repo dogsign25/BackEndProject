@@ -24,7 +24,7 @@
     </a>
     <a href="likedSongs.do" class="sidebar-nav-item ${param.activePage == 'likedSongs' ? 'active' : ''}">
         <div class="nav-icon"></div>
-        <div class="nav-text">좋아요 누른 곡</div>
+        <div class="nav-text">Liked Songs</div>
     </a>
     
     <!-- 관리자 전용 메뉴 -->

@@ -1,4 +1,4 @@
-package songData;
+package videoData;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -14,33 +14,6 @@ import org.json.JSONObject;
 public class YouTubeService {
 
     private static final String API_KEY = "AIzaSyDejkq1OLtVOWv7BpTAD9TZ2krUFJ3hlV8";
-    
-    /**
-     * YouTube 영상 정보를 담는 내부 DTO
-     */
-    public static class YouTubeVideo {
-        private String videoId;
-        private String title;
-        private String thumbnailUrl;
-        private String channelTitle;
-        private String publishedAt;
-        
-        public YouTubeVideo(String videoId, String title, String thumbnailUrl, 
-                           String channelTitle, String publishedAt) {
-            this.videoId = videoId;
-            this.title = title;
-            this.thumbnailUrl = thumbnailUrl;
-            this.channelTitle = channelTitle;
-            this.publishedAt = publishedAt;
-        }
-        
-        // Getters
-        public String getVideoId() { return videoId; }
-        public String getTitle() { return title; }
-        public String getThumbnailUrl() { return thumbnailUrl; }
-        public String getChannelTitle() { return channelTitle; }
-        public String getPublishedAt() { return publishedAt; }
-    }
     
     /**
      * 아티스트와 곡 제목으로 YouTube에서 라이브/커버 영상 검색

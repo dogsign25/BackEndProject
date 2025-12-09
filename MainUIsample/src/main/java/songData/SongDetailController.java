@@ -6,6 +6,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import videoData.YouTubeService;
+import videoData.YouTubeVideo;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -59,13 +62,13 @@ public class SongDetailController extends HttpServlet {
                     System.out.println("[SongDetailController] Recommendations loaded: " + recommendations.size());
                     
                     // 3. YouTube에서 라이브/커버 영상 검색 (4개)
-                    List<YouTubeService.YouTubeVideo> youtubeVideos = youtubeService.searchVideos(
+                    List<YouTubeVideo> youtubeVideos = youtubeService.searchVideos(
                         song.getArtist(), song.getTitle(), 4
                     );
                  // 디버깅: YouTube 비디오 정보 출력
                     if (youtubeVideos != null && !youtubeVideos.isEmpty()) {
                         System.out.println("[SongDetailController] YouTube videos loaded: " + youtubeVideos.size());
-                        for (YouTubeService.YouTubeVideo video : youtubeVideos) {
+                        for (YouTubeVideo video : youtubeVideos) {
                             System.out.println("  - Video ID: " + video.getVideoId());
                             System.out.println("    Title: " + video.getTitle());
                             System.out.println("    Channel: " + video.getChannelTitle());

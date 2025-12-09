@@ -194,41 +194,48 @@
     </style>
 </head>
 <body>
-    <div class="video-modal-overlay" onclick="closeModal(event)">
-        <div class="video-modal-content" onclick="event.stopPropagation()">
-            <button class="modal-close-btn" onclick="window.history.back()">&times;</button>
-            
-            <div class="video-container">
-                <!-- YouTube 플레이어 -->
-                <div class="video-player">
-                    <iframe 
-                        src="https://www.youtube.com/embed/<c:out value="${videoId}"/>?autoplay=1" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen>
-                    </iframe>
-                </div>
+    <div class="page-layout">
+        <!-- 사이드바 추가 -->
+        <jsp:include page="/WEB-INF/views/common/sidebar_user.jsp">
+            <jsp:param name="activePage" value="discover" />
+        </jsp:include>
+        
+        <div class="video-modal-overlay" onclick="closeModal(event)">
+            <div class="video-modal-content" onclick="event.stopPropagation()">
+                <button class="modal-close-btn" onclick="window.history.back()">&times;</button>
                 
-                <div class="video-info-section">
-                    <h1 class="video-title"><c:out value="${title}"/></h1>
-                    <p class="video-artist"><c:out value="${artist}"/></p>
-                    <span class="youtube-badge">YouTube Video</span>
-                </div>
-                
-                <!-- 비슷한 아티스트의 곡 추천 -->
-                <c:if test="${not empty recommendations}">
-                    <div class="recommendations-section">
-                        <h2 class="section-title">비슷한 <span style="color: #34C759;">곡 추천</span></h2>
-                        <div class="recommendations-grid">
-                            <c:forEach var="track" items="${recommendations}">
-                                <a href="<c:url value="/songDetail.do"><c:param name="id" value="${track.spotifyId}"/></c:url>" class="recommendation-card">
-                                    <img src="<c:out value="${track.imageUrl}"/>" alt="<c:out value="${track.title}"/>" class="recommendation-image">
-                                    <div class="recommendation-title"><c:out value="${track.title}"/></div>
-                                    <div class="recommendation-artist"><c:out value="${track.artist}"/></div>
-                                </a>
-                            </c:forEach>
-                        </div>
+                <div class="video-container">
+                    <!-- YouTube 플레이어 -->
+                    <div class="video-player">
+                        <iframe 
+                            src="https://www.youtube.com/embed/<c:out value="${videoId}"/>?autoplay=1" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
                     </div>
-                </c:if>
+                    
+                    <div class="video-info-section">
+                        <h1 class="video-title"><c:out value="${title}"/></h1>
+                        <p class="video-artist"><c:out value="${artist}"/></p>
+                        <span class="youtube-badge">YouTube Video</span>
+                    </div>
+                    
+                    <!-- 비슷한 아티스트의 곡 추천 -->
+                    <c:if test="${not empty recommendations}">
+                        <div class="recommendations-section">
+                            <h2 class="section-title">비슷한 <span style="color: #34C759;">곡 추천</span></h2>
+                            <div class="recommendations-grid">
+                                <c:forEach var="track" items="${recommendations}">
+                                    <a href="<c:url value="/songDetail.do"><c:param name="id" value="${track.spotifyId}"/></c:url>" class="recommendation-card">
+                                        <img src="<c:out value="${track.imageUrl}"/>" alt="<c:out value="${track.title}"/>" class="recommendation-image">
+                                        <div class="recommendation-title"><c:out value="${track.title}"/></div>
+                                        <div class="recommendation-artist"><c:out value="${track.artist}"/></div>
+                                    </a>
+                                </c:forEach>
+                            </div>
+                        </div>
+                    </c:if>
+                </div>
             </div>
         </div>
     </div>
