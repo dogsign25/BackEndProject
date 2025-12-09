@@ -6,7 +6,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Song Detail Controller
@@ -16,10 +23,14 @@ import java.io.IOException;
 public class SongDetailController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private SpotifyService spotifyService;
+    private YouTubeService youtubeService;
+    private LikedSongDAO likedSongDAO;
 
     @Override
     public void init() throws ServletException {
         spotifyService = new SpotifyService();
+        youtubeService = new YouTubeService();
+        likedSongDAO = new LikedSongDAO(); // Initialize LikedSongDAO
         System.out.println("[SongDetailController] Initialized successfully.");
     }
 
@@ -34,6 +45,18 @@ public class SongDetailController extends HttpServlet {
         if (spotifyId == null || spotifyId.trim().isEmpty()) {
             response.sendRedirect("index.do");
             return;
+        }
+
+        Set<String> likedSpotifyIds = Collections.emptySet();
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("userId") != null) {
+            Integer userId = (Integer) session.getAttribute("userId");
+            try {
+                likedSpotifyIds = new HashSet<>(likedSongDAO.getLikedSongSpotifyIds(userId));
+            } catch (SQLException e) {
+                System.err.println("[SongDetailController] Error fetching liked songs: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
         
         try {
@@ -65,6 +88,17 @@ request.getRequestDispatcher("/WEB-INF/views/mainUI/error.jsp").forward(request,
             request.getRequestDispatcher("/WEB-INF/views/mainUI/error.jsp").forward(request, response);
             return;
         }
+
+        // Pass liked song IDs to JSP
+        request.setAttribute("likedSpotifyIds", likedSpotifyIds);
+        String likedSpotifyIdsJson = "[]";
+        if (likedSpotifyIds != null && !likedSpotifyIds.isEmpty()) {
+            String joinedIds = likedSpotifyIds.stream()
+                                              .map(id -> "\"" + id + "\"")
+                                              .collect(Collectors.joining(","));
+            likedSpotifyIdsJson = "[" + joinedIds + "]";
+        }
+        request.setAttribute("likedSpotifyIdsJson", likedSpotifyIdsJson);
         
         // songDetail.jsp로 포워딩
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/song/songDetail.jsp");

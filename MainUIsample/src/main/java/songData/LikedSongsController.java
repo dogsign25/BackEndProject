@@ -6,23 +6,25 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.json.JSONObject; // Assuming org.json is available for JSON responses
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@WebServlet("/likedSongs.do")
+@WebServlet({"/likedSongs.do", "/likeSong.do"})
 public class LikedSongsController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private LikedSongDAO likedSongDAO;
-    private SpotifyService spotifyService; // Assuming this exists or will be implemented
+    private SpotifyService spotifyService;
 
     @Override
     public void init() throws ServletException {
         likedSongDAO = new LikedSongDAO();
-        spotifyService = new SpotifyService(); // Initialize SpotifyService
+        spotifyService = new SpotifyService();
         System.out.println("[LikedSongsController] Initialized successfully.");
     }
 
@@ -34,113 +36,94 @@ public class LikedSongsController extends HttpServlet {
 
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("userId") == null) {
-            response.sendRedirect("loginForm.do"); // 로그인 페이지로 리다이렉트
+            response.sendRedirect("loginForm.do");
             return;
         }
 
         int userId = (int) session.getAttribute("userId");
 
-        String action = request.getParameter("action");
+        // 기존의 좋아요 목록 페이지 로직
+        try {
+            List<String> likedSpotifyIds = likedSongDAO.getLikedSongSpotifyIds(userId);
+            List<TrackDTO> likedSongs = spotifyService.getTrackDetailsByIds(likedSpotifyIds);
 
-        if ("checkLike".equals(action)) {
-            // AJAX 요청: 특정 곡의 좋아요 여부 확인
-            String spotifyId = request.getParameter("spotifyId");
-            if (spotifyId == null || spotifyId.isEmpty()) {
-                sendJsonResponse(response, false, "Spotify ID is required.");
-                return;
-            }
-            try {
-                boolean isLiked = likedSongDAO.isSongLiked(userId, spotifyId);
-                JSONObject jsonResponse = new JSONObject();
-                jsonResponse.put("success", true);
-                jsonResponse.put("isLiked", isLiked);
-                sendJsonResponse(response, jsonResponse);
-            } catch (SQLException e) {
-                e.printStackTrace();
-                sendJsonResponse(response, false, "Database error: " + e.getMessage());
-            }
-        } else {
-            // 일반 GET 요청: 좋아요 목록 페이지 표시
-            try {
-                // 좋아요 누른 곡들의 Spotify ID 목록을 가져옴
-                List<String> likedSpotifyIds = likedSongDAO.getLikedSongSpotifyIds(userId);
-                
-                // 각 Spotify ID에 해당하는 곡의 상세 정보를 가져옴 (SpotifyService 사용)
-                List<TrackDTO> likedSongs = spotifyService.getTrackDetailsByIds(likedSpotifyIds);
-
-                request.setAttribute("likedSongs", likedSongs);
-                request.getRequestDispatcher("/WEB-INF/views/list/likedSongs.jsp").forward(request, response);
-            } catch (SQLException e) {
-                e.printStackTrace();
-                request.setAttribute("errorMsg", "좋아요 목록을 불러오는 데 실패했습니다: " + e.getMessage());
-                request.getRequestDispatcher("/WEB-INF/views/mainUI/error.jsp").forward(request, response);
-            }
+            request.setAttribute("likedSongs", likedSongs);
+            request.getRequestDispatcher("/WEB-INF/views/list/likedSongs.jsp").forward(request, response);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            request.setAttribute("errorMsg", "좋아요 목록을 불러오는 데 실패했습니다: " + e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/views/mainUI/error.jsp").forward(request, response);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
+        
+        String command = request.getServletPath();
+        
+        if ("/likeSong.do".equals(command)) {
+            handleLikeSong(request, response);
+        } else {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unknown POST command.");
+        }
+    }
+
+    private void handleLikeSong(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("userId") == null) {
-            sendJsonResponse(response, false, "Login required.");
-            return;
-        }
-
-        int userId = (int) session.getAttribute("userId");
-        String action = request.getParameter("action");
-        String spotifyId = request.getParameter("spotifyId");
-
-        if (spotifyId == null || spotifyId.isEmpty()) {
-            sendJsonResponse(response, false, "Spotify ID is required.");
+            sendJsonResponse(response, "error", "Login required.", false);
             return;
         }
 
         try {
-            int result = 0;
-            String message = "";
-            boolean isLiked = likedSongDAO.isSongLiked(userId, spotifyId);
+            JSONObject jsonRequest = readJsonBody(request);
+            String trackId = jsonRequest.optString("trackId", null);
+            int userId = (int) session.getAttribute("userId");
 
-            if ("add".equals(action)) {
-                if (!isLiked) {
-                    result = likedSongDAO.addLikedSong(userId, spotifyId);
-                    message = (result > 0) ? "Song added to liked songs." : "Failed to add song.";
-                } else {
-                    message = "Song is already liked.";
-                }
-            } else if ("remove".equals(action)) {
-                if (isLiked) {
-                    result = likedSongDAO.removeLikedSong(userId, spotifyId);
-                    message = (result > 0) ? "Song removed from liked songs." : "Failed to remove song.";
-                } else {
-                    message = "Song is not liked.";
-                }
-            } else {
-                sendJsonResponse(response, false, "Invalid action.");
+            if (trackId == null || trackId.isEmpty()) {
+                sendJsonResponse(response, "error", "Track ID is required.", false);
                 return;
             }
 
-            sendJsonResponse(response, true, message);
+            boolean isLiked = likedSongDAO.isSongLiked(userId, trackId);
+            boolean newLikedState;
+
+            if (isLiked) {
+                likedSongDAO.removeLikedSong(userId, trackId);
+                newLikedState = false;
+            } else {
+                likedSongDAO.addLikedSong(userId, trackId);
+                newLikedState = true;
+            }
+
+            sendJsonResponse(response, "success", "Like status updated.", newLikedState);
 
         } catch (SQLException e) {
             e.printStackTrace();
-            sendJsonResponse(response, false, "Database error: " + e.getMessage());
+            sendJsonResponse(response, "error", "Database error: " + e.getMessage(), false);
+        } catch (Exception e) {
+            e.printStackTrace();
+            sendJsonResponse(response, "error", "Invalid request: " + e.getMessage(), false);
         }
     }
 
-    private void sendJsonResponse(HttpServletResponse response, boolean success, String message) throws IOException {
-        JSONObject jsonResponse = new JSONObject();
-        jsonResponse.put("success", success);
-        jsonResponse.put("message", message);
-        sendJsonResponse(response, jsonResponse);
+    private JSONObject readJsonBody(HttpServletRequest request) throws IOException {
+        try (BufferedReader reader = request.getReader()) {
+            String jsonString = reader.lines().collect(Collectors.joining(System.lineSeparator()));
+            return new JSONObject(jsonString);
+        }
     }
 
-    private void sendJsonResponse(HttpServletResponse response, JSONObject jsonResponse) throws IOException {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+    private void sendJsonResponse(HttpServletResponse response, String status, String message, boolean liked) throws IOException {
+        JSONObject jsonResponse = new JSONObject();
+        jsonResponse.put("status", status);
+        jsonResponse.put("message", message);
+        jsonResponse.put("liked", liked);
+        
         try (PrintWriter out = response.getWriter()) {
             out.print(jsonResponse.toString());
             out.flush();

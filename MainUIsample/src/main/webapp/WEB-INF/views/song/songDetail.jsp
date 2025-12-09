@@ -291,6 +291,17 @@
             cursor: pointer;
         }
     </style>
+    <style>
+        .like-icon {
+            width: 20px !important;
+            height: 20px !important;
+            object-fit: contain !important;
+            transition: transform 0.2s ease-in-out;
+        }
+        .like-icon:hover {
+            transform: scale(1.1);
+        }
+    </style>
 </head>
 <body>
     <div class="song-modal-overlay" onclick="closeModal(event)">
@@ -333,7 +344,13 @@
                 
                 <div class="action-buttons">
                     <button class="action-button btn-add-playlist" onclick="openPlaylistModal()">플레이리스트에 추가</button>
-                    <button id="toggleLikeButton" class="action-button btn-toggle-like" onclick="toggleLike()">좋아요 ♥</button>
+                    <div class="action-button btn-toggle-like">
+                        <c:set var="isLiked" value="${likedSpotifyIds.contains(song.spotifyId)}"/>
+                        <img src="<c:url value="${isLiked ? '/assets/icons/liked_icon.png' : '/assets/icons/like_icon.png'}"/>" 
+                             alt="Like" 
+                             class="like-icon ${isLiked ? 'liked' : ''}" 
+                             onclick="likeSong('${song.spotifyId}', this, event)">
+                    </div>
                 </div>
             </div>
         </div>
@@ -428,81 +445,50 @@
             });
         }
 
-        // --- New Like Functionality ---
-        const toggleLikeButton = document.getElementById('toggleLikeButton');
-        const userId = "${sessionScope.userId}"; // Assuming userId is available in session
+        // New unified likeSong function
+        const likedSpotifyIdsClient = new Set(JSON.parse('${likedSpotifyIdsJson}'));
 
-        // Function to check initial like status
-        async function checkLikeStatus() {
-            if (!userId || userId === "0") { // userId is 0 if not logged in
-                // If not logged in, disable like button or hide it. For now, just don't check.
-                // toggleLikeButton.disabled = true;
+        function likeSong(trackId, element, event) {
+            event.stopPropagation(); // Stop parent element's onclick event
+
+            const isLoggedIn = ('${not empty sessionScope.userId}' === 'true'); 
+            
+            if (!isLoggedIn) {
+                if (confirm("'좋아요' 기능은 로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
+                    window.location.href = '<c:url value="/loginForm.do"/>';
+                }
                 return;
             }
 
-            try {
-                const encodedSpotifyId = encodeURIComponent(trackSpotifyId);
-                const response = await fetch("likedSongs.do?action=checkLike&spotifyId=" + encodedSpotifyId, {
-                    method: 'GET'
-                });
-                const data = await response.json();
-                if (data.success) {
-                    updateLikeButton(data.isLiked);
+            fetch('<c:url value="/likeSong.do"/>', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ trackId: trackId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    if (data.liked) {
+                        element.src = '<c:url value="/assets/icons/liked_icon.png"/>';
+                        element.classList.add('liked');
+                        likedSpotifyIdsClient.add(trackId); // Update client-side set
+                    } else {
+                        element.src = '<c:url value="/assets/icons/like_icon.png"/>';
+                        element.classList.remove('liked');
+                        likedSpotifyIdsClient.delete(trackId); // Update client-side set
+                    }
+                    console.log('Like status updated:', data.liked);
                 } else {
-                    console.error("Failed to check like status:", data.message);
+                    alert('오류가 발생했습니다: ' + data.message);
                 }
-            } catch (error) {
-                console.error("Error checking like status:", error);
-            }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('요청 중 오류가 발생했습니다.');
+            });
         }
-
-        // Function to update the button's appearance
-        function updateLikeButton(isLiked) {
-            if (isLiked) {
-                toggleLikeButton.classList.add('liked');
-                toggleLikeButton.innerHTML = '좋아요 ♥'; // Filled heart or similar
-            } else {
-                toggleLikeButton.classList.remove('liked');
-                toggleLikeButton.innerHTML = '좋아요 ♡'; // Empty heart
-            }
-        }
-
-        // Function to toggle like status
-        async function toggleLike() {
-            if (!userId || userId === "0") {
-                alert("로그인이 필요합니다.");
-                window.location.href = "loginForm.do"; // Redirect to login page
-                return;
-            }
-
-            const currentIsLiked = toggleLikeButton.classList.contains('liked');
-            const action = currentIsLiked ? 'remove' : 'add';
-
-            try {
-                const encodedSpotifyId = encodeURIComponent(trackSpotifyId); // Moved outside
-                const response = await fetch('likedSongs.do', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: "action=" + action + "&spotifyId=" + encodedSpotifyId
-                });
-                const data = await response.json();
-
-                if (data.success) {
-                    updateLikeButton(!currentIsLiked); // Toggle button state
-                    alert(data.message);
-                } else {
-                    alert("좋아요 처리 실패: " + data.message);
-                }
-            } catch (error) {
-                console.error("Error toggling like:", error);
-                alert("좋아요 처리 중 오류가 발생했습니다.");
-            }
-        }
-
-        // Initial check on page load
-        document.addEventListener('DOMContentLoaded', checkLikeStatus);
     </script>
 </body>
 </html>
