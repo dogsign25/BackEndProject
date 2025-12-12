@@ -1,12 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="MainUIsample">
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+        
+    <wb-module deploy-name="MusicApp">
+                
         <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
+                
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+                
         <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/con/org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Tomcat v10.1 Server at localhost">
+                        
             <dependency-type>uses</dependency-type>
+                    
         </dependent-module>
-        <property name="context-root" value="MainUIsample"/>
-        <property name="java-output-path" value="/MainUIsample/build/classes"/>
+                
+        <property name="java-output-path" value="/MusicApp/build/classes"/>
+        <property name="context-root" value="MusicApp"/>
+            
     </wb-module>
+    
 </project-modules>

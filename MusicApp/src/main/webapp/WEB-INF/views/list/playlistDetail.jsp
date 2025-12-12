@@ -141,7 +141,7 @@
                         <div class="playlist-cover-large">
                             <%-- Assuming PlaylistDTO has an imageUrl or cover for the playlist itself --%>
                             <%-- For now, using a placeholder --%>
-                            <img src="/assets/images/112.png" alt="Playlist Cover">
+                            <img src="./assets/icons/playlist.png" alt="Playlist Cover">
                         </div>
                         <div class="playlist-info">
                             <h1>${playlist.name}</h1>

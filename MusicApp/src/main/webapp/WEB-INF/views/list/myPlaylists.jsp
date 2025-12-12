@@ -163,7 +163,7 @@
                                     </form>
                                     <a href="playlistDetail.do?playlistId=${playlist.playlist_id}" class="playlist-card-link">
                                         <div class="playlist-card-image-wrapper">
-                                            <img src="/assets/images/112.png" alt="Playlist Cover">
+                                            <img src="./assets/icons/playlist.png" alt="Playlist Cover">
                                         </div>
                                         <h3>${playlist.name}</h3>
                                         <p>${playlist.songCount} 곡</p>
